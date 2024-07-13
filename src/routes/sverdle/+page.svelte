@@ -25,7 +25,6 @@
 	 * used for styling the keyboard
 	 */
 	let classnames: Record<string, 'exact' | 'close' | 'missing'>;
-
 	/**
 	 * A map of descriptions for all letters that have been guessed,
 	 * used for adding text for assistive technology (e.g. screen readers)
