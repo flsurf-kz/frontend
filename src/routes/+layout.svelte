@@ -1,10 +1,12 @@
 <script>
 	import Header from './Header.svelte';
 	import '../app.css';
+	import Navbar from '$lib/components/Navbar.svelte';
+	import { UserTypes } from '$lib/enums/UserTypes'
 </script>
 
 <div class="app">
-	<Header />
+	<Navbar userType={UserTypes.Client} isAuthorized={false}/>
 
 	<main>
 		<slot />
