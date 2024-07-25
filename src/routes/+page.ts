@@ -7,10 +7,17 @@ type UserInfo = {
 }
 
 export async function load({ params }) { 
-    
-    return { "orders": [ 
-        { 
-            "id": "31321", 
-        }
-    ] } 
+    return { 
+        "orders": [ 
+            { 
+                "id": "31321", 
+                "name": "Ok", 
+                "title": "dasda"
+            },
+            { 
+                "id": "3123", 
+                "name": "jdsadsa"
+            }
+        ]
+    }
 }
