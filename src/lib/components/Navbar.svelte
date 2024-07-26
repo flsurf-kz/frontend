@@ -1,16 +1,17 @@
 <script lang="ts">
 	import { UserTypes } from '$lib/enums/UserTypes';
     import arrowDown from '$lib/images/ArrowDown.svg'
+    import NavSearchbar from './NavSearchbar.svelte';
 
     export let userType: UserTypes; 
     export let isAuthorized: boolean; 
 </script>
 
 <header class="navbar"> 
-    <div class="navbar-logo">
-        <a href="/">Flsurf</a>
-    </div>
     <nav class="navbar-left">
+        <div class="navbar-logo">
+            <a href="/">Flsurf</a>
+        </div>
         {#if userType == UserTypes.Freelancer} 
             <div class="navbar-find-work navbar-element">
                 Найти работу
@@ -81,6 +82,9 @@
                 Сообщения
             </a>
         {/if}
+    </nav>
+    <nav class="navbar-right">
+        <NavSearchbar />
     </nav>
 </header>
 
@@ -171,10 +175,12 @@
     }
 
     .navbar { 
-        padding: 15px 24px;
+        padding: 12px 24px;
         margin-left: auto;
         margin-right: auto;
         width: min(100%, 1600px);
         flex-wrap: wrap;
+        justify-content: space-between;
+        border-bottom: 1px solid rgba(189, 189, 189, 0.3); 
     }
 </style>
