@@ -8,7 +8,7 @@
 
 <header class="navbar"> 
     <div class="navbar-logo">
-        <h4>Flsurf</h4>
+        <a href="/">Flsurf</a>
     </div>
     <nav class="navbar-left">
         {#if userType == UserTypes.Freelancer} 
@@ -95,16 +95,22 @@
         align-items: center;    
     }
 
+    .navbar a { 
+        text-decoration: none;
+        color: black; 
+    }
+
     .navbar-dropdown  {
         display: none;
         position: absolute;
         background-color: #f9f9f9;
-        min-width: 160px;
         box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.2);
         z-index: 1;
         padding: 10px 0; 
         margin-top: 10px; 
         border-radius: 5px;
+        background-clip: padding-box;
+        min-width: 240px;
     }
 
     .navbar-dropdown:after {
@@ -165,6 +171,10 @@
     }
 
     .navbar { 
-        padding: 15px 80px; 
+        padding: 15px 24px;
+        margin-left: auto;
+        margin-right: auto;
+        width: min(100%, 1600px);
+        flex-wrap: wrap;
     }
 </style>

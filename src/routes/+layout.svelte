@@ -6,7 +6,7 @@
 </script>
 
 <div class="app">
-	<Navbar userType={UserTypes.Client} isAuthorized={false}/>
+	<Navbar userType={UserTypes.Client} isAuthorized={true}/>
 
 	<main>
 		<slot />
