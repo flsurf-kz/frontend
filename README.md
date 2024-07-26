@@ -1,38 +1,59 @@
-# create-svelte
+# Frontend Flsurf.kz  
+### Основная информация
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+Этот репозитории ответсвеннен за интерфейс сайта flsurf.kz, Сопровождается разработчиками: DaniyarKZNursultan, ErsultanKalymgazy, pikoUsername  
 
-## Creating a project
+### Как запустить? 
 
-If you're seeing this, you've probably already done this step. Congrats!
+Сперва загрузите репозитории с помощью команды: 
+```shell
+$ git clone https://github.com/flsurf-kz/frontend.git
+```
+После откройте Visual studio code, и откройте проект в которую скопировали проект. 
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
+Третьим шагом выступает сам запуск приложения, просто запустив команды в директории проекта с именем приложения: 
+```
+$ npm install 
+$ npm run dev
 ```
 
-## Developing
+### Контрибуции 
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Для создания контрибуции необходимо создать новую ветку с префиском dev-{ваше имя профиля} сменив текущую ветку на ващу. Вы создадите дополнительную ветку для слияния. С помощью этой команды: 
 
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+```shell
+$ git branch -M dev-{ваше имя профиля} 
 ```
 
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
+Для отправки изменении на вашу ветку необходимо ввести эти команды: 
+```
+$ git add .
+$ git commit -m "Ваше сообщение"
+$ git push origin 
 ```
 
-You can preview the production build with `npm run preview`.
+Для получения измнений с ветки если вы с другого устройства, то надо ввести эту команду(Рекомендуется всегда делать перед началом работы): 
+```
+$ git pull --rebase 
+```
+При локальных конфликтах когда репозитории и ваш экземпляр репозитория отличаются в одних и тех же файлах рекомендуется вписать эту команду. Она делает сохранение в специальное временное хранилище Git, откуда измнение можно с легкость достать: 
+```
+$ git pull --abort  
+$ git stash 
+```
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+Что бы достать последние изменения надо вписать команду; 
+```
+$ git stash pop 0 
+```
+После этого вы обязаны решить возникшие конфликты в файлах. 
+
+Что бы поменять ветку над которой вы работаете, надо написать команду для смены веток: 
+```
+$ git checkout {имя ветки} 
+```
+(Учтите внимание если это ветки НЕ dev, main то вы имеете права отправлять измнения в репозитории, 
+без разрешения создателя ветки)  
+
+Примичание. 
+Главная и dev ветки защещины от слияния без разрешения владельца репозитория
