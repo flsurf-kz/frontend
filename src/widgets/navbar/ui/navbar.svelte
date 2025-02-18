@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { UserTypes } from "$lib/entities/user/enums/UserTypes";
-	import ArrowDown from "./icons/ArrowDown.svelte";
-	import NavSearchbar from "./NavSearchbar.svelte";
+	import ArrowDown from "$lib/shared/ui/icons/ArrowDown.svelte";
+	import NavbarSearch from "./navbar-search.svelte";
 
 
     export let userType: UserTypes; 
@@ -85,7 +85,7 @@
         {/if}
     </nav>
     <nav class="navbar-right">
-        <NavSearchbar />
+        <NavbarSearch />
     </nav>
 </header>
 

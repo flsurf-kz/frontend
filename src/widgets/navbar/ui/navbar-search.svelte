@@ -1,8 +1,8 @@
 <script lang="ts">
-	import ArrowDown from "./icons/ArrowDown.svelte";
-import SearchIcon from "./icons/SearchIcon.svelte";
+	import ArrowDown from "$lib/shared/ui/icons/ArrowDown.svelte";
+	import SearchIcon from "$lib/shared/ui/icons/SearchIcon.svelte";
 
- 
+
   let searchQuery = '';
   let showDropdown = false;
 
