@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { UserTypes } from '$lib/enums/UserTypes';
-    import arrowDown from '$lib/images/ArrowDown.svg'
-    import NavSearchbar from './NavSearchbar.svelte';
+	import { UserTypes } from "$lib/entities/user/enums/UserTypes";
+	import ArrowDown from "./icons/ArrowDown.svelte";
+	import NavSearchbar from "./NavSearchbar.svelte";
+
 
     export let userType: UserTypes; 
     export let isAuthorized: boolean; 
@@ -22,7 +23,7 @@
                     <a href="/jobs/user" class="dropdown-li">Ваши ставки</a>
                 </div>
 
-                <img class="arrow-down" src={arrowDown} alt=":P">
+                <ArrowDown />
             </div>
             
             <div class="navbar-my-work navbar-element">
@@ -33,7 +34,7 @@
                     <a href="/jobs/history" class="dropdown-li">История клиентов</a>
                 </div>
 
-                <img class="arrow-down" src={arrowDown} alt=":P">                    
+                <ArrowDown />                
             </div>
 
             <div class="navbar-element">
@@ -46,7 +47,7 @@
                     <a href="/user/settings/getpaid" class="dropdown-li">Выплаты</a>                    
                 </div>
 
-                <img class="arrow-down" src={arrowDown} alt=":P">
+                <ArrowDown />
             </div>
 
         {:else if userType == UserTypes.Client}
@@ -60,7 +61,7 @@
                     <a href="/jobs/create" class="dropdown-li">Ваша панель клиента</a>
                 </div>
                 
-                <img class="arrow-down" src={arrowDown} alt=":P">
+                <ArrowDown />
             </div>
 
             <div class="navbar-finances navbar-element">
@@ -73,7 +74,7 @@
                     <a href="/user/settings/getpaid" class="dropdown-li">Выплаты</a>                    
                 </div>
                 
-                <img class="arrow-down" src={arrowDown} alt=":P">
+                <ArrowDown />
             </div>
         {/if}
 

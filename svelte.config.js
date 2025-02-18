@@ -13,13 +13,13 @@ const config = {
 
 		// Настраиваем пути в проекте
 		files: {
-			routes: 'src/app/routes',              // Переносим маршруты в `app`
+			routes: 'src/pages',              // Переносим маршруты в `app`
 			lib: 'src',
-			appTemplate: 'src/app/index.html',     // Входная точка приложения
+			appTemplate: 'src/app/app.html',     // Входная точка приложения
 			assets: 'static'
 		}
+
 	}
 };
-
 
 export default config;

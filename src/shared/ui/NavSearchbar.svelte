@@ -1,7 +1,8 @@
 <script lang="ts">
-  import searchIcon from '$lib/images/SearchIcon.svg'
-  import arrowDown from '$lib/images/ArrowDown.svg'
-  
+	import ArrowDown from "./icons/ArrowDown.svelte";
+import SearchIcon from "./icons/SearchIcon.svelte";
+
+ 
   let searchQuery = '';
   let showDropdown = false;
 
@@ -50,10 +51,6 @@
       font-size: 14px; 
     }
 
-    .search-icon { 
-      padding: 4px; 
-    }
-
 
     .dropdown-menu {
       display: none;
@@ -86,21 +83,15 @@
     .dropdown-menu li:hover {
       background-color: #f0f0f0;
     }
-
-    .arrow-down { 
-      height: 10px;
-      width: 13px;
-      margin-left: 4px; 
-    }
   </style>
   
   <div class="search-bar">
-    <img src={searchIcon} alt="" class="search-icon">
+    <SearchIcon />
     <input type="text" placeholder="Search" bind:value={searchQuery} class="search-input"/>
     <button class="dropdown" on:click={toggleDropdown}>
       Талант
       
-      <img class="arrow-down" src={arrowDown} alt=":P">
+      <ArrowDown />
     </button>
     <div class="dropdown-menu {showDropdown ? 'active' : ''}">
       <ul>

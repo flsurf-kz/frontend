@@ -1,4 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-3 -3 30 30">
+<script>
+	export let width = '24'; // Ширина по умолчанию
+	export let height = '24'; // Высота по умолчанию
+	export let style = ''; // Стили по умолчанию
+</script>
+  
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-3 -3 30 30" {width} {height} style={style}>
 	<path
 		fill-rule="evenodd"
 		clip-rule="evenodd"
