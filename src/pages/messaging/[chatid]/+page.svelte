@@ -1,7 +1,5 @@
 <script lang="ts">
-    export let data; 
-</script>
+	import type { PageData } from "./$types";
 
-<section> 
-<p>i m good</p>
-</section>
+    export let data: PageData; 
+</script>

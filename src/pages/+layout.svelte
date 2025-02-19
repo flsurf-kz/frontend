@@ -1,8 +1,8 @@
 <script>
 	import '$lib/app/styles.scss';
 	import { UserTypes } from '$lib/entities/user/enums/UserTypes';
-	import Footer from '$lib/shared/ui/Footer.svelte';
-	import Navbar from '$lib/shared/ui/Navbar.svelte';
+	import { Footer } from '$lib/shared/ui/footer';
+	import { Navbar } from '$lib/widgets/navbar/ui';
 </script>
 
 <div class="app">

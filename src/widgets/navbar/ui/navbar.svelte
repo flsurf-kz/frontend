@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { UserTypes } from "$lib/entities/user/enums/UserTypes";
 	import ArrowDown from "$lib/shared/ui/icons/ArrowDown.svelte";
-	import NavbarSearch from "./navbar-search.svelte";
+	import { NavbarSearch } from "$lib/widgets/navbar/ui/navbar-search";
 
 
     export let userType: UserTypes; 
@@ -162,12 +162,6 @@
         padding: 5px 15px;
         text-decoration: none;
         display: block;
-    }
-
-    .arrow-down { 
-        height: 10px;
-        width: 13px;
-        margin-left: 4px; 
     }
 
     .navbar-element { 

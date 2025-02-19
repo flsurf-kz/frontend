@@ -1,9 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 
-	export let data: PageData; 
-
-	data.orders[0].id 
 </script>
 
 <svelte:head>
