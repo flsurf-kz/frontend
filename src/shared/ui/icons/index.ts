@@ -1,0 +1,10 @@
+export { default as AndroidIcon } from './AndroidIcon.svelte';
+export { default as AppleIcon } from './AppleIcon.svelte';
+export { default as ArrowDownIcon } from './ArrowDown.svelte';
+export { default as FacebookIcon } from './FacebookIcon.svelte';
+export { default as GithubIcon } from './GithubIcon.svelte';
+export { default as InstagramIcon } from './InstagramIcon.svelte';
+export { default as LinkedInIcon } from './LinkedInIcon.svelte';
+export { default as SearchIcon } from './SearchIcon.svelte';
+export { default as XIcon } from './XIcon.svelte';
+export { default as YouTubeIcon } from './YouTubeIcon.svelte';

@@ -1,4 +1,4 @@
-<script>
+ <script>
 	export let width = '24'; // Ширина по умолчанию
 	export let height = '24'; // Высота по умолчанию
 	export let style = ''; // Стили по умолчанию

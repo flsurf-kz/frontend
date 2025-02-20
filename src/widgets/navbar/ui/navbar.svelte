@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { UserTypes } from "$lib/entities/user/enums/UserTypes";
 	import ArrowDown from "$lib/shared/ui/icons/ArrowDown.svelte";
-	import { NavbarSearch } from "$lib/widgets/navbar/ui/navbar-search";
+	import NavbarSearch from "./navbar-search.svelte";
 
 
     export let userType: UserTypes; 
