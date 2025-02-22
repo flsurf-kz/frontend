@@ -8,3 +8,4 @@ export { default as LinkedInIcon } from './LinkedInIcon.svelte';
 export { default as SearchIcon } from './SearchIcon.svelte';
 export { default as XIcon } from './XIcon.svelte';
 export { default as YouTubeIcon } from './YouTubeIcon.svelte';
+export { default as BellIcon } from "./BellIcon.svelte"

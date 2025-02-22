@@ -1,9 +1,23 @@
 <script lang="ts">
-	import DropdownBase from "$lib/shared/ui/dropdowns/dropdown-base.svelte";
+	import "$lib/shared/styles/texts.scss"
+	import { asFilesBlobOrUrl } from "$lib/entities/files/asFileUrl";
 	import type { NotificationEntity } from "../models/notification";
 
     export let notifications: NotificationEntity[]; 
 </script>
 
-<DropdownBase label="🔔" position="bottom">
-</DropdownBase>
+<div class="notification-list">
+	{#each notifications as notif} 
+		<div class="notif-one">
+			<div class="notif-logo">
+				<img src={asFilesBlobOrUrl(notif.icon)} alt="">
+			</div>
+			<div class="notif-text typography-text">
+				{notif.text}
+			</div>
+			<a href="/user/notifications" class="notif-all-link typography-text">
+				Посмотреть другие увдомления
+			</a>
+		</div>
+	{/each}
+</div>

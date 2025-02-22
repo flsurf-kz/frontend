@@ -1,36 +1,39 @@
 <script lang="ts">
-    import { onClickOutside } from './onClickOutside';
+  import { onClickOutside } from './onClickOutside';
+
+  export let label: string = "Dropdown";
+  export let position: "bottom" | "right" | "left" = "bottom";
   
-    export let label: string = "Dropdown";
-    export let position: "bottom" | "right" | "left" = "bottom"; // Allow only these values
-  
-    let dropdown: HTMLElement | null = null;
-    let isOpen: boolean = false;
-  
-    function toggleDropdown() {
+  let dropdown: HTMLElement | null = null;
+  let isOpen: boolean = false;
+
+  function toggleDropdown() {
       isOpen = !isOpen;
-    }
-  
-    function closeDropdown() {
+  }
+
+  function closeDropdown() {
       isOpen = false;
-    }
+  }
 </script>
-  
+
 <style>
-    .dropdown {
+  .dropdown {
       position: relative;
       display: inline-block;
-    }
-  
-    .dropdown-button {
+  }
+
+  .dropdown-button {
       background: #222;
       color: white;
       border: none;
       padding: 10px 15px;
       cursor: pointer;
-    }
-  
-    .dropdown-menu {
+      display: flex;
+      align-items: center;
+      gap: 8px; /* Добавляем отступ между иконкой и текстом */
+  }
+
+  .dropdown-menu {
       position: absolute;
       min-width: 200px;
       background: #111;
@@ -39,24 +42,24 @@
       box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
       padding: 10px 0;
       display: none;
-    }
-  
-    .dropdown-menu.show {
-      display: block;
-    }
-  
-    .bottom { top: 100%; left: 0; }
- </style>
-  
-<div class="dropdown" bind:this={dropdown} use:onClickOutside={closeDropdown}>
-    <button class="dropdown-button" on:click={toggleDropdown}>
-      {label}
-    </button>
+  }
 
-    {#if isOpen}
+  .dropdown-menu.show {
+      display: block;
+  }
+
+  .bottom { top: 100%; left: 0; }
+</style>
+
+<div class="dropdown" bind:this={dropdown} use:onClickOutside={closeDropdown}>
+  <button class="dropdown-button" on:click={toggleDropdown}>
+      <slot name="icon" />
+      {label}
+  </button>
+
+  {#if isOpen}
       <div class="dropdown-menu {position}">
-        <slot />
+          <slot />
       </div>
-    {/if}
+  {/if}
 </div>
-  

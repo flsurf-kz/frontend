@@ -1,0 +1,81 @@
+:root {
+  --font-family-base: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-family-rebrand: "Neue Montreal";
+
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 24px;
+  --font-size-xxl: 32px;
+
+  --line-height-sm: 1.4;
+  --line-height-md: 1.5;
+  --line-height-lg: 1.6;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+}
+
+.typography-text {
+  text-decoration: none;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  font-weight: var(--font-weight-regular);
+}
+
+.typography-text-sm {
+    text-decoration: none;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+}
+
+.typography-text-lg {
+    text-decoration: none;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-lg);
+  font-weight: var(--font-weight-medium);
+}
+
+.typography-headline {
+    text-decoration: none;
+  font-family: var(--font-family-rebrand);
+  font-size: var(--font-size-xxl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-lg);
+}
+
+.typography-title {
+    text-decoration: none;
+  font-family: var(--font-family-rebrand);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-lg);
+}
+
+.typography-subtitle {
+    text-decoration: none;
+  font-family: var(--font-family-rebrand);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-md);
+}
+
+.typography-caption {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-sm);
+  opacity: 0.8;
+}
+
+.typography-button {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  line-height: var(--line-height-md);
+}

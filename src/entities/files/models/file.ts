@@ -4,4 +4,5 @@ export interface FileEntity {
     filePath: string;
     mimeType?: string; // Опциональное поле
     size: number;
+    blob: string;  // для локального тестирования 
 }
