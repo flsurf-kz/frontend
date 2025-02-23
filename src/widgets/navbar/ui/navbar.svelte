@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { UserTypes } from "$lib/entities/user/enums/UserTypes";
+	import { UserTypes } from "$lib/entities/user/enums/user-types";
 	import ArrowDown from "$lib/shared/ui/icons/ArrowDown.svelte";
 	import NavbarSearch from "./navbar-search.svelte";
 

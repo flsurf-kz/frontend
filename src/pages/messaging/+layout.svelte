@@ -1,3 +1,10 @@
+<script lang="ts">
+    export let data; 
+</script>
 
-
-<slot></slot>
+<div class="messanger-container">
+    <div class="chats-list">
+        
+    </div>
+    <slot></slot>
+</div>

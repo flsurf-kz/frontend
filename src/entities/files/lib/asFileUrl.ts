@@ -1,5 +1,5 @@
 import { config } from "$lib/shared/config/config";
-import type { FileEntity } from "./models/file";
+import type { FileEntity } from "../models/file";
 
 export function asFileUrl(fileUrl: string | null | undefined) { 
     return config.baseFilesUrl + fileUrl

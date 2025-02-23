@@ -1,6 +1,6 @@
 <script>
 	import '$lib/app/styles.scss';
-	import { UserTypes } from '$lib/entities/user/enums/UserTypes';
+	import { UserTypes } from '$lib/entities/user/enums/user-types';
 	import { Footer } from '$lib/shared/ui/footer';
 	import { Navbar } from '$lib/widgets/navbar/ui';
 </script>

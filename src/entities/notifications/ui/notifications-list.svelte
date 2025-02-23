@@ -1,6 +1,6 @@
 <script lang="ts">
 	import "$lib/shared/styles/texts.scss"
-	import { asFilesBlobOrUrl } from "$lib/entities/files/asFileUrl";
+	import { asFilesBlobOrUrl } from "$lib/entities/files/lib/asFileUrl";
 	import type { NotificationEntity } from "../models/notification";
 
     export let notifications: NotificationEntity[]; 
