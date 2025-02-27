@@ -1,7 +1,6 @@
-import type { LayoutServerLoad } from "./$types";
-import { getUser } from "$lib/api/user";
+import { getChats } from "$lib/shared/api/chat/queries";
 
-export const load: LayoutServerLoad = async ({ locals }) => {
-    const user = await getUser(locals.session); // Загружаем данные юзера
-    return { user };
+export const load  = async () => {
+    const chats = await getChats(); // Загружаем данные юзера
+    return chats;
 };
