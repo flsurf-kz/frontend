@@ -2,11 +2,13 @@
     export let width = '10'; // Значение по умолчанию для ширины
     export let height = '6'; // Значение по умолчанию для высоты
     export let style = '';  // Дополнительные стили по желанию
+    export let className = ''; 
 </script>
   
 <svg
     {width}
     {height}
+    class={className}
     viewBox="0 0 10 6"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

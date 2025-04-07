@@ -10,3 +10,4 @@ export { default as XIcon } from './logos/XIcon.svelte';
 export { default as YouTubeIcon } from './logos/YouTubeIcon.svelte';
 export { default as BellIcon } from "./BellIcon.svelte"
 export { default as EditIcon } from "./EditIcon.svelte";
+export { default as UserAvatar } from './UserAvatar.svelte'
