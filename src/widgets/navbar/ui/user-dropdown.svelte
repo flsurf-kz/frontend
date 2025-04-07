@@ -35,10 +35,10 @@
     </li>
 
     <li><a href="/profile">{user?.name || "Your profile"}</a></li>
-    <li><a href="/stats">Stats and trends</a></li>
-    <li><a href="/membership">Membership plan</a></li>
-    <li><a href="/connects">Connects</a></li>
-    <li><a href="/apps">Apps and Offers</a></li>
+    <li><a href="/stats">Статистика</a></li>
+    <li><a href="/membership">Премиум</a></li>
+    <li><a href="/connects">Коннекты</a></li>
+    <li><a href="/apps">Офферы</a></li>
 
     <li tabindex="0">
       <a href="/" class="justify-between">

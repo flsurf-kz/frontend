@@ -42,7 +42,7 @@
         <div class="dropdown dropdown-hover mx-2">
           <label tabindex="0" class="btn btn-ghost btn-sm text-gray-700">
             Клиентам
-            <ArrowDown className="w-4 h-4 ml-1" />
+            <ArrowDown className="h-4 ml-1" />
           </label>
           <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-48">
             <li><a href="/signup?role=client">Разместить вакансию</a></li>
@@ -53,7 +53,7 @@
         <div class="dropdown dropdown-hover mx-2">
           <label tabindex="0" class="btn btn-ghost btn-sm text-gray-700">
             Фрилансерам
-            <ArrowDown className="w-4 h-4 ml-1" />
+            <ArrowDown className="h-4 ml-1" />
           </label>
           <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-48">
             <li><a href="/freelancers">Для Фрилансеров</a></li>
@@ -82,7 +82,7 @@
         <div class="dropdown dropdown-hover mx-2">
           <label tabindex="0" class="btn btn-ghost btn-sm text-gray-700">
             Моя работа
-            <ArrowDown className="w-4 h-4 ml-1" />
+            <ArrowDown className="h-1 ml-1" />
           </label>
           <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-48">
             <li><a href="/jobs/active">Активная работа</a></li>
@@ -93,7 +93,7 @@
         <div class="dropdown dropdown-hover mx-2">
           <label tabindex="0" class="btn btn-ghost btn-sm text-gray-700">
             Финансы
-            <ArrowDown className="w-4 h-4 ml-1" />
+            <ArrowDown className="h-1 ml-1" />
           </label>
           <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-48">
             <li><a href="/finances/summary">Обзор финансов</a></li>
@@ -162,8 +162,8 @@
         <UserDropdown user={user} />
       {:else}
         <div class="hidden sm:flex gap-2">
-          <a href="/login" class="btn btn-sm btn-ghost text-gray-700">Войти</a>
-          <a href="/signup" class="btn btn-sm btn-success text-white">Регистрация</a>
+          <a href="/auth/login" class="btn btn-sm btn-ghost text-gray-700">Войти</a>
+          <a href="/auth/register" class="btn btn-sm btn-success text-white">Регистрация</a>
         </div>
       {/if}
     </div>
