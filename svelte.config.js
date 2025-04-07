@@ -6,7 +6,13 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	// Используем препроцессор Vite (например, для SCSS, TypeScript и т.д.)
-	preprocess: vitePreprocess(),
+	preprocess: vitePreprocess({
+		scss: {
+		  // Опционально: подключаем глобальные SCSS переменные/миксины
+		  prependData: `@import 'src/app/variables.scss';`
+		},
+		postcss: true
+	}),		
 
 	kit: {
 		adapter: adapter(),
