@@ -1,5 +1,8 @@
-<script lang="ts">
-	import type { PageData } from "./$types";
+<script>
 
-    export let data: PageData; 
+	import { LoginForm } from "$lib/features/auth/login";
+
 </script>
+<div>
+    <LoginForm />
+</div>

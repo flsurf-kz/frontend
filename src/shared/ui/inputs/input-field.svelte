@@ -5,7 +5,9 @@
     export let placeholder: string = 'Введите текст...';
     export let label: string = '';
     export let error: string = '';
+    export let inputType: "email" | "text" | "phone" = "text" 
     export let disabled: boolean = false;
+    export let required: boolean = false; 
     
     const dispatch = createEventDispatcher();
   
@@ -29,11 +31,12 @@
     <div class="relative">
       <input
         class="input input-bordered w-full pr-10"
-        type="text"
+        type={inputType}
         bind:value
         placeholder={placeholder}
         on:input={onInput}
         disabled={disabled}
+        {required}
       />
       {#if value}
         <button

@@ -1,5 +1,5 @@
 import { GlobalClient } from "$lib/shared/api";
-import { SwaggerException, UserEntity } from "flsurf-client";
+import { LoginUserSchema, RegisterUserSchema, SwaggerException, UserEntity, type IRegisterUserSchema } from "flsurf-client";
 import type { Exception } from "sass";
 import { writable } from "svelte/store";
 
@@ -11,7 +11,7 @@ export async function getCurrentUser(): Promise<UserEntity | undefined> {
 
         CurrentUser.set(curUser);
         return curUser; 
-    } catch (error) { 
+    } catch (error: any) { 
         console.error("Пользватель не авторизован", error.status); 
 
         return undefined; 
@@ -23,3 +23,24 @@ export async function logout() {
     // потом обнуляем Store
     GlobalClient.logout(); 
 }
+
+export async function registerUser(payload: RegisterUserSchema): Promise<void> {
+	try {
+		await GlobalClient.register(payload);
+		// TODO: возможно, сразу логинить или редирект
+	} catch (e) {
+		console.error("Ошибка регистрации", e);
+		throw e;
+	}
+}
+
+export async function loginUser(payload: LoginUserSchema): Promise<void> {
+	try {
+		await GlobalClient.login(payload);
+		// TODO: возможно, сразу логинить или редирект
+	} catch (e) {
+		console.error("Ошибка регистрации", e);
+		throw e;
+	}
+}
+

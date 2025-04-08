@@ -6,6 +6,8 @@
     export let label: string = '';
     export let error: string = '';
     export let disabled: boolean = false;
+    export let required: boolean = false; 
+    export let className: string = ''; 
     
     let showPassword = false;
     const dispatch = createEventDispatcher();
@@ -20,6 +22,7 @@
     }
 </script>
 
+  <!-- svelte-ignore a11y_label_has_associated_control -->
 <div class="form-control w-full max-w-xs">
 {#if label}
   <label class="label">
@@ -28,12 +31,13 @@
 {/if}
 <div class="relative">
   <input
-    class="input input-bordered w-full pr-10"
+    class="input input-bordered w-full pr-10 {className}"
     type={showPassword ? 'text' : 'password'}
     value={value}
     placeholder={placeholder}
     on:input={onInput}
     disabled={disabled}
+    {required}
   />
   <button
     type="button"

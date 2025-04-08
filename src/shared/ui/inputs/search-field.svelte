@@ -1,6 +1,6 @@
 <script lang="ts">
+	import { debounce } from 'lodash-es';
     import { createEventDispatcher } from 'svelte';
-    import { debounce } from 'lodash'; // Нужно установить lodash: `npm i lodash`
   
     export let value: string = '';
     export let placeholder: string = 'Поиск...';

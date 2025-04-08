@@ -37,30 +37,30 @@
   
       <!-- НЕ авторизован -->
       {#if !isAuthorized}
-        <a href="/why-us" class="btn btn-ghost btn-sm text-gray-700">Почему мы?</a>
+        <a href="/why-us" class="btn btn-ghost btn-sm">Почему мы?</a>
   
         <div class="dropdown dropdown-hover mx-2">
-          <label tabindex="0" class="btn btn-ghost btn-sm text-gray-700">
+          <label tabindex="0" class="btn btn-ghost btn-sm">
             Клиентам
             <ArrowDown className="h-4 ml-1" />
           </label>
           <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-48">
             <li><a href="/signup?role=client">Разместить вакансию</a></li>
-            <li><a href="/pages/clients">Разместить заказ</a></li>
+            <li><a href="/unauth/clients">Разместить заказ</a></li>
           </ul>
         </div>
   
         <div class="dropdown dropdown-hover mx-2">
-          <label tabindex="0" class="btn btn-ghost btn-sm text-gray-700">
+          <label tabindex="0" class="btn btn-ghost btn-sm">
             Фрилансерам
             <ArrowDown className="h-4 ml-1" />
           </label>
           <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-48">
-            <li><a href="/freelancers">Для Фрилансеров</a></li>
-            <li><a href="/freelancers/how-it-works">Как это работает</a></li>
-            <li><a href="/freelancers/success-stories">Успешные истории</a></li>
-            <li><a href="/freelancers/faq">FAQ</a></li>
-            <li><a href="/freelancers/resources">Ресурсы и советы</a></li>
+            <li><a href="/unauth/freelancers">Для Фрилансеров</a></li>
+            <li><a href="/unauth/freelancers/how-it-works">Как это работает</a></li>
+            <li><a href="/unauth/freelancers/success-stories">Успешные истории</a></li>
+            <li><a href="/unauth/freelancers/faq">FAQ</a></li>
+            <li><a href="/unauth/freelancers/resources">Ресурсы и советы</a></li>
           </ul>
         </div>
       {/if}
@@ -162,8 +162,8 @@
         <UserDropdown user={user} />
       {:else}
         <div class="hidden sm:flex gap-2">
-          <a href="/auth/login" class="btn btn-sm btn-ghost text-gray-700">Войти</a>
-          <a href="/auth/register" class="btn btn-sm btn-success text-white">Регистрация</a>
+          <a href="/auth/login" class="btn btn-sm btn-ghost">Войти</a>
+          <a href="/auth/register" class="btn btn-sm btn-success">Регистрация</a>
         </div>
       {/if}
     </div>

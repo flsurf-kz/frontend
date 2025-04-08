@@ -20,6 +20,6 @@
     style="background: none; border: none; padding: 0.5rem; cursor: pointer;"
     onclick={onClick}
 >
-    <slot />
+  <slot />
 </button>
   

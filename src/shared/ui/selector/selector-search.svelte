@@ -17,7 +17,7 @@
 
   let query = $state("");
 
-  import { debounce } from 'lodash';
+  import { debounce } from 'lodash-es';
 
   const debouncedSearch = debounce((q: string) => {
     onSearch(q);
@@ -46,6 +46,8 @@
   {#if query && searchResults.length > 0}
     <ul class="absolute z-10 bg-white border border-gray-200 mt-1 w-full max-h-60 overflow-y-auto">
       {#each searchResults as result}
+        <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+        <!-- svelte-ignore a11y_click_events_have_key_events -->
         <li
           class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
           onclick={() => handleSelect(result)}

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
-    import { debounce } from 'lodash';
+    import { debounce } from 'lodash-es';
   
     export let tags: string[] = [];
     export let placeholder: string = 'Поиск или добавьте тег...';

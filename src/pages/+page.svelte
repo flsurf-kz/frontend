@@ -30,65 +30,69 @@
 <main class="space-y-16">
 <!-- Hero Section -->
 <section class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
-  <div class="container mx-auto px-4 text-center">
-	<h1 class="text-4xl sm:text-6xl font-extrabold mb-4">
-	  Лучшие заказы для профессионалов
-	</h1>
-	<p class="text-xl sm:text-2xl mb-8">
-	  Найдите работу, соответствующую вашим навыкам, или найдите идеального исполнителя для своего проекта.
-	</p>
-	<div class="flex justify-center space-x-4">
-	  <button class="btn btn-primary">Найти заказы</button>
-	  <button class="btn btn-outline btn-light">Разместить заказ</button>
+	<div class="container mx-auto px-4 text-center">
+		<h1 class="text-4xl sm:text-6xl font-extrabold mb-4">
+			Лучшие заказы для профессионалов
+		</h1>
+		<p class="text-xl sm:text-2xl mb-8">
+			Найдите работу, соответствующую вашим навыкам, или найдите идеального исполнителя для своего проекта.
+		</p>
+		<div class="flex justify-center space-x-4">
+			<a href="/jobs" class="btn btn-primary">Найти заказы</a>
+			<a href="/jobs/create" class="btn btn-outline btn-light">Разместить заказ</a>
+		</div>
 	</div>
-  </div>
 </section>
+
 
 <!-- How It Works Section -->
-<section class="bg-white">
-  <div class="container mx-auto px-4">
-	<h2 class="text-3xl font-bold text-center mb-8">Как это работает?</h2>
-	<div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
-	  {#each howItWorksSteps as step}
-		<div class="p-6 border rounded-lg shadow hover:shadow-xl transition">
-		  <div class="text-2xl font-bold text-indigo-600 mb-2">Шаг {step.id}</div>
-		  <h3 class="text-xl font-semibold mb-2">{step.title}</h3>
-		  <p class="text-gray-600">{step.description}</p>
+<section class="bg-base-100 text-base-content">
+	<div class="container mx-auto px-4">
+		<h2 class="text-3xl font-bold text-center mb-8">Как это работает?</h2>
+		<div class="grid grid-cols-1 sm:grid-cols-3 gap-8">
+			{#each howItWorksSteps as step}
+				<div class="p-6 bg-base-200 border border-base-300 rounded-lg shadow hover:shadow-xl transition">
+					<div class="text-2xl font-bold text-indigo-500 mb-2">Шаг {step.id}</div>
+					<h3 class="text-xl font-semibold mb-2">{step.title}</h3>
+					<p>{step.description}</p>
+				</div>
+			{/each}
 		</div>
-	  {/each}
 	</div>
-  </div>
 </section>
+
 
 <!-- Categories Section -->
-<section class="bg-gray-50">
-  <div class="container mx-auto px-4">
-	<h2 class="text-3xl font-bold text-center mb-8">Категории заказов</h2>
-	<div class="flex flex-wrap justify-center gap-6">
-	  {#each categories as cat}
-		<div class="bg-white p-6 rounded-lg shadow w-full sm:w-64 hover:shadow-xl transition">
-		  <h3 class="text-xl font-semibold mb-2 text-gray-800">{cat.title}</h3>
-		  <p class="text-gray-600">{cat.description}</p>
+<section class="bg-base-200 text-base-content">
+	<div class="container mx-auto px-4">
+		<h2 class="text-3xl font-bold text-center mb-8">Категории заказов</h2>
+		<div class="flex flex-wrap justify-center gap-6">
+			{#each categories as cat}
+				<a href={`/search?category=${cat.title}`} class="bg-base-100 p-6 rounded-lg shadow w-full sm:w-64 hover:shadow-xl transition block">
+					<h3 class="text-xl font-semibold mb-2">{cat.title}</h3>
+					<p>{cat.description}</p>
+				</a>
+			{/each}
 		</div>
-	  {/each}
 	</div>
-  </div>
 </section>
 
+
 <!-- FAQ Section -->
-<section class="bg-white">
-  <div class="container mx-auto px-4">
-	<h2 class="text-3xl font-bold text-center mb-8">Часто задаваемые вопросы</h2>
-	<div class="space-y-4 max-w-2xl mx-auto">
-	  {#each faqItems as faq}
-		<div class="p-4 border rounded hover:shadow transition">
-		  <h3 class="font-semibold text-lg mb-2">{faq.question}</h3>
-		  <p class="text-gray-700">{faq.answer}</p>
+<section class="bg-base-100 text-base-content">
+	<div class="container mx-auto px-4">
+		<h2 class="text-3xl font-bold text-center mb-8">Часто задаваемые вопросы</h2>
+		<div class="space-y-4 max-w-2xl mx-auto">
+			{#each faqItems as faq}
+				<div class="p-4 border border-base-300 rounded hover:shadow transition">
+					<h3 class="font-semibold text-lg mb-2">{faq.question}</h3>
+					<p>{faq.answer}</p>
+				</div>
+			{/each}
 		</div>
-	  {/each}
 	</div>
-  </div>
 </section>
+
 
 <!-- Promo Section -->
 <section class="bg-gradient-to-r from-green-500 to-teal-500 text-white">
