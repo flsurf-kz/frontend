@@ -14,6 +14,7 @@
     }: Props = $props();
 </script>
   
+<!-- svelte-ignore slot_element_deprecated -->
 <button
     type="button"
     aria-label={ariaLabel}

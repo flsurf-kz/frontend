@@ -1,19 +1,35 @@
 <script lang="ts">
-	import { BaseButton } from "$lib/shared/ui/buttons";
-	import { Checkbox } from "$lib/shared/ui/checkboxes";
-	import { InputField, PasswordField } from "$lib/shared/ui/inputs";
 	import { registerUser } from "$lib/entities/user/model";
+	import BaseButton from "$lib/shared/ui/buttons/base-button.svelte";
+	import { Checkbox } from "$lib/shared/ui/checkboxes";
+	import InputField from "$lib/shared/ui/inputs/input-field.svelte";
+	import PasswordField from "$lib/shared/ui/inputs/password-field.svelte";
+
+	// Импорт типа схемы регистрации из клиента
 	import { RegisterUserSchema } from "flsurf-client";
 
+	// Дополнительные поля: тип аккаунта и страна (значения можно расширять)
 	let form: RegisterUserSchema = new RegisterUserSchema({
 		name: '',
 		surname: '',
 		email: '',
 		password: '',
-	}); 
+	});
 
 	let repeatPassword = '';
 	let agreed = false;
+	let accountType: "Freelancer" | "Client" = "Freelancer";
+	let country = '';
+
+	// Пример списка стран
+	let countries = [
+		{ code: 'RU', label: 'Россия' },
+		{ code: 'KZ', label: 'Казахстан' },
+		{ code: 'UA', label: 'Украина' },
+		{ code: 'BY', label: 'Беларусь' },
+		{ code: 'US', label: 'США' }
+	];
+
 	let loading = false;
 	let error: string | null = null;
 
@@ -31,19 +47,27 @@
 			error = "Пароли не совпадают";
 			return;
 		}
-
+		if (!country) {
+			error = "Выберите страну";
+			return;
+		}
+		// Если нужно, можно добавить accountType и country в payload
+		// Например, расширить RegisterUserSchema или отправлять их отдельно
 		loading = true;
 		try {
 			await registerUser(form);
-			// Навигация или показ успешного состояния
 			alert("Вы успешно зарегистрированы!");
+			// Можно выполнить редирект, например: goto('/dashboard');
 		} catch (e) {
 			error = "Не удалось зарегистрироваться. Проверьте данные.";
+		} finally {
+			loading = false;
 		}
-		loading = false;
 	}
 </script>
 
+
+<!-- svelte-ignore a11y_label_has_associated_control -->
 <form class="space-y-4 max-w-md mx-auto" on:submit|preventDefault={handleSubmit}>
 	<div class="flex gap-2">
 		<InputField label="Имя" bind:value={form.name} required />
@@ -53,9 +77,33 @@
 	<PasswordField label="Пароль" bind:value={form.password} required />
 	<PasswordField label="Повторите пароль" bind:value={repeatPassword} required />
 
-	<Checkbox value={agreed} onChange={(v) => { agreed = v } }>
-		<!-- Да, я принимаю <a href="/terms" class="text-green-500 underline">Условия обслуживания</a> -->
-	</Checkbox>
+	<!-- Выбор типа аккаунта -->
+	<div>
+		<label class="label">Тип аккаунта</label>
+		<select bind:value={accountType} class="select select-bordered w-full">
+			<option value="Freelancer">Фрилансер</option>
+			<option value="Client">Заказчик</option>
+		</select>
+	</div>
+
+	<!-- Выбор страны -->
+	<div>
+		<label class="label">Страна</label>
+		<select bind:value={country} class="select select-bordered w-full">
+			<option value="" disabled selected>Выберите страну</option>
+			{#each countries as c}
+				<option value={c.code}>{c.label}</option>
+			{/each}
+		</select>
+	</div>
+
+	<!-- Социальные входы -->
+	<div class="flex justify-between">
+		<a href="/auth/vk" class="btn btn-outline btn-info btn-xs">Войти через ВКонтакте</a>
+		<a href="/auth/google" class="btn btn-outline btn-info btn-xs">Войти через Google</a>
+	</div>
+
+	<Checkbox value={agreed} onChange={(value) => { agreed = value}} label={"Да, я принимаю Условия обслуживания"} />
 
 	{#if error}
 		<p class="text-red-500 text-sm">{error}</p>
