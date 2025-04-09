@@ -6,29 +6,21 @@
 	import PasswordField from "$lib/shared/ui/inputs/password-field.svelte";
 
 	// Импорт типа схемы регистрации из клиента
-	import { RegisterUserSchema } from "flsurf-client";
+	import { RegisterUserSchema, RegisterUserSchemaCountry, RegisterUserSchemaType } from "flsurf-client";
 
 	// Дополнительные поля: тип аккаунта и страна (значения можно расширять)
 	let form: RegisterUserSchema = new RegisterUserSchema({
 		name: '',
 		surname: '',
 		email: '',
+		country: RegisterUserSchemaCountry.Kazakhstan, 
+		type: RegisterUserSchemaType.NonUser, 
 		password: '',
 	});
 
 	let repeatPassword = '';
 	let agreed = false;
-	let accountType: "Freelancer" | "Client" = "Freelancer";
 	let country = '';
-
-	// Пример списка стран
-	let countries = [
-		{ code: 'RU', label: 'Россия' },
-		{ code: 'KZ', label: 'Казахстан' },
-		{ code: 'UA', label: 'Украина' },
-		{ code: 'BY', label: 'Беларусь' },
-		{ code: 'US', label: 'США' }
-	];
 
 	let loading = false;
 	let error: string | null = null;
@@ -64,6 +56,7 @@
 			loading = false;
 		}
 	}
+	let countries = Object.values(RegisterUserSchemaCountry);
 </script>
 
 
@@ -80,7 +73,7 @@
 	<!-- Выбор типа аккаунта -->
 	<div>
 		<label class="label">Тип аккаунта</label>
-		<select bind:value={accountType} class="select select-bordered w-full">
+		<select bind:value={form.type} class="select select-bordered w-full">
 			<option value="Freelancer">Фрилансер</option>
 			<option value="Client">Заказчик</option>
 		</select>
@@ -89,10 +82,10 @@
 	<!-- Выбор страны -->
 	<div>
 		<label class="label">Страна</label>
-		<select bind:value={country} class="select select-bordered w-full">
+		<select bind:value={form.country} class="select select-bordered w-full">
 			<option value="" disabled selected>Выберите страну</option>
-			{#each countries as c}
-				<option value={c.code}>{c.label}</option>
+			{#each countries as country}
+				<option value={country}>{country}</option>
 			{/each}
 		</select>
 	</div>
