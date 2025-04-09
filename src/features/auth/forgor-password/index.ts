@@ -1,0 +1,1 @@
+export { default as ForgorPassword } from './forgor-password.svelte'; 
