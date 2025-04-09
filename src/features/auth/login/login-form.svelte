@@ -29,19 +29,19 @@
 	}
 </script>
 
-<div class="max-w-md mx-auto bg-base-100 p-6 rounded-lg shadow border border-base-200 text-base-content">
+<div class="max-w-md mx-auto bg-base-100 p-6 rounded-lg shadow border border-base-200 space-y-4 text-base-content">
 	<h1 class="text-2xl font-bold text-center mb-6">
 		Войти в <span class="text-green-600">FLSurf.kz</span>
 	</h1>
 
 	<InputField placeholder="Юзернейм или почта" bind:value={email} />
-	<PasswordField placeholder="Пароль" bind:value={password} className="mt-4" />
+	<PasswordField placeholder="Пароль" bind:value={password} />
 
 	{#if error}
-		<p class="text-sm text-red-500 mt-2">{error}</p>
+		<p class="text-sm text-red-500">{error}</p>
 	{/if}
 
-	<BaseButton className="btn btn-success w-full mt-6" on:click={handleLogin} disabled={loading}>
+	<BaseButton className="btn btn-success w-full" on:click={handleLogin} disabled={loading}>
 		{loading ? "Вход..." : "Продолжить"}
 	</BaseButton>
 
@@ -51,6 +51,10 @@
 		<img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="" class="w-5 h-5 mr-2" />
 		Зайти через Google
 	</a>
+
+	<div class="text-center mt-[-10px] mb-[-10px]">
+		<a href="/auth/forgor-password" class="text-sm text-blue-500 hover:text-blue-600">Забыли пароль? </a>
+	</div>
 
 	<div class="text-center mt-4 text-sm">
 		Нету аккаунта FLSurf.kz?

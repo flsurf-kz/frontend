@@ -21,16 +21,16 @@
     }
   </script>
   
-  <div class="form-control w-full max-w-xs">
+  <div class="form-control w-full">
     {#if label}
       <!-- svelte-ignore a11y-label-has-associated-control -->
       <label class="label">
         <span class="label-text">{label}</span>
       </label>
     {/if}
-    <div class="relative">
+    <div class="relative  w-full">
       <input
-        class="input input-bordered w-full pr-10"
+        class="input input-bordered w-full pr-10 focus:outline-none"
         type={inputType}
         bind:value
         placeholder={placeholder}

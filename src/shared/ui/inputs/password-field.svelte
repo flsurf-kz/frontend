@@ -23,15 +23,15 @@
 </script>
 
   <!-- svelte-ignore a11y_label_has_associated_control -->
-<div class="form-control w-full max-w-xs">
+<div class="form-control w-full">
 {#if label}
   <label class="label">
     <span class="label-text">{label}</span>
   </label>
 {/if}
-<div class="relative">
+<div class="relative w-full">
   <input
-    class="input input-bordered w-full pr-10 {className}"
+    class="input input-bordered w-full pr-10 {className} focus:outline-none"
     type={showPassword ? 'text' : 'password'}
     value={value}
     placeholder={placeholder}
@@ -44,8 +44,8 @@
     class="absolute top-0 right-0 mt-2 mr-2 text-gray-500"
     on:click={toggleVisibility}
   >
-    {#if showPassword} 🙈 {/if}
-    {#if !showPassword} 👁️ {/if}
+    {#if showPassword} <img src="https://cdn-icons-png.flaticon.com/512/11502/11502607.png" alt="" class="w-5 h-5 object-contain"> {/if}
+    {#if !showPassword} <img src="https://cdn-icons-png.flaticon.com/512/8275/8275675.png" alt="" class="w-5 h-5 object-contain"> {/if}
   </button>
 </div>
 {#if error}

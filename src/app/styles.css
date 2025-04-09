@@ -12,3 +12,7 @@
         @apply focus:outline-hidden; 
     }
 }
+
+* { 
+    box-sizing: border-box;
+}

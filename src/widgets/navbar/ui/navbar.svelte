@@ -37,7 +37,7 @@
   
       <!-- НЕ авторизован -->
       {#if !isAuthorized}
-        <a href="/why-us" class="btn btn-ghost btn-sm">Почему мы?</a>
+        <a href="/unauth/whyus" class="btn btn-ghost btn-sm">Почему мы?</a>
   
         <div class="dropdown dropdown-hover mx-2">
           <label tabindex="0" class="btn btn-ghost btn-sm">
