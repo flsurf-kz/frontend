@@ -36,8 +36,12 @@ export async function registerUser(payload: RegisterUserSchema): Promise<void> {
 
 export async function loginUser(payload: LoginUserSchema): Promise<void> {
 	try {
-		await GlobalClient.login(payload);
+		let result = await GlobalClient.login(payload);
 		// TODO: возможно, сразу логинить или редирект
+		getCurrentUser(); 
+		
+
+		console.log("Пользватель авторизован")
 	} catch (e) {
 		console.error("Ошибка регистрации", e);
 		throw e;
