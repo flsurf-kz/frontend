@@ -1,32 +1,28 @@
 <script lang="ts">
-    import { createEventDispatcher } from 'svelte';
+  // Компонент принимает список опций и массив выбранных значений (для двустороннего биндинга)
+  export let options: string[] = [];
+  export let selected: string[] = [];
   
-    export let options: string[] = [];
-    export let selected: string[] = [];
-  
-    const dispatch = createEventDispatcher();
-  
-    function toggleOption(option: string) {
-      let newSelected = [...selected];
-      if (newSelected.includes(option)) {
-        newSelected = newSelected.filter(o => o !== option);
-      } else {
-        newSelected.push(option);
-      }
-      dispatch('change', newSelected);
+  function toggleOption(option: string) {
+    // Если опция уже выбрана – удаляем её, иначе добавляем
+    if (selected.includes(option)) {
+      selected = selected.filter(o => o !== option);
+    } else {
+      selected = [...selected, option];
     }
-  </script>
-  
+  }
+</script>
+
 <div class="flex flex-col gap-2">
-{#each options as option}
-  <label class="flex items-center gap-2">
-    <input
-      type="checkbox"
-      class="checkbox"
-      checked={selected.includes(option)}
-      on:change={() => toggleOption(option)}
-    />
-    <span>{option}</span>
-  </label>
-{/each}
+  {#each options as option}
+    <label class="flex items-center gap-2">
+      <input
+        type="checkbox"
+        class="checkbox"
+        checked={selected.includes(option)}
+        on:change={() => toggleOption(option)}
+      />
+      <span>{option}</span>
+    </label>
+  {/each}
 </div>

@@ -1,13 +1,15 @@
 <script lang="ts">
+	import type { SelectItem } from '$lib/shared/types';
+
   // Для Svelte 5: используем руны ($state) и получаем пропсы через $props()
   // Обратите внимание: обновите Svelte до v5, чтобы $state работал.
   type Props = {
     placeholder?: string;
-    selectedItems: string[];
-    searchResults: string[];
+    selectedItems: SelectItem[];
+    searchResults: SelectItem[];
     searchDelay?: number;
     onSearch: (query: string) => void;
-    onAdd: (item: string) => void;
+    onAdd: (item: SelectItem) => void;
     onRemove: (index: number) => void;
   };
 
@@ -34,7 +36,7 @@
     debouncedSearch(query);
   }
 
-  function selectItem(item: string) {
+  function selectItem(item: SelectItem) {
     if (!selectedItems.includes(item)) {
       onAdd(item);
     }
@@ -70,6 +72,8 @@
   {#if query && searchResults.length > 0}
     <ul class="absolute z-10 bg-white border border-gray-200 mt-1 w-full max-h-60 overflow-y-auto">
       {#each searchResults as result}
+        <!-- svelte-ignore a11y_click_events_have_key_events -->
+        <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
         <li
           class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
           onclick={() => selectItem(result)}
