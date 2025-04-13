@@ -16,7 +16,7 @@
         hourlyRate: hourlyRate ?? undefined,
         duration: duration ?? undefined
       }));
-      goto("/job/create/step4");
+      goto("/job/create/description");
     }
   </script>
   

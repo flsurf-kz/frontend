@@ -9,7 +9,7 @@
         ...data,
         expirationDate: expirationDate ? new Date(expirationDate) : undefined
       }));
-      goto("/job/create/step5");
+      goto("/job/create/budget");
     }
   </script>
   

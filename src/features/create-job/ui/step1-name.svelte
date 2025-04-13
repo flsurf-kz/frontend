@@ -16,7 +16,7 @@
         description,
         timestamp: new Date()
       }));
-      goto("/job/create/step2");
+      goto("/job/create/category");
     }
   </script>
   

@@ -46,7 +46,7 @@
 			categoryId,
 			requiredSkillIds: selectedSkills
 		}));
-		goto("/job/create/step3");
+		goto("/job/create/skills");
 	}
 </script>
 

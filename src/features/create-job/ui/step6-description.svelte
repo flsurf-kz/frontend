@@ -10,7 +10,7 @@
         ...data,
         additionalInfo: additionalInfo.trim() !== "" ? additionalInfo : undefined
       }));
-      goto("/job/create/step7");
+      goto("/job/create/overview");
     }
   </script>
   
