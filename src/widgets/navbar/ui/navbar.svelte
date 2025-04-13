@@ -1,7 +1,5 @@
 <script lang="ts">
-    import { UserTypes } from "$lib/entities/user/enums/user-types";
     import { CurrentUser } from "$lib/entities/user/model/modal"; // Глобальный store
-    import { get } from 'svelte/store';
   
     import ArrowDown from "$lib/shared/ui/icons/ArrowDown.svelte";
     import BellIcon from "$lib/shared/ui/icons/BellIcon.svelte";
@@ -37,7 +35,7 @@
   
       <!-- НЕ авторизован -->
       {#if !isAuthorized}
-        <a href="/unauth/whyus" class="btn btn-ghost btn-sm">Почему мы?</a>
+        <a href="/why-us" class="btn btn-ghost btn-sm">Почему мы?</a>
   
         <div class="dropdown dropdown-hover mx-2">
           <label tabindex="0" class="btn btn-ghost btn-sm">
@@ -45,7 +43,7 @@
             <ArrowDown className="h-4 ml-1" />
           </label>
           <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-48">
-            <li><a href="/signup?role=client">Разместить вакансию</a></li>
+            <li><a href="/auth/register?type=Client">Разместить вакансию</a></li>
             <li><a href="/unauth/clients">Разместить заказ</a></li>
           </ul>
         </div>

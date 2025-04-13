@@ -8,6 +8,7 @@
     export let inputType: "email" | "text" | "phone" = "text" 
     export let disabled: boolean = false;
     export let required: boolean = false; 
+    export let className: string = ""
     
     const dispatch = createEventDispatcher();
   
@@ -21,7 +22,7 @@
     }
   </script>
   
-  <div class="form-control w-full">
+  <div class="form-control w-full flex-col">
     {#if label}
       <!-- svelte-ignore a11y-label-has-associated-control -->
       <label class="label">
@@ -30,7 +31,7 @@
     {/if}
     <div class="relative  w-full">
       <input
-        class="input input-bordered w-full pr-10 focus:outline-none"
+        class="input input-bordered w-full pr-10 focus:outline-none {className}"
         type={inputType}
         bind:value
         placeholder={placeholder}

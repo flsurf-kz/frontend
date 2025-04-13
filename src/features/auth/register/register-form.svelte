@@ -4,9 +4,20 @@
 	import { Checkbox } from "$lib/shared/ui/checkboxes";
 	import InputField from "$lib/shared/ui/inputs/input-field.svelte";
 	import PasswordField from "$lib/shared/ui/inputs/password-field.svelte";
+	import { page } from '$app/state'; 
 
 	// Импорт типа схемы регистрации из клиента
 	import { RegisterUserSchema, RegisterUserSchemaCountry, RegisterUserSchemaType } from "flsurf-client";
+
+	let userTypeParam = page.url.searchParams.get('type') || "";
+
+	// Массив реальных значений enum
+	let validUserTypes = Object.values(RegisterUserSchemaType) as string[];
+
+	// Если параметр совпадает с одним из значений enum — используем его, иначе дефолт
+	let userType: RegisterUserSchemaType = validUserTypes.includes(userTypeParam)
+		? (userTypeParam as RegisterUserSchemaType)
+		: RegisterUserSchemaType.NonUser; // например, дефолтный
 
 	// Дополнительные поля: тип аккаунта и страна (значения можно расширять)
 	let form: RegisterUserSchema = new RegisterUserSchema({
@@ -14,7 +25,7 @@
 		surname: '',
 		email: '',
 		country: RegisterUserSchemaCountry.Kazakhstan, 
-		type: RegisterUserSchemaType.NonUser, 
+		type: userType, 
 		password: '',
 	});
 
@@ -61,7 +72,11 @@
 
 
 <!-- svelte-ignore a11y_label_has_associated_control -->
-<form class="space-y-4 max-w-md mx-auto" on:submit|preventDefault={handleSubmit}>
+<form class="space-y-4 max-w-md mx-auto rounded-lg p-6 bg-base-100 border-base-200 mb-10 shadow border" on:submit|preventDefault={handleSubmit}>
+	<h1 class="text-2xl font-bold text-center mb-6">
+		Зарегистрироваться в <span class="text-green-600">FLSurf.kz</span>
+	</h1>
+
 	<div class="flex gap-2">
 		<InputField label="Имя" bind:value={form.name} required />
 		<InputField label="Фамилия" bind:value={form.surname} required />

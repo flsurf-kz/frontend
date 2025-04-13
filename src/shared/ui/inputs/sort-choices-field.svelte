@@ -1,7 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
-  
-    export let sortOptions: string[] = ['По времени', 'По релевантности'];
+
+    export let sortOptions: string[] = ['Date', 'Recommended'];
     export let selected: string = sortOptions[0];
   
     const dispatch = createEventDispatcher();
@@ -13,6 +13,7 @@
   </script>
   
 <div class="form-control w-full max-w-xs">
+    <!-- svelte-ignore a11y_label_has_associated_control -->
     <label class="label">
       <span class="label-text">Сортировать по:</span>
     </label>

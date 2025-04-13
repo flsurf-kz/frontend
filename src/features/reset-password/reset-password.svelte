@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { GlobalClient } from "$lib/shared/api";
 	import { goto } from "$app/navigation";
-	import { page } from "$app/stores";
+	import { page } from "$app/state";
 	import { get } from 'svelte/store';
 	import { ResetPasswordCommand } from "flsurf-client";
 
 	// Получаем код сброса из параметров URL
-	$: code = get(page).url.searchParams.get("code");
+	$: code = page.url.searchParams.get("code");
+	$: email = page.url.searchParams.get("email"); 
 
 	let password = "";
 	let repeatPassword = "";
@@ -21,6 +22,10 @@
 			error = "Код для сброса отсутствует. Проверьте ссылку.";
 			return;
 		}
+		if (!email) { 
+			error = "Электронная почта отсутствует. Попробуйте снова"
+			return; 
+		}
 		if (password.length < 8) {
 			error = "Пароль должен содержать не менее 8 символов";
 			return;
@@ -32,7 +37,7 @@
 		loading = true;
 		try {
 			// Предположим, API-метод resetPassword принимает объект с code и новым паролем
-			await GlobalClient.resetPassword(new ResetPasswordCommand({ code, newPassword: password }));
+			await GlobalClient.resetPassword(new ResetPasswordCommand({ code: code, email: email, newPassword: password }));
 			successMessage = "Пароль успешно сброшен. Вы будете перенаправлены на страницу входа.";
 			setTimeout(() => goto("/login"), 3000);
 		} catch (e) {
