@@ -1,1 +1,1 @@
-export { default as GetJobs } from './ui/get-jobs.svelte'
+export { default as GetJobsPage } from './ui/get-jobs.svelte'
