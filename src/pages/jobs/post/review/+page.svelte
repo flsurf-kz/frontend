@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Step7Review } from "$lib/features/create-job";
+	import { Step7Review } from "$lib/features/job/create-job";
 
     
 </script>

@@ -1,5 +1,5 @@
 <script>
-	import { PostStepsLayout } from "$lib/features/create-job";
+	import { PostStepsLayout } from "$lib/features/job/create-job";
 
 </script>
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Step3Skills } from "$lib/features/create-job";
+	import { Step3Skills } from "$lib/features/job/create-job";
 
     
 </script>

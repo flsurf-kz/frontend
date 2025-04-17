@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Step2Category from "$lib/features/create-job/ui/step2-category.svelte";
+	import Step2Category from "$lib/features/job/create-job/ui/step2-category.svelte";
 
     
 </script>

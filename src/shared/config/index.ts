@@ -1,1 +1,1 @@
-export { config as GlobalConfig } from './config'; 
+export { GlobalConfig as GlobalConfig } from './config'; 
