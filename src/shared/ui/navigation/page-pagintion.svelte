@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { ContractEntity, JobEntity } from 'flsurf-client';
     import { createEventDispatcher } from 'svelte';
   
     export let currentPage: number = 1;

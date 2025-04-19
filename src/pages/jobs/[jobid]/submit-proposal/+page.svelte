@@ -1,23 +1,28 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { GlobalClient } from '$lib/shared/api';
+	import BaseButton from '$lib/shared/ui/buttons/base-button.svelte';
+	import { InputField } from '$lib/shared/ui/inputs';
+	import TextField from '$lib/shared/ui/inputs/text-field.svelte';
+	import { SubmitProposalCommand } from 'flsurf-client';
 
 	let { job } = $props();
 
-	let proposedRate = '';
-	let coverLetter = '';
-	let isSubmitting = false;
-	let error = '';
-	let submitted = false;
+	let proposedRate = $state('');
+	let coverLetter = $state('');
+	let isSubmitting = $state(false);
+	let error = $state('');
+	let submitted = $state(false);
 
 	async function submit() {
 		isSubmitting = true;
 		error = '';
 		try {
-			await GlobalClient.submitProposal({
+			await GlobalClient.submitProposal(new SubmitProposalCommand({
 				jobId: job.jobId,
 				proposedRate: parseFloat(proposedRate),
-				coverLetter
-			});
+				coverLetter: coverLetter, 
+			}))
 			submitted = true;
 			goto(`/job/${job.jobId}`);
 		} catch (e) {
@@ -38,14 +43,13 @@
 		<!-- Цена -->
 		<InputField
 			label="Предложенная цена (в ₸)"
-			type="number"
+			inputType="number"
 			bind:value={proposedRate}
 			required
-			min="100"
 		/>
 
 		<!-- Сообщение -->
-		<Textarea
+		<TextField
 			label="Сопроводительное письмо"
 			placeholder="Расскажите, почему вы подходите..."
 			bind:value={coverLetter}
@@ -60,8 +64,8 @@
 		{/if}
 
 		<div class="flex justify-end gap-4">
-			<BaseButton color="gray" on:click={() => history.back()}>Отмена</BaseButton>
-			<BaseButton color="success" on:click={submit} disabled={isSubmitting}>
+			<BaseButton className="gray" onclick={() => history.back()}>Отмена</BaseButton>
+			<BaseButton className="success" onclick={submit} disabled={isSubmitting}>
 				{isSubmitting ? 'Отправка...' : 'Отправить'}
 			</BaseButton>
 		</div>

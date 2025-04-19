@@ -1,12 +1,16 @@
 <script lang="ts">
+	import type { SelectItem } from '$lib/shared/types';
+	import { NotificationEntity } from 'flsurf-client';
     import { createEventDispatcher } from 'svelte';
   
-    export let options: string[] = [];
+    export let options: SelectItem[] = [];
     export let value: string = '';
     export let label: string = '';
     export let disabled: boolean = false;
   
     const dispatch = createEventDispatcher();
+
+    NotificationEntity
   
     function onSelect(event: Event) {
       const target = event.target as HTMLSelectElement;
