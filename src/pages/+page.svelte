@@ -96,20 +96,22 @@
 
 <!-- Promo Section -->
 <section class="bg-gradient-to-r from-green-500 to-teal-500 text-white">
-  <div class="container mx-auto px-4 flex flex-col md:flex-row items-center gap-8">
-	<div class="flex-1">
-	  <h2 class="text-3xl font-bold mb-4">
-		Работайте эффективно с нами
-	  </h2>
-	  <p class="text-xl mb-6">
-		Присоединяйтесь к тысячам профессионалов и находите заказы, которые помогут вашему бизнесу расти.
-	  </p>
-	  <button class="btn btn-light">Начать сейчас</button>
+	<div class="container mx-auto px-4 flex flex-col md:flex-row items-center gap-8">
+		<div class="flex-1">
+			<h2 class="text-3xl font-bold mb-4">Работайте эффективно с нами</h2>
+			<p class="text-xl mb-6">
+				Присоединяйтесь к тысячам профессионалов и находите заказы, которые помогут вашему бизнесу расти.
+			</p>
+			<a href="/auth/register" class="btn btn-light">Начать сейчас</a>
+		</div>
+		<div class="flex-1">
+			<img
+				src="https://via.placeholder.com/600x400"
+				alt="Промо изображение"
+				class="w-full md:w-1/2 rounded shadow-md"
+			/>
+		</div>
 	</div>
-	<div class="flex-1">
-	  <img src="https://via.placeholder.com/600x400" alt="Промо изображение" class="w-full md:w-1/2 rounded shadow-md" />
-	</div>
-  </div>
 </section>
 </main>
   

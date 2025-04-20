@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from "$app/navigation";
 	import { logout } from "$lib/entities/user/model";
 	import { UserAvatar } from "$lib/shared/ui/icons";
   import ArrowDown from "$lib/shared/ui/icons/ArrowDown.svelte";
@@ -12,6 +13,7 @@
   // Функция выхода (можем брать из store напрямую)
   function handleLogout() {
     logout();
+    goto("/")
   }
 </script>
 
@@ -52,6 +54,6 @@
     </li>
 
     <li><a href="/settings">Account settings</a></li>
-    <li><a href="/logout" onclick={handleLogout}>Log out</a></li>
+    <li><a href="/" onclick={handleLogout}>Log out</a></li>
   </ul>
 </div>

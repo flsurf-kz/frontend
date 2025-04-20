@@ -42,7 +42,8 @@
 			error = "Вы должны принять условия обслуживания";
 			return;
 		}
-		if (form.password.length >= 8) {
+		if (form.password.length <= 8) {
+			console.log(form.password)
 			error = "Пароль должен быть минимум 8 символов";
 			return;
 		}

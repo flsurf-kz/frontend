@@ -23,6 +23,7 @@ export async function logout() {
     // потом обнуляем Store
     GlobalClient.logout(); 
 	CurrentUser.set(undefined)
+	
 }
 
 export async function registerUser(payload: RegisterUserSchema): Promise<void> {
