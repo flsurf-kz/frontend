@@ -8,6 +8,7 @@
 
 	// Импорт типа схемы регистрации из клиента
 	import { RegisterUserSchema, RegisterUserSchemaCountry, RegisterUserSchemaType } from "flsurf-client";
+	import { goto } from "$app/navigation";
 
 	let userTypeParam = page.url.searchParams.get('type') || "";
 
@@ -31,7 +32,6 @@
 
 	let repeatPassword = '';
 	let agreed = false;
-	let country = '';
 
 	let loading = false;
 	let error: string | null = null;
@@ -42,7 +42,7 @@
 			error = "Вы должны принять условия обслуживания";
 			return;
 		}
-		if (form.password.length < 8) {
+		if (form.password.length >= 8) {
 			error = "Пароль должен быть минимум 8 символов";
 			return;
 		}
@@ -50,7 +50,7 @@
 			error = "Пароли не совпадают";
 			return;
 		}
-		if (!country) {
+		if (!form.country) {
 			error = "Выберите страну";
 			return;
 		}
@@ -59,8 +59,7 @@
 		loading = true;
 		try {
 			await registerUser(form);
-			alert("Вы успешно зарегистрированы!");
-			// Можно выполнить редирект, например: goto('/dashboard');
+			goto('/');
 		} catch (e) {
 			error = "Не удалось зарегистрироваться. Проверьте данные.";
 		} finally {
@@ -117,7 +116,8 @@
 		<p class="text-red-500 text-sm">{error}</p>
 	{/if}
 
-	<BaseButton type="submit" className="w-full" disabled={loading}>
+	
+	<BaseButton type="submit" className="w-full" disabled={loading} onclick={() => {}}>
 		{loading ? "Загрузка..." : "Создать аккаунт"}
 	</BaseButton>
 </form>

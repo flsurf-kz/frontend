@@ -35,7 +35,7 @@
   
       <!-- НЕ авторизован -->
       {#if !isAuthorized}
-        <a href="/why-us" class="btn btn-ghost btn-sm">Почему мы?</a>
+        <a href="/unauth/whyus" class="btn btn-ghost btn-sm">Почему мы?</a>
   
         <div class="dropdown dropdown-hover mx-2">
           <label tabindex="0" class="btn btn-ghost btn-sm">
@@ -66,9 +66,9 @@
       <!-- Авторизован: Фрилансер -->
       {#if isAuthorized && userType === 'Freelancer'}
         <div class="dropdown dropdown-hover mx-2">
-          <label tabindex="0" class="btn btn-ghost btn-sm text-gray-700">
+          <label tabindex="0" class="btn btn-ghost btn-sm text-base-content">
             Найти работу
-            <ArrowDown className="w-4 h-4 ml-1" />
+            <ArrowDown className="h-4 ml-1" />
           </label>
           <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-48">
             <li><a href="/jobs">Найти заказ</a></li>
@@ -78,9 +78,9 @@
         </div>
   
         <div class="dropdown dropdown-hover mx-2">
-          <label tabindex="0" class="btn btn-ghost btn-sm text-gray-700">
+          <label tabindex="0" class="btn btn-ghost btn-sm text-base-content">
             Моя работа
-            <ArrowDown className="h-1 ml-1" />
+            <ArrowDown className="h-4 ml-1" />
           </label>
           <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-48">
             <li><a href="/jobs/active">Активная работа</a></li>
@@ -89,9 +89,9 @@
         </div>
   
         <div class="dropdown dropdown-hover mx-2">
-          <label tabindex="0" class="btn btn-ghost btn-sm text-gray-700">
+          <label tabindex="0" class="btn btn-ghost btn-sm text-base-content">
             Финансы
-            <ArrowDown className="h-1 ml-1" />
+            <ArrowDown className="h-4 ml-1" />
           </label>
           <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-48">
             <li><a href="/finances/summary">Обзор финансов</a></li>
@@ -105,9 +105,9 @@
       <!-- Авторизован: Клиент -->
       {#if isAuthorized && userType === 'Client'}
         <div class="dropdown dropdown-hover mx-2">
-          <label tabindex="0" class="btn btn-ghost btn-sm text-gray-700">
+          <label tabindex="0" class="btn btn-ghost btn-sm text-base-content">
             Работы
-            <ArrowDown className=" h-4 ml-1" height={'5'}/>
+            <ArrowDown className="h-4 ml-1" height={'5'}/>
           </label>
           <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-48">
             <li><a href="/jobs/create">Опубликовать работу</a></li>
@@ -118,9 +118,9 @@
         </div>
   
         <div class="dropdown dropdown-hover mx-2">
-          <label tabindex="0" class="btn btn-ghost btn-sm text-gray-700">
+          <label tabindex="0" class="btn btn-ghost btn-sm text-base-content">
             Финансы
-            <ArrowDown className=" h-4 ml-1" />
+            <ArrowDown className="h-4 ml-1" />
           </label>
           <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-48">
             <li><a href="/finances/summary">Обзор финансов</a></li>
@@ -133,7 +133,7 @@
   
       <!-- Сообщения -->
       {#if isAuthorized}
-        <a href="/messages" class="btn btn-ghost btn-sm normal-case text-gray-700">Сообщения</a>
+        <a href="/messages" class="btn btn-ghost btn-sm normal-case text-base-content">Сообщения</a>
       {/if}
     </div>
   
@@ -147,7 +147,7 @@
   
       <!-- Уведомления -->
       {#if isAuthorized}
-        <button class="btn btn-ghost btn-circle btn-sm text-gray-700">
+        <button class="btn btn-ghost btn-circle btn-sm text-base-content">
           <div class="indicator">
             <BellIcon className="w-5 h-5" />
             <span class="badge badge-xs indicator-item">3</span>

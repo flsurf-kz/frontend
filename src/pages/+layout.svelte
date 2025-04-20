@@ -1,6 +1,5 @@
 <script>
 	import '$lib/app/styles.css';
-	import { UserTypes } from '$lib/entities/user/enums/user-types';
 	import { Footer } from '$lib/shared/ui/footer';
 	import { Navbar } from '$lib/widgets/navbar/ui';
 </script>

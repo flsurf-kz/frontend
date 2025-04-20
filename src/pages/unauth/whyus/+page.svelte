@@ -24,14 +24,14 @@
     ];
   </script>
   
-  <section class="py-16 bg-white">
+  <section class="py-16 bg-base">
     <div class="container mx-auto px-4">
       <h1 class="text-4xl font-bold text-center mb-8">Почему выбирают нас?</h1>
       <div class="space-y-8 max-w-4xl mx-auto">
         {#each reasons as reason (reason.id)}
           <div class="p-6 border rounded-lg shadow hover:shadow-xl transition">
-            <h2 class="text-2xl font-bold mb-2 text-gray-800">{reason.title}</h2>
-            <p class="text-gray-600">{reason.description}</p>
+            <h2 class="text-2xl font-bold mb-2 text-green-800">{reason.title}</h2>
+            <p class="text-base-600">{reason.description}</p>
           </div>
         {/each}
       </div>

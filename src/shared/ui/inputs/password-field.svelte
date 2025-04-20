@@ -33,7 +33,7 @@
   <input
     class="input input-bordered w-full pr-10 {className} focus:outline-none"
     type={showPassword ? 'text' : 'password'}
-    value={value}
+    bind:value
     placeholder={placeholder}
     on:input={onInput}
     disabled={disabled}
