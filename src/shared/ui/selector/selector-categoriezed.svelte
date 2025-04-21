@@ -1,10 +1,4 @@
 <script lang="ts">
-    interface Category { 
-        key: string, 
-        label: string 
-        items: Category[] 
-    }
-
     // Принимаем внешние переменные (props)
     export let categories: Category[] = [];
     export let searchValue: string  = "";

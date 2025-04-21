@@ -1,7 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
   
-    export let value: string = '';
+    export let value: string | number = '';
     export let placeholder: string = 'Введите текст...';
     export let label: string = '';
     export let error: string = '';

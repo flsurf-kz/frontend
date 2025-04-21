@@ -1,5 +1,6 @@
 import { GlobalClient } from "$lib/shared/api";
 import { GetTransactionsListQuery, type IGetTransactionsListQuery } from "flsurf-client";
+import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async ({ url }: { url: any }) => {
 	const filters: IGetTransactionsListQuery = {
