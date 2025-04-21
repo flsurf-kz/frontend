@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { ChoicesField } from '$lib/shared/ui/inputs';
+	import { ChoicesField } from '$lib/shared/ui/inputs/index.js';
 	import { PagePagination } from '$lib/shared/ui/navigation';
 
 	export let data;

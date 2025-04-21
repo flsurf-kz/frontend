@@ -9,8 +9,6 @@
     export let disabled: boolean = false;
   
     const dispatch = createEventDispatcher();
-
-    NotificationEntity
   
     function onSelect(event: Event) {
       const target = event.target as HTMLSelectElement;
