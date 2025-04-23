@@ -1,13 +1,15 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     content: [
-      "./src/**/*.{html,svelte,js,ts}"
+      "./src/**/*.{html,svelte,js,ts}", 
+      './node_modules/flowbite-svelte/**/*.{html,js,svelte,ts}'
     ],
     theme: {
       extend: {},
     },
     plugins: [
-      require('daisyui')
+      require('daisyui'),
+      require('flowbite/plugin')   
     ],
     // Опционально: можно настроить темы daisyUI
     daisyui: {

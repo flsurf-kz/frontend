@@ -14,7 +14,7 @@ export const errorMessages = writable<ErrorMessage[]>([]);
  * @param message Текст ошибки
  * @param critical Если true, ошибка считается критической и вызывает "краш" (оверлей)
  */
-export function showError(message: string, critical: boolean = false): void {
+export function showNotification(message: string, critical: boolean = false	): void {
 	errorMessages.update(errors => [
 		...errors,
 		{ id: Date.now(), message, critical }

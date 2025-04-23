@@ -9,6 +9,7 @@
     export let disabled: boolean = false;
     export let required: boolean = false; 
     export let className: string = ""
+    export let maxlength: number = 0; 
     
     const dispatch = createEventDispatcher();
   
@@ -38,6 +39,7 @@
         on:input={onInput}
         disabled={disabled}
         {required}
+        {maxlength}
       />
       {#if value}
         <button

@@ -23,10 +23,12 @@
 
 	onMount(async () => {
 		try {
+			GlobalClient.createPortfolioProject
 			const { clientSecret: secret } = await GlobalClient.createSetupIntent({
 				providerId: selectedProviderId,
 				systemId: selectedSystemId
 			});
+			
 			clientSecret = secret;
 
 			stripe = await loadStripe(GlobalConfig.stripePublicKey);
