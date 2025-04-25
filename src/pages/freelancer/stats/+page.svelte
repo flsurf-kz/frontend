@@ -1,17 +1,19 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { Chart } from 'flowbite-svelte';
-	import { BaseButton } from '$lib/shared/ui/buttons';
+  	import { BaseButton } from '$lib/shared/ui/buttons';
+  	import { GlobalClient } from '$lib/shared/api';
+	import type { FreelancerStatsDto } from 'flsurf-client';
   
     export let userId!: string;
   
-    let stats: FreelancerStats | null = null;
+    let stats: FreelancerStatsDto | null = null;
     let loading = true;
   
     // ─── GET DATA ─────────────────────────────────────────────
     onMount(async () => {
       try {
-        stats = await GlobalClient.getFreelancerStats({ userId });
+        stats = await GlobalClient.getFreelancerStats(userId);
       } catch (e) {
         console.error('Failed to load stats', e);
       } finally {
@@ -27,7 +29,7 @@
         radialBar: {
           hollow: { size: '65%' },
           dataLabels: {
-            value: { formatter: v => `${v}%`, fontSize: '24px' }
+            value: { formatter: (v) => {`${v}%`}, fontSize: '24px' }
           }
         }
       },
@@ -73,6 +75,7 @@
   
   <section class="grid gap-6 p-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
   
+    <!-- svelte-ignore element_invalid_self_closing_tag -->
     <!-- 12-month earnings -->
     <div class="card bg-base-100 shadow">
       <div class="card-body">
@@ -81,10 +84,10 @@
           <span class="skeleton h-8 w-24"/>
         {:else}
           <p class="text-3xl font-semibold">
-            ${stats?.earningsLast12Months.toLocaleString()}
+            ${stats?.earningsLast12Months?.toLocaleString()}
           </p>
         {/if}
-        <BaseButton className="btn-link mt-2">Transaction history</BaseButton>
+        <BaseButton className="btn-link mt-2" onclick={() => {}}>Transaction history</BaseButton>
       </div>
     </div>
   
@@ -97,7 +100,7 @@
         {:else}
           <Chart options={jssOptions} class="w-full"/>
         {/if}
-        <BaseButton className="btn-outline btn-sm mt-2">View insights</BaseButton>
+        <BaseButton className="btn-outline btn-sm mt-2" onclick={() => {}}>View insights</BaseButton>
       </div>
     </div>
   

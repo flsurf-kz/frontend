@@ -1,6 +1,7 @@
 <script lang="ts">
-	import type { MouseEventHandler } from "svelte/elements";
+	import { GlobalClient } from "$lib/shared/api";
 
+	import type { MouseEventHandler } from "svelte/elements";
     export let type: "button" | "submit" | "reset" | null | undefined = 'button';
     export let variant: string = 'primary'; // primary, secondary, etc.
     export let disabled: boolean = false;
