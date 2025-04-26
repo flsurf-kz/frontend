@@ -2,7 +2,6 @@
 	import { GlobalClient } from "$lib/shared/api";
 	import { goto } from "$app/navigation";
 	import { page } from "$app/state";
-	import { get } from 'svelte/store';
 	import { ResetPasswordCommand } from "flsurf-client";
 
 	// Получаем код сброса из параметров URL
@@ -48,6 +47,7 @@
 	}
 </script>
 
+<!-- svelte-ignore a11y_label_has_associated_control -->
 <div class="max-w-md mx-auto bg-base-100 p-6 rounded-lg shadow border border-base-300">
 	<h1 class="text-2xl font-bold text-center mb-6">Сброс пароля</h1>
 	{#if !code}

@@ -10,7 +10,7 @@
 	{#each notifications as notif} 
 		<div class="notif-one">
 			<div class="notif-logo">
-				<img src={asFilesBlobOrUrl(notif.icon)} alt="">
+				<img src={notif.icon?.filePath} alt="">
 			</div>
 			<div class="notif-text typography-text">
 				{notif.text}
