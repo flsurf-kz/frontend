@@ -9,7 +9,7 @@
     export let disabled: boolean = false;
     export let required: boolean = false; 
     export let className: string = ""
-    export let maxlength: number = 0; 
+    export let maxlength: number | undefined = undefined; 
     
     const dispatch = createEventDispatcher();
   

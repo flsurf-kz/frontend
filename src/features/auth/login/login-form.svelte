@@ -41,7 +41,7 @@
 		<p class="text-sm text-red-500">{error}</p>
 	{/if}
 
-	<BaseButton className="btn btn-success w-full" on:click={handleLogin} disabled={loading}>
+	<BaseButton className="btn btn-success w-full" onclick={handleLogin} disabled={loading}>
 		{loading ? "Вход..." : "Продолжить"}
 	</BaseButton>
 

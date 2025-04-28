@@ -1,29 +1,30 @@
 <script lang="ts">
-    import { CurrentUser } from "$lib/entities/user/model/modal"; // Глобальный store
-  
-    import ArrowDown from "$lib/shared/ui/icons/ArrowDown.svelte";
-    import BellIcon from "$lib/shared/ui/icons/BellIcon.svelte";
-  
-    import NavbarSearch from "./navbar-search.svelte";
-    import UserDropdown from "./user-dropdown.svelte";
-  
-    // Реактивно получаем текущего пользователя
-    $: user = $CurrentUser;
-    $: isAuthorized = !!user;
-    $: userType = user?.type;
-  
-    // Локальный массив результатов поиска (заглушка)
-    let searchResults: { title: string; url: string }[] = [];
-  
-    // Функция поиска
-    function handleSearch(query: string) {
-      // Пример: вызываем searchBy(query, userType) => пока заполняем заглушкой
-      searchResults = [
-        { title: `Результат 1 для «${query}»`, url: "#" },
-        { title: `Результат 2 для «${query}»`, url: "#" }
-      ];
-    }
-  </script>
+  import { CurrentUser } from "$lib/entities/user/model/modal"; // Глобальный store
+
+  import ArrowDown from "$lib/shared/ui/icons/ArrowDown.svelte";
+	import type { NotificationEntity } from "flsurf-client";
+
+  import NavbarSearch from "./navbar-search.svelte";
+  import NotificationDropdown from "./notification-dropdown.svelte";
+  import UserDropdown from "./user-dropdown.svelte";
+
+  // Реактивно получаем текущего пользователя
+  $: user = $CurrentUser;
+  $: isAuthorized = !!user;
+  $: userType = user?.type;
+
+  // Локальный массив результатов поиска (заглушка)
+  let searchResults: { title: string; url: string }[] = [];
+
+  // Функция поиска
+  function handleSearch(query: string) {
+    // Пример: вызываем searchBy(query, userType) => пока заполняем заглушкой
+    searchResults = [
+      { title: `Результат 1 для «${query}»`, url: "#" },
+      { title: `Результат 2 для «${query}»`, url: "#" }
+    ];
+  }
+</script>
   
 <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
   <header class="navbar bg-base-100 shadow px-4 text-sm">
@@ -147,12 +148,7 @@
   
       <!-- Уведомления -->
       {#if isAuthorized}
-        <button class="btn btn-ghost btn-circle btn-sm text-base-content">
-          <div class="indicator">
-            <BellIcon className="w-5 h-5" />
-            <span class="badge badge-xs indicator-item">3</span>
-          </div>
-        </button>
+        <NotificationDropdown />
       {/if}
   
       <!-- Дропдаун пользователя или кнопки авторизации -->
