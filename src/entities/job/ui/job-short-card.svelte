@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { JobEntityBudgetType, type JobEntity } from 'flsurf-client';
 
 	let { job }: { job: JobEntity } = $props();
@@ -19,7 +20,12 @@
 	const tags = job.requiredSkills?.map((s) => s.name) ?? [];
 </script>
 
-<div class="p-4 border rounded-xl shadow-sm bg-white space-y-3">
+<div class="p-4 border rounded-xl shadow-sm bg-white space-y-3 relative">
+	<a
+		href="/jobs/{job.id}"
+		class="absolute inset-0 z-10"
+		aria-label="Перейти к { job.id }"
+	></a>
 	<div class="flex justify-between items-start">
 		<div class="space-y-1">
 			<h3 class="text-lg font-semibold">{job.title}</h3>

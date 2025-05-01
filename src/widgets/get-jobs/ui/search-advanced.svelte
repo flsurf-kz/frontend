@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import { JobEntityStatus, type GetJobsListQueryEmployerLocation } from 'flsurf-client';
-	import { BaseModal } from '$lib/shared/ui/modal';
+	import ModalBase from '$lib/shared/ui/modal/modal-base.svelte';
 
     let { open, onclose }: { open: boolean, onclose: () => void} = $props(); 
 
@@ -39,7 +39,7 @@
 </script>
 
 <!-- svelte-ignore a11y_label_has_associated_control -->
-<BaseModal {open} onClose={onclose}>
+<ModalBase {open} onClose={onclose}>
 	<h2 class="text-lg font-bold mb-4">Продвинутый поиск</h2>
 
 	<div class="space-y-4">
@@ -90,4 +90,4 @@
 			<button class="btn btn-success" onclick={applyFilters}>Применить</button>
 		</div>
 	</div>
-</BaseModal>
+</ModalBase>

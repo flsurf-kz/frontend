@@ -3,13 +3,17 @@
 	import { GetJobsListQuery } from 'flsurf-client';
 	import type { JobEntity } from 'flsurf-client';
 	import JobFilters from './job-filters.svelte';
-	import { getJobs } from '$lib/entities/job/models/modal';
 	import SearchField from '$lib/shared/ui/inputs/search-field.svelte';
 	import SortChoicesField from '$lib/shared/ui/inputs/sort-choices-field.svelte';
 	import { PagePagination } from '$lib/shared/ui/navigation';
 	import JobShortCard from '$lib/entities/job/ui/job-short-card.svelte';
 	import SearchAdvanced from './search-advanced.svelte';
-
+	import { getJobsPage } from '$lib/entities/job/models/modal';
+	$effect(() => {(async () => {
+		
+		// при желании можно сразу загрузить свежий список через API
+		await loadJobs();
+	})()});
 	let search = $state('');
 	let filters = $state({});
 	let sort = $state('newest');
@@ -27,7 +31,7 @@
     error = null;
 
     try {
-      const { jobs: result, total } = await getJobs({
+      const { jobs: result, total } = await getJobsPage({
         search,
         // sortBy: sort,
         page: currentPage,
@@ -70,7 +74,7 @@
 	<div class="flex flex-col md:flex-row justify-between gap-4">
 		<div class="flex-1 flex gap-2 items-center">
 			<SearchField bind:value={search} on:change={(e) => handleSearch(e.detail)} />
-			<button class="text-green-500 text-sm underline" on:click={() => (isAdvancedOpen = true)}>
+			<button class="text-green-500 text-sm underline" onclick={() => (isAdvancedOpen = true)}>
 				Продвинутый поиск
 			</button>
 		</div>
@@ -87,12 +91,12 @@
 				<p class="text-center text-sm">Загрузка...</p>
 			{:else if error}
 				<p class="text-center text-red-500">{error}</p>
-			{:else if jobs.length === 0}
+			{:else if jobs?.length === 0}
 				<p class="text-center text-gray-600">Нет заказов</p>
 			{:else}
 
 				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {#each jobs as job (job.id)}
+          {#each jobs as job}
             <JobShortCard {job} />
           {/each}
         </div>

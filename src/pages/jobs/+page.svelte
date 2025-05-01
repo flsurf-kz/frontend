@@ -1,5 +1,7 @@
 <script lang="ts">
-	import type { PageData } from "./$types";
-
-    export let data: PageData; 
+	import { GetJobsPage } from "$lib/widgets/get-jobs";
 </script>
+
+<div class="">
+    <GetJobsPage />
+</div>

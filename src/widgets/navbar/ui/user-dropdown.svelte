@@ -53,7 +53,7 @@
       </ul>
     </li>
 
-    <li><a href="/settings">Account settings</a></li>
+    <li><a href="/settings/info">Account settings</a></li>
     <li><a href="/" onclick={handleLogout}>Log out</a></li>
   </ul>
 </div>
