@@ -95,11 +95,11 @@
 				<p class="text-center text-gray-600">Нет заказов</p>
 			{:else}
 
-				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {#each jobs as job}
-            <JobShortCard {job} />
-          {/each}
-        </div>
+				<div class="flex flex-col gap-4">
+					{#each jobs as job}
+						<JobShortCard {job} />
+					{/each}
+				</div>
 				<div class="flex justify-between items-center mt-4">
 					<div class="flex items-center gap-2 text-sm">
 						<label>На странице:</label>
