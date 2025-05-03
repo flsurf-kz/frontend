@@ -3,6 +3,7 @@
 	import { logout } from "$lib/entities/user/model";
 	import { UserAvatar } from "$lib/shared/ui/icons";
   import ArrowDown from "$lib/shared/ui/icons/ArrowDown.svelte";
+	import { CurrentTheme, setTheme } from "$lib/shared/ui/theme";
   // Пример пропса
   export let user: {
     name: string;
@@ -29,6 +30,8 @@
     {/if}
   </label>
 
+  <!-- svelte-ignore a11y_click_events_have_key_events -->
+  <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
   <ul tabindex="0" class="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
     <!-- Статус онлайн -->
     <li class="flex items-center justify-between">
@@ -48,8 +51,8 @@
         <ArrowDown className="w-4 h-4" />
       </a>
       <ul class="p-2 bg-base-100">
-        <li><p>Light</p></li>
-        <li><p>Dark</p></li>
+        <li onclick={() => setTheme("light")}><p>Light</p></li>
+        <li onclick={() => setTheme("dark")}><p>Dark</p></li>
       </ul>
     </li>
 

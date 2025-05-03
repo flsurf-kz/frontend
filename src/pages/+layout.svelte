@@ -1,10 +1,11 @@
 <script>
 	import '$lib/app/styles.css';
 	import { Footer } from '$lib/shared/ui/footer';
+	import { CurrentTheme } from '$lib/shared/ui/theme';
 	import { Navbar } from '$lib/widgets/navbar/ui';
 </script>
 
-<div class="app">
+<div data-theme={$CurrentTheme} class="app">
 	<Navbar/>
 
 	<main>
