@@ -3,7 +3,7 @@
     import { Chart } from 'flowbite-svelte';
   	import { BaseButton } from '$lib/shared/ui/buttons';
   	import { GlobalClient } from '$lib/shared/api';
-	import type { FreelancerStatsDto } from 'flsurf-client';
+	  import type { FreelancerStatsDto } from 'flsurf-client';
   
     export let userId!: string;
   
@@ -39,7 +39,7 @@
     // ─── Profile Views (line) ─────────────────────────────────
     $: viewsOptions = {
       series: stats
-        ? [{ name: 'Views', data: stats.profileViews.map(p => [Date.parse(p.date), p.count]) }]
+        ? [{ name: 'Views', data: stats.profileViews?.map(p => [Date.parse(p.date || ""), p.count]) }]
         : [],
       chart: { type: 'line', height: 200, toolbar: { show: false } },
       stroke: { curve: 'smooth', width: 2 },
@@ -51,10 +51,9 @@
     $: proposalsOptions = {
       series: stats
         ? [{ name: 'Proposals', data: [
-            stats.proposals.sent,
-            stats.proposals.viewed,
-            stats.proposals.interviews,
-            stats.proposals.hires
+            stats.proposals?.sent,
+            stats.proposals?.viewed,
+            stats.proposals?.hires
           ] }]
         : [{ data: [0, 0, 0, 0] }],
       chart: { type: 'bar', height: 150 },
@@ -151,7 +150,7 @@
         {:else}
           <Chart options={clientsOptions} class="w-full"/>
         {/if}
-        <BaseButton class="btn-link mt-2">Explore how it works</BaseButton>
+        <BaseButton className="btn-link mt-2">Explore how it works</BaseButton>
       </div>
     </div>
   

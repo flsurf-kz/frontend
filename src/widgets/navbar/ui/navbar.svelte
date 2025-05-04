@@ -98,7 +98,8 @@
             <li><a href="/finances/summary">Обзор финансов</a></li>
             <li><a href="/finances/reports">Финансовые отчёты</a></li>
             <li><a href="/finances/transactions">Транзакции</a></li>
-            <li><a href="/user/settings/getpaid">Выплаты</a></li>
+            <li><a href="/settings/getpaid">Выплаты</a></li>
+            <li><a href="/finances/wallet">Кошелек</a></li>
           </ul>
         </div>
       {/if}
