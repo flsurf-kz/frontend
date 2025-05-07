@@ -3,7 +3,7 @@
 	import { page } from '$app/stores';
 
 	const sections: SelectItem[] = [
-		{ key: 'profile', label: 'Настройка профиля' },
+		{ key: 'info', label: 'Настройка профиля' },
 		{ key: 'contact', label: 'Контактная информация' },
 		{ key: 'linked', label: 'Подключенные аккаунты' },
 		{ key: 'security', label: 'Безопасность' },

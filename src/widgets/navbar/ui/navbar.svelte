@@ -135,7 +135,7 @@
   
       <!-- Сообщения -->
       {#if isAuthorized}
-        <a href="/messages" class="btn btn-ghost btn-sm normal-case text-base-content">Сообщения</a>
+        <a href="/messaging" class="btn btn-ghost btn-sm normal-case text-base-content">Сообщения</a>
       {/if}
     </div>
   

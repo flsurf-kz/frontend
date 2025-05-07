@@ -15,4 +15,4 @@ export function setTheme(theme: "dark" | "light") {
     CurrentTheme.set(theme)
 }
 
-export let CurrentTheme = writable<"dark" | "light">("dark")
+export let CurrentTheme = writable<"dark" | "light">("light")
