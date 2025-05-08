@@ -7,6 +7,8 @@
   import { derived } from 'svelte/store';
   import { writable } from 'svelte/store';
 
+  export let className = ''
+
   const search = writable('');
   const filtered = derived(
     [CurrentChatsList, search],
@@ -34,7 +36,7 @@
   }
 </script>
   
-  <aside class="w-72 bg-base-200 h-full flex flex-col">
+  <aside class="w-72 bg-base-200 h-full flex flex-col  shrink-0">
     <!-- svelte-ignore a11y_click_events_have_key_events -->
     <!-- svelte-ignore a11y_missing_attribute -->
     <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
