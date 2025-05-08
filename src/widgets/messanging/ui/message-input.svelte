@@ -1,5 +1,7 @@
 <script lang="ts">
     import { sendText, uploadFiles, CurrentChat } from '$lib/entities/messanging';
+	import { GlobalClient } from '$lib/shared/api';
+	import { SendMessageDto } from 'flsurf-client';
     import { get, writable } from 'svelte/store';
     const text = writable('');
     let fileInput!: HTMLInputElement;
@@ -10,7 +12,11 @@
   
       // файлы, если выбраны
       const files = fileInput?.files ? await uploadFiles([...fileInput.files]) : [];
-      sendText(get(text), files);
+      await GlobalClient.sendMessage(new SendMessageDto({
+        chatId: $CurrentChat?.id ?? "", 
+        text: $text, 
+        files: files, 
+      }))
       text.set('');
       if (fileInput) fileInput.value = '';
     }

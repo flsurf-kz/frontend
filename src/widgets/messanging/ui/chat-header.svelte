@@ -1,5 +1,9 @@
 <script lang="ts">
     import { CurrentChat } from '$lib/entities/messanging';
+	import { writable } from 'svelte/store';
+	import ChatControl from './chat-control.svelte';
+
+    const showChatControl = writable(false);
  </script>
   
 <!-- svelte-ignore a11y_consider_explicit_label -->
@@ -12,7 +16,7 @@
 
 <!-- иконки действий -->
 <div class="flex items-center gap-4">
-  <button class="btn btn-ghost btn-sm btn-square">
+  <button class="btn btn-ghost btn-sm btn-square" onclick={() => showChatControl.set(true)}>
     <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none"
          viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -22,4 +26,8 @@
   <!-- … -->
 </div>
 </header>
+
+{#if $showChatControl}
+  <ChatControl />
+{/if}
   

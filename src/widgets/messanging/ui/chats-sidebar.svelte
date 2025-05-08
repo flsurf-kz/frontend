@@ -1,6 +1,7 @@
 <script lang="ts">
   import { CurrentChatsList, openChat } from '$lib/entities/messanging/';
 	import { GlobalClient } from '$lib/shared/api';
+	import { InputField } from '$lib/shared/ui/inputs';
 	import ModalBase from '$lib/shared/ui/modal/modal-base.svelte';
 	import { CreateChatDto } from 'flsurf-client';
   import { derived } from 'svelte/store';
@@ -22,9 +23,11 @@
 
   /* --- dummy chat create --- */
   let newName = '';
+  let description = ""
   async function createChat() {
     GlobalClient.createChat(new CreateChatDto({
-      name: newName
+      name: newName, 
+      description: description, 
     }))
     newModal.set(false);
     newName = '';
@@ -32,7 +35,8 @@
 </script>
   
   <aside class="w-72 bg-base-200 h-full flex flex-col">
-    
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_missing_attribute -->
     <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
     <div class="flex items-center justify-between p-4">
       <h1 class="text-2xl font-bold">Messages</h1>
@@ -49,6 +53,7 @@
           </svg>
         </label>
     
+        <!-- svelte-ignore a11y_no_static_element_interactions -->
         <ul tabindex="0"
             class="menu dropdown-content bg-base-200 text-base-content
                    rounded-box w-60 shadow mt-3">
@@ -56,6 +61,7 @@
           <li><a on:click={() => settingsModal.set(true)}>Message settings</a></li>
           <li><a on:click={() => oooModal.set(true)}>Out of office</a></li>
           <li><a on:click={() => shortcutsModal.set(true)}>Shortcut keys</a></li>
+
           <li><a on:click={() => integModal.set(true)}>Configure integrations</a></li>
         </ul>
       </div>
@@ -105,6 +111,7 @@
       placeholder="Conversation name"
       bind:value={newName}
     />
+    <InputField bind:value={description} placeholder="Описание разговора" className="w-full"/>
     <button class="btn btn-primary" on:click={createChat}>Create</button>
   </div>
 </ModalBase>
