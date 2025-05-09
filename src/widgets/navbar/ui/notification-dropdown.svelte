@@ -44,7 +44,7 @@
       on:click|stopPropagation={toggle}
     >
       <div class="indicator">
-        <BellIcon className="w-5 h-5" />
+        <BellIcon className="w-7 h-7" />
         {#if unreadCount > 0}
           <span class="badge badge-xs indicator-item">{unreadCount}</span>
         {/if}

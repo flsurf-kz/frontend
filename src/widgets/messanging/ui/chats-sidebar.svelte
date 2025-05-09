@@ -1,6 +1,7 @@
 <script lang="ts">
   import { CurrentChatsList, openChat } from '$lib/entities/messanging/';
 	import { GlobalClient } from '$lib/shared/api';
+	import { errorMessages, showNotification } from '$lib/shared/ui/errors/modal';
 	import { InputField } from '$lib/shared/ui/inputs';
 	import ModalBase from '$lib/shared/ui/modal/modal-base.svelte';
 	import { CreateChatDto } from 'flsurf-client';
@@ -27,12 +28,19 @@
   let newName = '';
   let description = ""
   async function createChat() {
-    GlobalClient.createChat(new CreateChatDto({
-      name: newName, 
-      description: description, 
-    }))
+    try { 
+      let res = await GlobalClient.createChat(new CreateChatDto({
+        name: newName, 
+        description: description, 
+      }))
+      let chat = await GlobalClient.getChat(res.id); 
+      $CurrentChatsList = [...$CurrentChatsList, chat] 
+    } catch (exc) { 
+      showNotification("Ошибка при создании чата")
+    } 
     newModal.set(false);
     newName = '';
+    description = ''
   }
 </script>
   

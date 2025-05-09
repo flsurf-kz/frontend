@@ -146,6 +146,18 @@
         onSearch={handleSearch}
         searchResults={searchResults}
       />
+
+      <!-- svelte-ignore a11y_label_has_associated_control -->
+      <!-- Help Dropdown -->
+      <div class="dropdown dropdown-end">
+        <label tabindex="0" class="text-green-500 cursor-pointer text-lg px-1">?</label>
+        <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-56">
+          <li><a href="/help">Поддержка</a></li>
+          <li><a href="/support/requests">Ваши тикеты к поддержке</a></li>
+          <li><a href="/updates">Обновления flsurf</a></li>
+          <li><a href="/release-notes">Измнения</a></li>
+        </ul>
+      </div>
   
       <!-- Уведомления -->
       {#if isAuthorized}
@@ -154,7 +166,7 @@
   
       <!-- Дропдаун пользователя или кнопки авторизации -->
       {#if isAuthorized && user}
-        <UserDropdown user={user} />
+        <UserDropdown />
       {:else}
         <div class="hidden sm:flex gap-2">
           <a href="/auth/login" class="btn btn-sm btn-ghost">Войти</a>
