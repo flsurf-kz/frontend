@@ -9,12 +9,16 @@ export type ErrorMessage = {
 // Глобальный store для ошибок
 export const errorMessages = writable<ErrorMessage[]>([]);
 
+export type ShowNotificationInfo = { 
+	error: boolean, 
+}
+
 /**
  * Регистрирует новое сообщение об ошибке.
  * @param message Текст ошибки
  * @param critical Если true, ошибка считается критической и вызывает "краш" (оверлей)
  */
-export function showNotification(message: string, critical: boolean = false	): void {
+export function showNotification(message: string, critical: boolean = false, info: ShowNotificationInfo | undefined = undefined): void {
 	errorMessages.update(errors => [
 		...errors,
 		{ id: Date.now(), message, critical }

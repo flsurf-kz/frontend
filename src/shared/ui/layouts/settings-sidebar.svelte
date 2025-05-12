@@ -9,7 +9,8 @@
 		{ key: 'security', label: 'Безопасность' },
 		{ key: 'notifications', label: 'Уведомления' },
 		{ key: 'verification', label: 'Верификация' },
-		{ key: 'teams', label: 'Команды' }
+		{ key: 'teams', label: 'Команды' }, 
+		{ key: 'getpaid', label: 'Финансы' }, 
 	];
 
 	$: currentPath = $page.url.pathname;

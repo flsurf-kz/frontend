@@ -18,7 +18,6 @@
 <div class="dropdown dropdown-end">
   <label tabindex="0" class="btn btn-ghost btn-circle">
       <UserAvatar avatarFile={$CurrentUser?.avatar} className="rounded-full" width="30" height="30"/>
-
   </label>
 
   <ul tabindex="0" class="dropdown-content mt-3 w-64 bg-base-100 rounded-box shadow-xl p-4 space-y-3">
@@ -63,17 +62,17 @@
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         <!-- svelte-ignore a11y_no_static_element_interactions -->
         <!-- svelte-ignore a11y_missing_attribute -->
-        <ul class="p-2 bg-base-100">
-          <li><a onclick={() => setTheme("light")}>Светлый</a></li>
-          <li><a onclick={() => setTheme("dark")}>Темный</a></li>
+        <ul class="p-2 bg-base-100 space-y-2">
+          <li class="btn btn-sm btn-ghost w-full"><a onclick={() => setTheme("light")}>Светлый</a></li>
+          <li class="hover:bg-black-400 cursor-pointer"><a onclick={() => setTheme("dark")}>Темный</a></li>
         </ul>
       </details>
     </li>
 
     <!-- Настройки -->
-    <li><a href="/settings/info" class="text-sm">Account settings</a></li>
+    <li><a href="/settings/info" class="text-sm">Настройки аккаунта</a></li>
 
     <!-- Выход -->
-    <li><button onclick={handleLogout} class="btn btn-sm btn-ghost text-error w-full text-left">Log out</button></li>
+    <li><button onclick={handleLogout} class="btn btn-sm btn-ghost text-error w-full text-left">Выход</button></li>
   </ul>
 </div>

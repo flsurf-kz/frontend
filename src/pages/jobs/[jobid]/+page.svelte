@@ -3,16 +3,20 @@
 	import JobCard from "$lib/widgets/job-card/ui/job-card.svelte";
 	import type { JobDetails, JobEntity } from "flsurf-client";
 
+	export let data; 
 
-	let { job, rawJob }: { job: JobDetails, rawJob: JobEntity } = $props();
+	let { job, rawJob }: { 
+		job: JobDetails,
+		rawJob: JobEntity, 
+	} = data; 
 </script>
 
 <div class="grid md:grid-cols-3 gap-6">
 	<div class="md:col-span-2 space-y-6">
-		<JobCard job={rawJob} />
+		<JobCard job={rawJob} jobDetails={job}/>
 	</div>
 
 	<div>
-		<ClientProfileCard job={job} />
+		<ClientProfileCard job={job} rawJob={rawJob}/>
 	</div>
 </div>

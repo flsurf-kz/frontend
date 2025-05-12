@@ -4,12 +4,12 @@
 	import JobCardFooterClient from '$lib/features/job/get-job/ui/job-card-footer-client.svelte';
 	import JobCardFooterFreelancer from '$lib/features/job/get-job/ui/job-card-footer-freelancer.svelte';
 	import JobCardFooterUnauth from '$lib/features/job/get-job/ui/job-card-footer-unauth.svelte';
-	import type { JobEntity } from 'flsurf-client';
-	let { job }: { job: JobEntity } = $props();
+	import type { JobDetails, JobEntity } from 'flsurf-client';
+	let { job, jobDetails }: { job: JobEntity, jobDetails: JobDetails } = $props();
 </script>
 
 <div class="bg-white rounded-xl border shadow-sm p-6">
-	<JobCardHeader {job} />
+	<JobCardHeader job={job} jobDetails={jobDetails}/>
 
 	{#if $CurrentUser === undefined}
 		<JobCardFooterUnauth />

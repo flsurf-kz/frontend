@@ -1,17 +1,22 @@
 <script lang="ts">
-	import type { IJobEntity } from 'flsurf-client';
+	import { GlobalClient } from '$lib/shared/api';
 	import { formatDistanceToNow, format } from 'date-fns';
 	import { ru } from 'date-fns/locale';
+	import { type JobEntity, type JobDetails, BookmarkJobCommand } from 'flsurf-client';
 
-	let { job } = $props();
+	let { job, jobDetails }: { job: JobEntity, jobDetails: JobDetails } = $props();
 
 	const formattedDate = job.publicationDate
-		? format(job.publicationDate, "dd MMMM yyyy, HH:mm", { locale: ru })
+		? format(job.createdAt, "dd MMMM yyyy, HH:mm", { locale: ru })
 		: "";
 
 	const untilExpiration = job.expirationDate
 		? formatDistanceToNow(job.expirationDate, { addSuffix: false, locale: ru })
 		: "—";
+
+	async function saveBookmark() { 
+		GlobalClient.bookmarkJob(new BookmarkJobCommand({jobId: job.id}))
+	}
 </script>
 
 <!-- svelte-ignore a11y_consider_explicit_label -->
@@ -19,9 +24,9 @@
 	<!-- Header -->
 	<div class="flex justify-between items-start">
 		<div>
-			<h1 class="text-2xl font-bold">{job.title}</h1>
+			<h1 class="text-2xl font-bold">{job.title ?? ""}</h1>
 			<p class="text-sm text-gray-500 mt-1">
-				{formattedDate} • {job.proposals?.length ?? 0} отклик • {job.views ?? 0} просмотров
+				{formattedDate} • {job.proposals?.length ?? 0} отклик • {jobDetails.views ?? 0} просмотров
 			</p>
 		</div>
 		<div class="flex gap-3">
@@ -33,7 +38,7 @@
 			</button>
 
 			<!-- Bookmark -->
-			<button class="text-gray-400 hover:text-black" title="Сохранить">
+			<button class="text-gray-400 hover:text-black" title="Сохранить" onclick={() => saveBookmark()}>
 				<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
 					<path d="M5 3v18l7-5 7 5V3H5z" />
 				</svg>

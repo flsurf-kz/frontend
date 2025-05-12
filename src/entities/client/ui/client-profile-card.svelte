@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { format } from 'date-fns';
 	import { ru } from 'date-fns/locale';
-    import { JobDetails } from 'flsurf-client'
+    import { JobDetails, JobEntity } from 'flsurf-client'
 
-	let { job }: { job: JobDetails } = $props();
+	let { job, rawJob }: { job: JobDetails, rawJob: JobEntity } = $props();
 
 	const formatDate = (date: Date | string | undefined) =>
 		date ? format(new Date(date), 'dd MMMM yyyy', { locale: ru }) : '—';
@@ -12,7 +12,7 @@
 <div class="bg-white rounded-xl border shadow-md p-4 space-y-6 max-w-sm">
 	<!-- 🔹 Header -->
 	<div class="flex items-center gap-4">
-		<img src={job.clientAvatarUrl || '/placeholder.jpg'} alt="avatar" class="w-16 h-16 rounded-full object-cover" />
+		<img src={rawJob.employer?.avatar?.filePath} alt="avatar" class="w-16 h-16 rounded-full object-cover" />
 		<div>
 			<p class="text-lg font-semibold">{job.clientName}</p>
 			<p class="text-sm text-gray-500 flex items-center gap-1">

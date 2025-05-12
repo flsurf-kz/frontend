@@ -20,7 +20,7 @@ export const load: PageLoad = async ({ params }) => {
 
 	return {
 		job: jobDetails,
-		rawJob, 
+		rawJob: rawJob, 
 		isClient,
 		isAuthenticated,
 		proposals

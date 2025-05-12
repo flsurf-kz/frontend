@@ -2,13 +2,13 @@
 	import { goto } from "$app/navigation";
 	import BaseButton from "$lib/shared/ui/buttons/base-button.svelte";
 	import { UserAvatar } from "$lib/shared/ui/icons";
-	import type { JobEntity } from "flsurf-client";
+	import type { JobEntity, ProposalEntity } from "flsurf-client";
 
     let { job }: { job: JobEntity } = $props();
 </script>
 
-<div class="">
-    <div class="flex justify-betweem items-center">
+<div class="mt-6">
+    <div class="flex justify-between items-center w-full">
         <h1 class="text-2xl font-bold">Ставки</h1>
         <BaseButton type="submit" className="bg-green-400" onclick={() => {goto(`/jobs/${job.id}/submit-proposal/`)}}>
             Отправить ставку 
@@ -25,5 +25,9 @@
                 </div>
             </div>  
         {/each}
+
+        {#if (job.proposals ?? []).length === 0}
+            <p class="text-sm text-gray-400 italic">Нет предложений</p>
+        {/if}
     </div>
 </div>
