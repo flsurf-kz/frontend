@@ -1,25 +1,24 @@
-import { getCurrentUser } from "$lib/entities/user/model";
-import { redirect } from "@sveltejs/kit";
-import type { LayoutLoad } from "./$types";
-import { UserEntityType } from "flsurf-client";
-import { loadNotifications } from "$lib/entities/notifications/modal";
-import { loadTheme } from "$lib/shared/ui/theme";
+// +layout.ts     (работает ТОЛЬКО в браузере)
+import type { LayoutLoad } from './$types';
 
-export const ssr = false; 
+import { CurrentUser }  from '$lib/entities/user/model/modal';   // writable‑store
+import { loadNotifications } from '$lib/entities/notifications/modal';
+import { loadTheme }         from '$lib/shared/ui/theme';
 
-export const load: LayoutLoad = async ({ url, fetch }) => { 
-    var currentUser = await getCurrentUser(); 
-    if (url.pathname === '/' && currentUser?.type === UserEntityType.Client) {
-		throw redirect(302, '/client');
-	}
+/** делаем страницу полностью клиентской – т.к. внутри localStorage */
+export const ssr = false;
 
-	if (url.pathname === '/' && currentUser?.type === UserEntityType.Freelancer) {
-		throw redirect(302, '/freelancer');
-	}
-    await loadNotifications(); 
-    loadTheme() 
+/**
+ * На клиенте:
+ * • кладём currentUser в store
+ * • загружаем уведомления
+ * • восстанавливаем тему из localStorage
+ */
+export const load: LayoutLoad = async ({ data }: { data: any }) => {
+	CurrentUser.set(data.currentUser);   // <— store сразу готов
 
-    return { 
-        currentUser
-    }
-}
+	await loadNotifications();           // использует fetch() в браузере
+	loadTheme();                         // читает localStorage
+
+	return {};                           // дочерние страницы получат всё через store
+};

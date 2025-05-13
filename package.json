@@ -45,7 +45,7 @@
 		"apexcharts": "^4.6.0",
 		"date-fns": "^4.1.0",
 		"flowbite-svelte": "^0.48.6",
-		"flsurf-client": "^1.0.30",
+		"flsurf-client": "^1.0.42",
 		"lodash-es": "^4.17.21"
 	}
 }

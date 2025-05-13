@@ -2,6 +2,7 @@
 	import { goto } from "$app/navigation";
 	import { loginUser } from "$lib/entities/user/model";
 	import BaseButton from "$lib/shared/ui/buttons/base-button.svelte";
+	import { Checkbox } from "$lib/shared/ui/checkboxes";
 	import { InputField, PasswordField } from "$lib/shared/ui/inputs";
 	import { LoginUserSchema } from "flsurf-client";
 
@@ -9,6 +10,7 @@
 	let password = '';
 	let loading = false;
 	let error: string | null = null;
+	let rememberMe = false; 
 
 	async function handleLogin() {
 		error = null;
@@ -19,7 +21,7 @@
 
 		loading = true;
 		try {
-			await loginUser(new LoginUserSchema({email, password}));
+			await loginUser(new LoginUserSchema({email, password, rememberMe}));
 			goto('/'); // редирект после логина
 		} catch (e) {
 			error = "Неверные данные для входа";
@@ -29,7 +31,7 @@
 	}
 </script>
 
-<div class="max-w-md mx-auto bg-base-100 p-6 rounded-lg shadow border border-base-200 space-y-4 text-base-content">
+<div class="max-w-md mx-auto bg-base-100 p-6 rounded-lg m-30 shadow border border-base-200 space-y-4 text-base-content">
 	<h1 class="text-2xl font-bold text-center mb-6">
 		Войти в <span class="text-green-600">FLSurf.kz</span>
 	</h1>
@@ -41,9 +43,12 @@
 		<p class="text-sm text-red-500">{error}</p>
 	{/if}
 
+	<Checkbox value={rememberMe} onChange={() => { rememberMe = !rememberMe}} disabled={false} label={"Запомнить вход на этом устройстве"}/>
+
 	<BaseButton className="btn btn-success w-full" onclick={handleLogin} disabled={loading}>
 		{loading ? "Вход..." : "Продолжить"}
 	</BaseButton>
+
 
 	<div class="divider">или</div>
 

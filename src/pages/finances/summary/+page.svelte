@@ -1,12 +1,11 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import {
-      SummaryDto,
-      ContractSummaryDto,
-      WorkSessionSummaryDto,
-      ActivitySummaryDto
+      FinanceSummaryDto,
+	    GetFinanceSummaryQuery
     } from 'flsurf-client';
-	import { GlobalClient } from '$lib/shared/api';
+  	import { GlobalClient } from '$lib/shared/api';
+  	import { CurrentUser } from '$lib/entities/user/model/modal';
   
     export let data: {
       months: { label: string; value: number }[];
@@ -18,13 +17,15 @@
     let month = data.currentMonth;
     let year  = data.currentYear;
   
-    let summary: SummaryDto | null = null;
+    let summary: FinanceSummaryDto | null = null;
     let loading = false;
   
     async function loadSummary() {
       loading = true;
       try {
-        summary = await GlobalClient.getSummary(month, year);
+        summary = await GlobalClient.getUserFinancesSummary(
+          new GetFinanceSummaryQuery({month, year, userId: $CurrentUser?.id})
+        );
       } finally {
         loading = false;
       }
@@ -87,7 +88,7 @@
           {#if summary.topContracts.length}
             <ol class="list-decimal list-inside space-y-1 text-sm">
               {#each summary.topContracts as c (c.contractId)}
-                <li>{c.contractTitle} — {c.amount.toFixed(2)}₸</li>
+                <li>{c.contractLabel} — {c.amount.toFixed(2)}₸</li>
               {/each}
             </ol>
           {:else}
@@ -126,7 +127,7 @@
               <tbody>
                 {#each summary.earnings.fixed as f (f.contractId)}
                   <tr>
-                    <td>{f.contractTitle}</td>
+                    <td>{f.contractLabel}</td>
                     <td class="text-right">{f.amount.toFixed(2)}</td>
                   </tr>
                 {/each}
@@ -158,7 +159,7 @@
               <tbody>
                 {#each summary.earnings.hourly as h (h.sessionId)}
                   <tr>
-                    <td>{h.sessionTitle}</td>
+                    <td>{h.comment}</td>
                     <td class="text-right">{h.hours.toFixed(2)}</td>
                     <td class="text-right">{h.amount.toFixed(2)}</td>
                   </tr>

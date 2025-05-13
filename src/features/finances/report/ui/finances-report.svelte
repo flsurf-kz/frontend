@@ -34,10 +34,10 @@
 	}
 </script>
 
-<div class="max-w-4xl mx-auto px-4 py-6">
+<div class="max-w-4xl px-4 py-6">
 	<h1 class="text-2xl font-bold mb-6">Финансовая отчетность</h1>
 
-	<div class="flex justify-end mb-4">
+	<div class="flex mb-4">
 		<ChoicesField
 			label="Тип кошелька"
 			bind:value={walletType}

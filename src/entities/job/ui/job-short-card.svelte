@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import {
 	  JobEntityBudgetType,
+	  JobEntityStatus,
 	  type JobEntity
 	} from 'flsurf-client';
   
@@ -42,6 +43,9 @@
 	<!-- Заголовок + ставка -->
 	<div class="flex justify-between items-start">
 	  <div class="space-y-1">
+		{#if job.status === JobEntityStatus.Closed} 
+			<p class="text-xl text-yellow-200">Работа уже закрыта</p>
+		{/if}
 		<h3 class="text-xl font-bold">{job.title}</h3>
 		<div class="flex items-center text-sm opacity-60 space-x-2">
 		  <span class="font-medium">{employerName}</span>

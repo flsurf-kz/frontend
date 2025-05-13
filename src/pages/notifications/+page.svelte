@@ -17,7 +17,7 @@
     }
 </script>
 
-<div class="max-w-3xl mx-auto py-6 px-4 space-y-6">
+<div class="max-w-3xl py-6 px-4 space-y-6">
 	<h1 class="text-2xl font-bold">Уведомления</h1>
 
 	<ChoicesField
@@ -32,7 +32,7 @@
 		on:change={() => updateQuery({ type: meta.type, page: 1 })}
 	/>
 
-	<ul class="divide-y border rounded bg-white mt-4">
+	<ul class="divide-y border rounded bg-base-300 mt-4">
 		{#each notifications as n}
 			<li class="p-4">
 				<p class="font-semibold">{n.title}</p>

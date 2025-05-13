@@ -28,6 +28,7 @@
 		country: RegisterUserSchemaCountry.Kazakhstan, 
 		type: userType, 
 		password: '',
+		rememberMe: false, 
 	});
 
 	let repeatPassword = '';
@@ -72,7 +73,7 @@
 
 
 <!-- svelte-ignore a11y_label_has_associated_control -->
-<form class="space-y-4 max-w-md mx-auto rounded-lg p-6 bg-base-100 border-base-200 mb-10 shadow border" on:submit|preventDefault={handleSubmit}>
+<form class="space-y-3 max-w-md mx-auto rounded-lg p-6 bg-base-100 border-base-200 mb-10 shadow border" on:submit|preventDefault={handleSubmit}>
 	<h1 class="text-2xl font-bold text-center mb-6">
 		Зарегистрироваться в <span class="text-green-600">FLSurf.kz</span>
 	</h1>
@@ -105,11 +106,19 @@
 		</select>
 	</div>
 
+
 	<!-- Социальные входы -->
 	<div class="flex justify-between">
 		<a href="/auth/vk" class="btn btn-outline btn-info btn-xs">Войти через ВКонтакте</a>
 		<a href="/auth/google" class="btn btn-outline btn-info btn-xs">Войти через Google</a>
 	</div>
+	
+	<Checkbox
+		value={form.rememberMe ?? false} 
+		onChange={() => { form.rememberMe = !form.rememberMe}} 
+		disabled={false} 
+		label={"Запомнить вход на этом устройстве"}
+	/>
 
 	<Checkbox value={agreed} onChange={(value) => { agreed = value}} label={"Да, я принимаю Условия обслуживания"} />
 

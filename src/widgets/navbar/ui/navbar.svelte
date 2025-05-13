@@ -73,8 +73,8 @@
           </label>
           <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-48">
             <li><a href="/jobs">Найти заказ</a></li>
-            <li><a href="/jobs/saved">Сохранённые работы</a></li>
-            <li><a href="/jobs/user">Ваши ставки</a></li>
+            <li><a href="/jobs/bookmarked">Сохранённые работы</a></li>
+            <li><a href="/jobs/proposals">Ваши ставки</a></li>
           </ul>
         </div>
   

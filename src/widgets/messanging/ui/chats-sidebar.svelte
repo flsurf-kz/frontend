@@ -1,7 +1,7 @@
 <script lang="ts">
   import { CurrentChatsList, openChat } from '$lib/entities/messanging/';
 	import { GlobalClient } from '$lib/shared/api';
-	import { errorMessages, showNotification } from '$lib/shared/ui/errors/modal';
+	import { showNotification } from '$lib/shared/ui/errors/modal';
 	import { InputField } from '$lib/shared/ui/inputs';
 	import ModalBase from '$lib/shared/ui/modal/modal-base.svelte';
 	import { CreateChatDto } from 'flsurf-client';
@@ -44,7 +44,7 @@
   }
 </script>
   
-  <aside class="w-72 bg-base-200 h-full flex flex-col  shrink-0">
+  <aside class="w-72 bg-base-200 h-full flex flex-col  shrink-0 {className}">
     <!-- svelte-ignore a11y_click_events_have_key_events -->
     <!-- svelte-ignore a11y_missing_attribute -->
     <!-- svelte-ignore a11y_no_noninteractive_tabindex -->

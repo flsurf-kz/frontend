@@ -1,1 +1,1 @@
-export { getCurrentUser, logout, registerUser, loginUser } from './modal'
+export { getCurrentUser, getServerCurrentUser, logout, registerUser, loginUser } from './modal'

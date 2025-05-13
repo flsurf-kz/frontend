@@ -7,8 +7,8 @@
   import { setTheme } from "$lib/shared/ui/theme";
 	import { UserEntityType } from "flsurf-client";
 
-  function handleLogout() {
-    logout();
+  async function handleLogout() {
+    await logout();
     goto("/");
   }
 </script>
@@ -24,7 +24,7 @@
     
     <!-- Имя и роль -->
     <li class="flex flex-col items-start">
-      <div class="flex items-center gap-3">
+      <a href={$CurrentUser?.type == UserEntityType.Freelancer ? `/freelancer/${$CurrentUser?.id}` : "/client"} class="flex items-center gap-3">
         <div class="avatar">
           <div class="w-8 rounded-full">
             <UserAvatar avatarFile={$CurrentUser?.avatar} />
@@ -34,7 +34,7 @@
           <p class="font-semibold text-sm">{$CurrentUser?.fullname}</p>
           <p class="text-xs text-gray-500">{$CurrentUser?.type == UserEntityType.Client ? 'Клиент' : "Фрилансер"}</p>
         </div>
-      </div>
+      </a>
     </li>
 
     <!-- Статус онлайн -->
