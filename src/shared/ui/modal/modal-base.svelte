@@ -27,7 +27,6 @@
     modalCounter.update(n => n - 1);
   });
 </script>
-
 {#if open}
   {#if ownsBackdrop}
     <!-- ЕДИНСТВЕННЫЙ фон‑оверлей -->
@@ -40,18 +39,18 @@
     />
   {/if}
 
-  <!-- ОКНО (каждое со своим z‑index) -->
+  <!-- pointer-events: none; пропускаем клики сквозь контейнер -->
   <div
-    class="fixed inset-0 flex items-center justify-center p-4"
+    class="fixed inset-0 flex items-center justify-center p-4 pointer-events-none"
     style="z-index:{myZ}"
     aria-modal="true" role="dialog"
   >
+    <!-- окно снова принимает события -->
     <div
       class="relative bg-base-100 text-base-content
              rounded-xl shadow-xl w-full max-w-lg
-             border border-base-300"
+             border border-base-300 pointer-events-auto"
     >
-      <!-- ✕ -->
       <button
         class="btn btn-ghost btn-sm btn-circle absolute right-3 top-3"
         aria-label="Close" on:click={onClose}

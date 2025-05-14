@@ -13,6 +13,11 @@ export const CurrentChat        = writable<ChatEntity | undefined>();
 export const CurrentMessages    = writable<MessageEntity[]>([]);
 export const MessagesLoading    = writable(false);
 export const UnreadCounter      = writable<Record<string, number>>({});
+/** К какому сообщению пользователь отвечает (reply) */
+export const CurrentMessageReplyTo = writable<MessageEntity | undefined>();
+
+/** Какое сообщение сейчас редактируется (edit) */
+export const CurrentEditingMessage = writable<MessageEntity | undefined>();
 
 let ws: WebSocket | null = null;
 let sse: EventSource | null = null;

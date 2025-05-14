@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
   import { CurrentChatsList, openChat } from '$lib/entities/messanging/';
 	import { GlobalClient } from '$lib/shared/api';
 	import { showNotification } from '$lib/shared/ui/errors/modal';
@@ -7,6 +8,7 @@
 	import { CreateChatDto } from 'flsurf-client';
   import { derived } from 'svelte/store';
   import { writable } from 'svelte/store';
+  import { page } from '$app/stores' 
 
   export let className = ''
 
@@ -42,9 +44,25 @@
     newName = '';
     description = ''
   }
+
+  function selectChat(id: string) {
+    /* 1. открываем чат логически */
+    openChat(id);
+
+    /* 2. синхронизируем адресную строку
+       – оставляем тот же путь, только /?chatId=…                */
+    const url = new URL($page.url);
+    url.searchParams.set('chatId', id);
+
+    /* 3. переходим без перезагрузки */
+    goto(url.pathname + url.search, {
+      keepFocus: true,
+      noScroll:  true
+    });
+  }
 </script>
   
-  <aside class="w-72 bg-base-200 h-full flex flex-col  shrink-0 {className}">
+  <aside class="w-75 bg-base-200 min-h-0  flex flex-col  shrink-0 {className}">
     <!-- svelte-ignore a11y_click_events_have_key_events -->
     <!-- svelte-ignore a11y_missing_attribute -->
     <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
@@ -91,7 +109,7 @@
         <button
           class="flex items-center gap-3 w-full px-3 py-2 rounded-lg
                  hover:bg-base-300 text-left"
-          on:click={() => openChat(chat.id)}
+          on:click={() => selectChat(chat.id)}
         >
           <div class="avatar placeholder">
             <div class="bg-primary text-primary-content rounded-full w-8">
@@ -100,7 +118,7 @@
           </div>
           <div class="flex-1">
             <p class="font-medium truncate">{chat.name}</p>
-            <p class="text-xs opacity-60 truncate">
+            <p class="text-xs opacity-60 max-w-50" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
               {chat.lastMessage?.text ?? ''}
             </p>
           </div>

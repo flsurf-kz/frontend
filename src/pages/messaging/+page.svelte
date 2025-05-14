@@ -7,34 +7,43 @@
     MessageInput,
     NoChatPlaceholder,
   } from '$lib/widgets/messanging';
-  import { CurrentChat, CurrentMessages } from '$lib/entities/messanging';
+  import { CurrentChat, CurrentMessages, openChat } from '$lib/entities/messanging';
 	import ChatControl from '$lib/widgets/messanging/ui/chat-control.svelte';
+	import { page } from '$app/stores';
 
   /* открыта ли правая панель? */
   export const controlOpen = writable(false);
+
+    /* всегда следим за параметром chatId ------------- */
+  $: chatIdParam = $page.url.searchParams.get('chatId');
+
+  /* если он изменился – открываем чат */
+  $: if (chatIdParam && (!$CurrentChat || $CurrentChat.id !== chatIdParam)) { openChat(chatIdParam) }
 </script>
 
-<div class="h-screen flex">
-  <!-- Sidebar -->
+<!-- верхний уровень: растягиваемся на весь экран и гасим скролл body -->
+<div class="flex-1 min-h-0 flex overflow-hidden">  <!-- +overflow-hidden -->
   <ChatsSidebar />
 
-  <!-- Основная область: grid  (chat ‖ control) -->
-  <div class="flex-1 grid grid-cols-[1fr_auto]">
-    <!-- Chat pane -->
-    <section class="flex flex-col bg-base-100">
+  <!-- grid‑контейнер тоже должен уметь ужиматься -->
+  <div class="flex-1 grid grid-cols-[1fr_auto] min-h-0"> <!-- +min-h-0 -->
+    <!-- chat‑pane -->
+    <section class="flex flex-col bg-base-100 min-h-0"> <!-- +min-h-0 -->
       <ChatHeader bind:controlOpen={$controlOpen} />
 
       {#if $CurrentChat}
-        <ChatMessages messages={$CurrentMessages} />
+        <!-- главный скроллируемый блок -->
+        <ChatMessages
+          messages={$CurrentMessages}
+        />
         <MessageInput />
       {:else}
-        <NoChatPlaceholder />
+        <NoChatPlaceholder/>
       {/if}
     </section>
 
-    <!-- Control pane (lazy) -->
     {#if $controlOpen}
-      <ChatControl onclose={() => {$controlOpen = false}}/>
+      <ChatControl onclose={() => $controlOpen = false}/>
     {/if}
   </div>
 </div>

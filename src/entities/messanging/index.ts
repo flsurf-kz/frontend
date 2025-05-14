@@ -4,6 +4,8 @@ export {
     CurrentChatsList, 
     UnreadCounter, 
     MessagesLoading,  
+    CurrentEditingMessage, 
+    CurrentMessageReplyTo, 
     openChat, 
     uploadFiles, 
     sendText

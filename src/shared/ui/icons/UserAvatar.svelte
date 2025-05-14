@@ -11,7 +11,7 @@
 </script>
   
 {#if avatarFile !== undefined} 
-    <img width={width} height={height} src={avatarFile.filePath} class={className} alt="" style={style}>
+    <img width={width} height={height} src={avatarFile.filePath} class={className + " rounded-full"} alt="" style={style}>
 {:else}
-    <img width={width} height={height} src={imageUrl} class={className} alt="" style={style}>    
+    <img width={width} height={height} src={imageUrl} class={className + " rounded-full"} alt="" style={style}>    
 {/if} 

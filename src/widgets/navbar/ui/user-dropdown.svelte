@@ -61,10 +61,11 @@
         </summary>
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         <!-- svelte-ignore a11y_no_static_element_interactions -->
+        <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
         <!-- svelte-ignore a11y_missing_attribute -->
-        <ul class="p-2 bg-base-100 space-y-2">
-          <li class="btn btn-sm btn-ghost w-full"><a onclick={() => setTheme("light")}>Светлый</a></li>
-          <li class="hover:bg-black-400 cursor-pointer"><a onclick={() => setTheme("dark")}>Темный</a></li>
+        <ul class="p-1 bg-base-100 space-y-2">
+          <li class="btn btn-sm btn-ghost w-full" onclick={() => setTheme("light")}>Светлый</li>
+          <li class="btn btn-sm btn-ghost w-full" onclick={() => setTheme("dark")}>Тёмный</li>
         </ul>
       </details>
     </li>
