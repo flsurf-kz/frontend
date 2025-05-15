@@ -1,18 +1,35 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-  import { CurrentChatsList, openChat } from '$lib/entities/messanging/';
+  import { CurrentChatsList, openChat, CurrentChat } from '$lib/entities/messanging/';
 	import { GlobalClient } from '$lib/shared/api';
 	import { showNotification } from '$lib/shared/ui/errors/modal';
-	import { InputField } from '$lib/shared/ui/inputs';
+	import { InputField, SearchField } from '$lib/shared/ui/inputs';
 	import ModalBase from '$lib/shared/ui/modal/modal-base.svelte';
 	import { CreateChatDto } from 'flsurf-client';
   import { derived } from 'svelte/store';
   import { writable } from 'svelte/store';
   import { page } from '$app/stores' 
+	import { debounce } from 'lodash';
+	import { SearchIcon } from '$lib/shared/ui/icons';
 
   export let className = ''
 
+    // оригинальный стор для фильтрации
   const search = writable('');
+  // локальный биндинг для поля ввода
+  let localSearch = '';
+
+  // дебаунс на 300 мс
+  const debounced = debounce((val: string) => {
+    search.set(val);
+  }, 300);
+
+  function onInputSearch(e: Event) {
+    const v = (e.target as HTMLInputElement).value;
+    localSearch = v;
+    debounced(v);
+  }
+
   const filtered = derived(
     [CurrentChatsList, search],
     ([$list, $s]) =>
@@ -28,7 +45,8 @@
 
   /* --- dummy chat create --- */
   let newName = '';
-  let description = ""
+  let description = "" 
+
   async function createChat() {
     try { 
       let res = await GlobalClient.createChat(new CreateChatDto({
@@ -67,7 +85,7 @@
     <!-- svelte-ignore a11y_missing_attribute -->
     <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
     <div class="flex items-center justify-between p-4">
-      <h1 class="text-2xl font-bold">Messages</h1>
+      <h1 class="text-2xl font-bold">Сообщения</h1>
     
       <!-- three‑dots dropdown -->
       <!-- svelte-ignore a11y_label_has_associated_control -->
@@ -85,22 +103,29 @@
         <ul tabindex="0"
             class="menu dropdown-content bg-base-200 text-base-content
                    rounded-box w-60 shadow mt-3">
-          <li><a on:click={() => newModal.set(true)}>Start a new conversation</a></li>
-          <li><a on:click={() => settingsModal.set(true)}>Message settings</a></li>
-          <li><a on:click={() => oooModal.set(true)}>Out of office</a></li>
-          <li><a on:click={() => shortcutsModal.set(true)}>Shortcut keys</a></li>
+          <li><a on:click={() => newModal.set(true)}>Создать новый чат</a></li>
+          <li><a on:click={() => settingsModal.set(true)}>Настройки сообщении</a></li>
+          <li><a on:click={() => oooModal.set(true)}>Не онлайн</a></li>
+          <li><a on:click={() => shortcutsModal.set(true)}>Горячие клавишы</a></li>
 
-          <li><a on:click={() => integModal.set(true)}>Configure integrations</a></li>
+          <li><a on:click={() => integModal.set(true)}>Настроить интеграции</a></li>
         </ul>
       </div>
     </div>
   
     <div class="px-4 mb-4">
-      <input
-        class="input input-bordered w-full"
-        placeholder="Search"
-        bind:value={$search}
-      />
+      <div class="relative">
+        <input
+          type="text"
+          class="input input-bordered w-full pr-10"
+          placeholder="Поиск..."
+          bind:value={localSearch}
+          on:input={onInputSearch}
+        />
+        <SearchIcon
+          className="absolute top-1/2 right-3 w-5 h-5 text-gray-500 pointer-events-none -translate-y-1/2"
+        />
+      </div>
     </div>
   
     <!-- ===== Chats list ===== -->
@@ -110,6 +135,7 @@
           class="flex items-center gap-3 w-full px-3 py-2 rounded-lg
                  hover:bg-base-300 text-left"
           on:click={() => selectChat(chat.id)}
+          class:selected={$CurrentChat?.id === chat.id}
         >
           <div class="avatar placeholder">
             <div class="bg-primary text-primary-content rounded-full w-8">
@@ -133,14 +159,10 @@
 
 <!-- 1. New conversation -->
 <ModalBase bind:open={$newModal} title="Start a new conversation">
-  <div class="space-y-4">
-    <input
-      class="input input-bordered w-full"
-      placeholder="Conversation name"
-      bind:value={newName}
-    />
-    <InputField bind:value={description} placeholder="Описание разговора" className="w-full"/>
-    <button class="btn btn-primary" on:click={createChat}>Create</button>
+  <div class="space-y-4">    
+    <InputField bind:value={newName} placeholder="Как вы его бы назвали?" className="w-full" label="Имя чата"/>
+    <InputField bind:value={description} placeholder="Чем бы описали чат?" className="w-full" label="Описание чата"/>
+    <button class="btn btn-primary" on:click={createChat}>Создать</button>
   </div>
 </ModalBase>
 
@@ -171,3 +193,10 @@
     Здесь позже появится список интеграций (Slack, Email, Webhooks …)
   </p>
 </ModalBase>
+
+<style>
+  .selected { 
+    background-color: green;
+    color: white; 
+  }
+</style>

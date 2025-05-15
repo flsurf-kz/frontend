@@ -11,3 +11,6 @@ export { default as YouTubeIcon } from './logos/YouTubeIcon.svelte';
 export { default as BellIcon } from "./BellIcon.svelte"
 export { default as EditIcon } from "./EditIcon.svelte";
 export { default as UserAvatar } from './UserAvatar.svelte'
+export { default as TrashIcon } from './TrashIcon.svelte'
+export { default as PinIcon } from './PinIcon.svelte' 
+export { default as ReplyIcon } from './ReplyIcon.svelte'

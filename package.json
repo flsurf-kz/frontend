@@ -46,6 +46,7 @@
 		"date-fns": "^4.1.0",
 		"flowbite-svelte": "^0.48.6",
 		"flsurf-client": "^1.0.42",
+		"lodash": "^4.17.21",
 		"lodash-es": "^4.17.21"
 	}
 }

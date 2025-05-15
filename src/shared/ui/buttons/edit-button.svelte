@@ -13,9 +13,9 @@
   
 <button
     type="button"
-    style="background: none; border: none; padding: 0.5rem; cursor: pointer;"
+    style="border: 1px solid #13fc03; border-radius: 10rem; padding: 0.5rem; cursor: pointer; "
     onclick={onclick}
-    class={className}
+    class={className + " bg-base-100"} 
 >
     <EditIcon width={size} height={size} style={`color: ${color}`} />
 </button>
