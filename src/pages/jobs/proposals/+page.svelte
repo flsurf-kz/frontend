@@ -23,7 +23,7 @@
 <!-- ─────────────────────────────────────────────────────────────── -->
 <div class="max-w-5xl py-6 px-4 space-y-6">
 
-	<h1 class="text-3xl font-bold">My proposals</h1>
+	<h1 class="text-3xl font-bold">Мои ставки</h1>
 
 	<!-- вкладки -->
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -31,32 +31,32 @@
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<!-- svelte-ignore a11y_missing_attribute -->
 	<div class="tabs">
-		<a class="tab" class:tab-active={$tab === 'active'}    on:click={() => tab.set('active')}>Active</a>
-		<a class="tab" class:tab-active={$tab === 'referrals'} on:click={() => tab.set('referrals')}>Referrals</a>
-		<a class="tab" class:tab-active={$tab === 'archived'}  on:click={() => tab.set('archived')}>Archived</a>
+		<a class="tab" class:tab-active={$tab === 'active'}    on:click={() => tab.set('active')}>Активные</a>
+		<a class="tab" class:tab-active={$tab === 'referrals'} on:click={() => tab.set('referrals')}>Рефераллы</a>
+		<a class="tab" class:tab-active={$tab === 'archived'}  on:click={() => tab.set('archived')}>Архивированные</a>
 	</div>
 
 	<!-- ========== ACTIVE ========== -->
 	{#if $tab === 'active'}
 		<!-- Offers -->
-		<Section title="Offers" count={data.accepted.length}>
+		<Section title="Принятые ставки" count={data.accepted.length}>
 			{#each data.accepted as p}
 				<ProposalCard {p} />
 			{/each}
 		</Section>
 
 		<!-- Invitations -->
-		<Section title="Invitations to interview" count={0}>
-			<p class="text-sm opacity-60 px-4 py-3">No invitations yet</p>
+		<Section title="Приглашения на интервью (через мессенджер)" count={0}>
+			<p class="text-sm opacity-60 px-4 py-3">Нету приглашений пока...</p>
 		</Section>
 
 		<!-- Active proposals (в работе – статус accepted со Contract?) -->
-		<Section title="Active proposals" count={0}>
-			<p class="text-sm opacity-60 px-4 py-3">No active proposals</p>
+		<Section title="Активные ставки" count={0}>
+			<p class="text-sm opacity-60 px-4 py-3">Нету активных ставок</p>
 		</Section>
 
 		<!-- Submitted (Pending) -->
-		<Section title="Submitted proposal" count={data.pending.length}>
+		<Section title="Отправленные ставки" count={data.pending.length}>
 			{#each data.pending as p}
 				<ProposalCard {p} />
 			{/each}
@@ -65,14 +65,14 @@
 
 	<!-- ========== REFERRALS ========== -->
 	{#if $tab === 'referrals'}
-		<Section title="Referrals" count={referrals.length}>
-			<p class="text-sm opacity-60 px-4 py-3">Nothing here yet</p>
+		<Section title="Рефераллы" count={referrals.length}>
+			<p class="text-sm opacity-60 px-4 py-3">Пока что нету...</p>
 		</Section>
 	{/if}
 
 	<!-- ========== ARCHIVED ========== -->
 	{#if $tab === 'archived'}
-		<Section title="Archived proposals" count={data.hidden.length}>
+		<Section title="Архирвированные ставки" count={data.hidden.length}>
 			{#each data.hidden as p}
 				<ProposalCard {p} />
 			{/each}

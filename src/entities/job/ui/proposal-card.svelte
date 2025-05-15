@@ -12,10 +12,10 @@
 	<div class="flex justify-between items-center">
 		<div class="text-sm">
 			<p class="font-medium">
-				Initiated {started}
+				Создан {started}
 			</p>
 			<p class="text-xs opacity-70">
-				{Math.round((Date.now()-+new Date(p.createdAt))/1000)} seconds ago
+				{Math.round((Date.now()-+new Date(p.createdAt))/1000)} секунд назад
 			</p>
 		</div>
 		<span class="badge badge-success badge-outline">
@@ -28,6 +28,6 @@
 	</h3>
 
 	<p class="text-xs opacity-70 mt-1">
-		{p.job?.category?.name ?? 'General profile'}
+		{p.job?.category?.name ?? 'Общая категория'}
 	</p>
 </a>

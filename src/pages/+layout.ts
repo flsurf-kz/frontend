@@ -17,7 +17,7 @@ export const ssr = false;
 export const load: LayoutLoad = async ({ data }: { data: any }) => {
 	CurrentUser.set(data.currentUser);   // <— store сразу готов
 
-	await loadNotifications();           // использует fetch() в браузере
+	loadNotifications();           // использует fetch() в браузере
 	loadTheme();                         // читает localStorage
 
 	return {};                           // дочерние страницы получат всё через store
