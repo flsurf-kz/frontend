@@ -5,8 +5,8 @@ import {
 } from 'flsurf-client';
 import { writable, get } from 'svelte/store';
 import { browser } from '$app/environment';
-import { CurrentUser } from '../user/model/modal';
 import { GlobalClient } from '$lib/shared/api';
+import { HttpTransportType, HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
   
 export const CurrentChatsList   = writable<ChatEntity[]>([]);
 export const CurrentChat        = writable<ChatEntity | undefined>();
@@ -18,6 +18,8 @@ export const CurrentMessageReplyTo = writable<MessageEntity | undefined>();
 
 /** Какое сообщение сейчас редактируется (edit) */
 export const CurrentEditingMessage = writable<MessageEntity | undefined>();
+
+let hub: HubConnection | null = null;
 
 let ws: WebSocket | null = null;
 let sse: EventSource | null = null;
@@ -38,34 +40,37 @@ export async function openChat(id: string) {
   MessagesLoading.set(false);
   CurrentMessages.set(msgs);
 
-  connectSocket(id);
+  await connectHub(id)
 }
 
 /* --- WebSocket / SSE -------------------------------------------------- */
 
-function connectSocket(chatId: string) {
-  disconnect();
-
+async function connectHub(chatId: string) {
   if (!browser) return;
 
-  const token = (get(CurrentUser)?.id) ?? ''; // если вы храните jwt
-  ws = new WebSocket(`wss://<domain>/api/messenger/ws?chatId=${chatId}&token=${token}`);
+  await disconnectHub();
 
-  ws.onmessage = (ev) => {
-    const msg: MessageEntity = JSON.parse(ev.data);
-    CurrentMessages.update(arr => [...arr, msg]);
-  };
+  // SignalR из коробки отправит все куки того же домена
+  hub = new HubConnectionBuilder()
+    .withUrl("/ws/general", {
+      transport: HttpTransportType.WebSockets,
+      // если фронт и бэк на разных origin-ах:
+      withCredentials: true
+    })
+    .withAutomaticReconnect()
+    .build();
 
-  ws.onerror = () => {
-    // fallback на SSE
-    ws?.close();
-    ws = null;
-    sse = new EventSource(`/api/messenger/sse?chatId=${chatId}&token=${token}`);
-    sse.onmessage = ev => {
-      const msg: MessageEntity = JSON.parse(ev.data);
-      CurrentMessages.update(arr => [...arr, msg]);
-    };
-  };
+  hub.on("ReceiveMessage", msg => { /* … */ });
+
+  await hub.start();
+  await hub.invoke("JoinChat", chatId);
+}
+
+async function disconnectHub() {
+  if (hub) {
+    try { await hub.stop(); } catch { /* ignore */ }
+    hub = null;
+  }
 }
 
 export function sendText(text: string, files: CreateFileDto[] = []) {
@@ -73,11 +78,6 @@ export function sendText(text: string, files: CreateFileDto[] = []) {
   if (!chat || !ws || ws.readyState !== WebSocket.OPEN) return;
 
   ws.send(JSON.stringify({ chatId: chat.id, text, files }));
-}
-
-function disconnect() {
-  ws?.close(); ws = null;
-  sse?.close(); sse = null;
 }
 
 /* --- file upload à‑la Telegram --------------------------------------- */
@@ -93,4 +93,6 @@ export async function uploadFiles(nativeFiles: File[]): Promise<CreateFileDto[]>
 
 /* --- init ------------------------------------------------------------- */
 
-loadChats();
+if (browser) {
+  loadChats();
+}
