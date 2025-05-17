@@ -5,12 +5,11 @@
 	import { InputField } from '$lib/shared/ui/inputs';
 	import TextField from '$lib/shared/ui/inputs/text-field.svelte';
 	import { JobEntity, SubmitProposalCommand } from 'flsurf-client';
-	import type { PageProps } from './$types';
 	import ChoicesField from '$lib/shared/ui/inputs/choices-field.svelte';
 	import type { SelectItem } from '$lib/shared/types';
 
-	let { data }: PageProps  = $props();
-	let { currentUser, job } = data;
+	let { data }  = $props();
+	let { job }: { job: JobEntity } = data;
 
 	let proposedRate = $state('');
 	let coverLetter = $state('');

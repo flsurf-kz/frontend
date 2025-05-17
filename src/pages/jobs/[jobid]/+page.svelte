@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ClientProfileCard from "$lib/entities/client/ui/client-profile-card.svelte";
 	import JobCard from "$lib/widgets/job-card/ui/job-card.svelte";
-	import type { JobDetails, JobEntity } from "flsurf-client";
+	import { AcceptDisputeCommand, ResolveDisputeCommand, type JobDetails, type JobEntity } from "flsurf-client";
 
 	export let data; 
 
