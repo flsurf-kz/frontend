@@ -154,8 +154,8 @@
         <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-56">
           <li><a href="/help">Поддержка</a></li>
           <li><a href="/support/requests">Ваши тикеты к поддержке</a></li>
-          <li><a href="/updates">Обновления flsurf</a></li>
-          <li><a href="/release-notes">Измнения</a></li>
+          <li><a href="/support/news">Обновления flsurf</a></li>
+          <li><a href="/support/news?change-notes=true">Измнения</a></li>
         </ul>
       </div>
   
