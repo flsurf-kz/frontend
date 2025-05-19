@@ -45,6 +45,8 @@
   async function loadMembers() {
     const chat = await GlobalClient.getChat(get(CurrentChat)?.id ?? '');
     members.set(chat.participants ?? []);
+    if (chat.owner)
+      members.set([...$members, chat.owner])
   }
 
   async function findUsers() {

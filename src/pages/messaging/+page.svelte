@@ -7,7 +7,7 @@
     MessageInput,
     NoChatPlaceholder,
   } from '$lib/widgets/messanging';
-  import { CurrentChat, CurrentMessages, openChat } from '$lib/entities/messanging';
+  import { CurrentChat, CurrentMessages, openChat, CurrentChatsList } from '$lib/entities/messanging';
 	import ChatControl from '$lib/widgets/messanging/ui/chat-control.svelte';
 	import { page } from '$app/stores';
 
@@ -17,13 +17,20 @@
     /* всегда следим за параметром chatId ------------- */
   $: chatIdParam = $page.url.searchParams.get('chatId');
 
+
   /* если он изменился – открываем чат */
-  $: if (chatIdParam && (!$CurrentChat || $CurrentChat.id !== chatIdParam)) { openChat(chatIdParam) }
+  $: if (chatIdParam && (!$CurrentChat || $CurrentChat.id !== chatIdParam)) { 
+    let chat = $CurrentChatsList.find(x => x.id == chatIdParam)
+    if (chat !== undefined) {  
+      openChat(chat) 
+      $controlOpen = false; 
+    }
+  }
 </script>
 
 <!-- верхний уровень: растягиваемся на весь экран и гасим скролл body -->
 <div class="flex-1 min-h-0 flex overflow-hidden">  <!-- +overflow-hidden -->
-  <ChatsSidebar />
+  <ChatsSidebar chatControl={$controlOpen}/>
 
   <!-- grid‑контейнер тоже должен уметь ужиматься -->
   <div class="flex-1 grid grid-cols-[1fr_auto] min-h-0"> <!-- +min-h-0 -->

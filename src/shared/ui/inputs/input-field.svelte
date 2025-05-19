@@ -10,6 +10,9 @@
     export let required: boolean = false; 
     export let className: string = ""
     export let maxlength: number | undefined = undefined; 
+    export let name: string = ""
+    export let min: string | undefined = undefined; 
+    export let step: string | undefined = undefined; 
     
     const dispatch = createEventDispatcher();
   
@@ -40,6 +43,9 @@
         disabled={disabled}
         {required}
         {maxlength}
+        {name}
+        {min}
+        {step}
       />
       {#if value}
         <button
