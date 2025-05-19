@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
     import type { PageData } from './$types';
     import { MetaTags } from '$lib/shared/ui/meta-tags';
     import { GlobalClient } from '$lib/shared/api'; // Adjust DTOs
@@ -177,4 +177,4 @@
             </div>
         {/if}
     </div>
-</div>
+</div> -->
