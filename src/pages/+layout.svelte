@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';       // SvelteKit 5
 	import '$lib/app/styles.css';
+	import { ErrorNotifications } from '$lib/shared/ui/errors';
 	import { Footer } from '$lib/shared/ui/footer';
 	import { CurrentTheme } from '$lib/shared/ui/theme';
 	import { Navbar } from '$lib/widgets/navbar/ui';
@@ -29,6 +30,8 @@
 	{#if !isFooterRemoved}
 		<Footer />
 	{/if}
+
+	<ErrorNotifications />
 </div>
 
 <style>

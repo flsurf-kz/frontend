@@ -152,8 +152,8 @@
       <div class="dropdown dropdown-end">
         <label tabindex="0" class="text-green-500 cursor-pointer text-lg px-1">?</label>
         <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-56">
-          <li><a href="/help">Поддержка</a></li>
-          <li><a href="/support/requests">Ваши тикеты к поддержке</a></li>
+          <li><a href="/support/help">Поддержка</a></li>
+          <li><a href="/support/tickets">Ваши тикеты к поддержке</a></li>
           <li><a href="/support/news">Обновления flsurf</a></li>
           <li><a href="/support/news?change-notes=true">Измнения</a></li>
         </ul>

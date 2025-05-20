@@ -21,6 +21,7 @@
     import { writable, get } from 'svelte/store';
     import { page } from '$app/stores'; // Для return_url
     import { goto } from '$app/navigation';
+    import { tick } from 'svelte';
     // import { CurrencyEnum } from '$lib/entities/payment/enums/currency'; // Если MoneyCurrency из flsurf-client используется, этот локальный enum может быть не нужен или должен быть согласован
 
     // Импортируем тип данных страницы из сгенерированного SvelteKit $types
@@ -88,7 +89,7 @@
                     systemId: selectedSystemId, // Если ваш API его принимает 
                     returnUrl: "", 
                 }));
-                currentClientSecret = serverResponse.clientSecret;
+                currentClientSecret = serverResponse.clientSecretForWidget;
             } else { // paymentIntent для пополнения
                 if (topUpAmount <= 0) {
                     showError("Сумма пополнения должна быть больше нуля.", true);
@@ -137,9 +138,10 @@
             paymentElement = elements.create('payment', {
                 /* layout: 'tabs' */
             });
-            paymentElement.mount(paymentElementDiv);
-            isStripeElementReady.set(true);
-
+            isStripeElementReady.set(true);   // ← div уже есть (hidden)
+            await tick();                     // гарантируем, что bind:this выполнился
+            console.log(paymentElementDiv)
+            paymentElement.mount(paymentElementDiv);  // теперь не undefined
         } catch (err: any) {
             showError(err.message || "Ошибка инициализации платежной формы.", true);
             console.error("Stripe Init Error:", err);
@@ -394,7 +396,7 @@
         </div>
     </section>
 
-    {#if get(isStripeElementReady)}
+    {#if $isStripeElementReady}
         <section class="card bg-base-100 shadow-xl">
             <div class="card-body">
                 <h3 class="card-title mb-4 text-lg">
@@ -414,6 +416,9 @@
                 </div>
                 <div class="card-actions justify-end mt-6">
                     {#if currentStripeIntentType === 'setupIntent'}
+                        <BaseButton className="primary btn-md" onclick={() => $isStripeElementReady = false}>
+                            Отмена
+                        </BaseButton>
                         <BaseButton className="primary btn-md" onclick={handleAddCard} disabled={get(isLoading)}>
                             {get(isLoading) ? 'Сохранение...' : 'Сохранить карту'}
                         </BaseButton>

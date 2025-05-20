@@ -9,7 +9,6 @@
 </script>
 
 <DropdownBase position="bottom">
-    
 	<BellIcon slot="icon" width="20" height="20" style="fill: white;" />
     <NotificationsList notifications={notifications}/>
 </DropdownBase>

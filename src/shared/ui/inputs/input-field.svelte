@@ -13,6 +13,7 @@
     export let name: string = ""
     export let min: string | undefined = undefined; 
     export let step: string | undefined = undefined; 
+    export let id: string | undefined = undefined; 
     
     const dispatch = createEventDispatcher();
   
@@ -46,6 +47,7 @@
         {name}
         {min}
         {step}
+        {id}
       />
       {#if value}
         <button

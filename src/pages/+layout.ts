@@ -15,10 +15,10 @@ export const ssr = false;
  * • восстанавливаем тему из localStorage
  */
 export const load: LayoutLoad = async ({ data }: { data: any }) => {
-	if (data !== undefined) { 
+	if (data !== undefined && data !== null) { 
 		CurrentUser.set(data.currentUser);   // <— store сразу готов
+		loadNotifications();           // использует fetch() в браузере
 	}
-	loadNotifications();           // использует fetch() в браузере
 	loadTheme();                         // читает localStorage
 
 	return {};                           // дочерние страницы получат всё через store

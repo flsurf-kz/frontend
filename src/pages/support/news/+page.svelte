@@ -8,6 +8,7 @@
     let { newsItems, currentPage, hasNextPage, newsType } = $derived(data);
 
     const totalPages = $derived(Math.ceil(newsItems.length / currentPage * 10));
+    // svelte-ignore state_referenced_locally
     const pageTitle = newsType === 'change-notes' ? "Технические обновления (Change Notes)" : "Новости и обновления FlSurf";
 
     const formatDate = (dateStr: string | Date | undefined) => {

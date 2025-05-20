@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { differenceInMinutes, format } from 'date-fns';
+  import { differenceInMinutes, format, parseISO } from 'date-fns';
   import { DeleteMessageDto, PinMessageDto, type MessageEntity } from 'flsurf-client';
 
-  import { GlobalClient } from '$lib/shared/api';
+  import { fixIso, GlobalClient } from '$lib/shared/api';
 	import { CurrentEditingMessage, CurrentMessageReplyTo, CurrentMessages } from '$lib/entities/messanging';
 	import UserAvatar from '$lib/shared/ui/icons/UserAvatar.svelte';
 	import { EditButton } from '$lib/shared/ui/buttons';
@@ -14,8 +14,25 @@
   export let currentUserId = $CurrentUser?.id;              // id текущего пользователя
 
   /* ---------- хелперы ---------- */
-  const fDate = (d: Date) => format(d, 'yyyy‑MM‑dd'); // для «нового дня»
-  const fTime = (d: Date) => format(d, 'p');          // 2:33 PM
+  export function toDate(input: string | Date): Date {
+    if (input instanceof Date) return input;
+
+    // обрезаем дробную часть до 3 цифр (1495165 → 149)
+    const normalized = input.replace(
+      /\.(\d{3})\d*(Z|[+\-]\d{2}:\d{2})$/,
+      '.$1$2'
+    );
+
+    return parseISO(normalized);
+  }
+
+  /** Формат даты «2025-05-20» */
+  export const fDate = (d: string | Date) =>
+    format(toDate(d), 'yyyy-MM-dd');
+
+  /** Формат времени «15:55» */
+  export const fTime = (d: string | Date) =>
+    format(toDate(d), 'HH:mm');
 
   const selectedMessageId = writable<string | null>(null);
 
@@ -58,16 +75,16 @@
   {/if}
 
   {#each messages as msg, i (msg.id + '-' + i)}
-    {@const prev = i > 0 ? messages[i - 1] : null}
-    {@const sent = new Date(msg.sentDate ?? "")}
-    {@const newDay =
-      !prev || fDate(sent) !== fDate(new Date(prev.sentDate ?? ""))}
-
-    {@const groupStart =
-      !prev ||
-      prev.sender?.id !== msg.sender?.id ||
-      differenceInMinutes(sent, new Date(prev.sentDate ?? "")) > 10}
-      {@const isSelected = $selectedMessageId === msg.id}
+    {@const prev        = i > 0 ? messages[i - 1] : null}
+    {@const sent        = toDate(msg.createdAt ?? msg.sentDate)}
+    {@const prevSent    = prev 
+        ? toDate(msg.createdAt ?? msg.sentDate)
+        : null}
+    {@const newDay      = !prev || fDate(sent) !== fDate(prevSent!)}
+    {@const groupStart  = !prev 
+        || prev.sender?.id !== msg.sender?.id
+        || differenceInMinutes(sent, prevSent!) > 10}
+    {@const isSelected  = $selectedMessageId === msg.id}
     <div>
       {#if newDay}
         <!-- разделитель дат -->

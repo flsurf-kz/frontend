@@ -95,6 +95,8 @@
       })
     );
 
+    console.log(`chat: ${replying?.id ?? ""}, message: ${msg}, text: ${text}, chatId: ${get(CurrentChat)?.id}`)
+
     /* очистка */
     CurrentMessageReplyTo.set(undefined);
     text.set('');

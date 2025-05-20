@@ -10,9 +10,18 @@
   import { page } from '$app/stores';
   import { debounce } from 'lodash';
   import { SearchIcon, UserPlusIcon, XIcon } from '$lib/shared/ui/icons'; // Добавим иконки
+	import { format, toDate } from 'date-fns';
 
   export let chatControl: boolean = false; 
   export let className = '';
+
+    /** Время «15:30» */
+  const formatTime = (d: string | Date) =>
+    format(toDate(d), 'HH:mm');
+
+  /** Короткая дата «May 20» */
+  const formatDateShort = (d: string | Date) =>
+    format(toDate(d), 'MMM d');
 
   const searchChatsTerm = writable('');
   let localSearchChatsInput = '';
@@ -154,6 +163,48 @@
       noScroll: true
     });
   }
+
+    /* --- Для настроек сообщений --- */
+  let desktopNotifyFor = 'Все действия';
+  let playSound        = false;
+  let counterFor       = 'Все действия';
+  let emailFor         = 'Все действия';
+  let emailFreq        = 'Каждые 15 минут';
+  const notifyOptions  = [
+    'Все действия',
+    'Личные сообщения',
+    'Упоминания',
+    'Нет'
+  ];
+  const freqOptions    = [
+    'Каждые 5 минут',
+    'Каждые 15 минут',
+    'Каждый час',
+    'Никогда'
+  ];
+
+  /* --- Для «Не онлайн» (OOO) --- */
+  let oooEnabled   = true;
+  let oooFirstDay  = new Date().toISOString().slice(0,10);
+  let oooLastDay   = new Date(Date.now()+24*3600e3).toISOString().slice(0,10);
+  let oooMessage   = `Я не онлайн ${oooLastDay} и не могу ответить сразу. Спасибо за понимание.`;
+  const timeZone   = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  /* --- Для горячих клавиш --- */
+  let activeTab: 'General' | 'Text' = 'General';
+  interface Shortcut { action: string; combo: string; }
+  const generalShortcuts: Shortcut[] = [
+    { action: 'Поиск по всем', combo: 'Ctrl + Shift + F' },
+    { action: 'Прошлый чат', combo: 'Alt + ↑' },
+    { action: 'Следующий чат', combo: 'Alt + ↓' },
+    { action: 'Shortcut Help', combo: 'Alt + ?' }
+  ];
+  const textShortcuts: Shortcut[] = [
+    { action: 'Жирный',      combo: 'Ctrl + B' },
+    { action: 'Италик',    combo: 'Ctrl + I' },
+    { action: 'Пунктир', combo: 'Ctrl + U' },
+    { action: 'Код',combo: 'Ctrl + Shift + `' }
+  ];
 </script>
 
 <aside class="w-75 bg-base-200 min-h-0 flex flex-col shrink-0 {className}">
@@ -210,11 +261,23 @@
             <span class="text-sm font-semibold">{chat?.name?.slice(0, 2).toUpperCase()}</span>
           </div>
         </div>
+        <!-- Основной контент -->
         <div class="flex-1 min-w-0">
+          <!-- Название чата -->
           <p class="font-medium truncate">{chat.name}</p>
-          <p class="text-xs opacity-70 truncate">
-            {chat.lastMessage?.text ?? 'Нет сообщений'}
-          </p>
+
+          <!-- Последнее сообщение + время -->
+          <div class="flex items-center justify-between">
+            <p class="text-xs opacity-70 truncate">
+              {chat.lastMessage?.text ?? 'Нет сообщений'}
+            </p>
+
+            {#if chat.lastMessage?.createdAt}
+              <span class="text-xs opacity-50 ml-2 whitespace-nowrap">
+                {formatTime(chat.lastMessage.createdAt)}
+              </span>
+            {/if}
+          </div>
         </div>
         {#if chat.currentUserUnreadMessagesCount ?? 0 > 0} 
           <span class="badge badge-secondary badge-sm ml-auto">{chat.currentUserUnreadMessagesCount}</span>
@@ -226,6 +289,7 @@
     {/if}
   </div>
 </aside>
+
 <ModalBase bind:open={$newModal} title="Создать новый чат">
   <div class="space-y-4 p-1">
     <InputField bind:value={newChatName} placeholder="Например, 'Обсуждение проекта X'" className="w-full" label="Имя чата" required={true} />
@@ -291,25 +355,234 @@
 </ModalBase>
 
 <ModalBase bind:open={$settingsModal} title="Настройки сообщений">
- <p class="opacity-70">Здесь будут настройки уведомлений, автосохранения черновиков и&nbsp;т.&nbsp;д.</p>
+  
+    <!-- svelte-ignore a11y_label_has_associated_control -->
+  <div class="p-4 space-y-4">
+    <div>
+      <label class="label"><span class="label-text">
+        Показывать уведомления на рабочем столе для:
+      </span></label>
+      <select class="select select-bordered w-full"
+              bind:value={desktopNotifyFor}>
+        {#each notifyOptions as o}
+          <option value={o}>{o}</option>
+        {/each}
+      </select>
+    </div>
+    <div class="flex items-center space-x-2">
+      <input type="checkbox" id="playSound" class="checkbox"
+             bind:checked={playSound}/>
+      <label for="playSound" class="label-text">
+        Воспроизводить звук
+      </label>
+      <a href="/" class="text-green-500">Проверить!</a>
+    </div>
+    <div>
+      <label class="label"><span class="label-text">
+        Увеличивать счётчик сообщений для:
+      </span></label>
+      <select class="select select-bordered w-full"
+              bind:value={counterFor}>
+        {#each notifyOptions as o}
+          <option value={o}>{o}</option>
+        {/each}
+      </select>
+    </div>
+    <div>
+      <label class="label"><span class="label-text">
+        Отправлять email для:
+      </span></label>
+      <select class="select select-bordered w-full mb-2"
+              bind:value={emailFor}>
+        {#each notifyOptions as o}
+          <option value={o}>{o}</option>
+        {/each}
+      </select>
+      <select class="select select-bordered w-full"
+              bind:value={emailFreq}>
+        {#each freqOptions as f}
+          <option value={f}>{f}</option>
+        {/each}
+      </select>
+    </div>
+    <div class="modal-action justify-end space-x-2">
+      <button class="btn btn-ghost" on:click={() => settingsModal.set(false)}>
+        Отмена
+      </button>
+      <button class="btn btn-primary" on:click={() => settingsModal.set(false)}>
+        Сохранить
+      </button>
+    </div>
+  </div>
 </ModalBase>
 
-<ModalBase bind:open={$oooModal} title="Не онлайн">
- <p class="opacity-70">Функция «Нет на месте». Заглушка.</p>
+<!-- 1) Настройки сообщений -->
+<!-- svelte-ignore a11y_label_has_associated_control -->
+<!-- svelte-ignore a11y_invalid_attribute -->
+<ModalBase bind:open={$settingsModal} title="Messages settings">
+  <div class="p-4 space-y-4">
+    <div>
+      <label class="label"><span class="label-text">Показывать уведомления для:</span></label>
+      <select class="select select-bordered w-full"
+              bind:value={desktopNotifyFor}>
+        {#each notifyOptions as o}
+          <option value={o}>{o}</option>
+        {/each}
+      </select>
+    </div>
+    <div class="flex items-center space-x-2">
+      <input type="checkbox" id="playSound" class="checkbox"
+             bind:checked={playSound}/>
+      <label for="playSound" class="label-text">Играть звук</label>
+      <a href="#" class="text-green-500">Проверь!</a>
+    </div>
+    <div>
+      <label class="label"><span class="label-text">
+        Увеличивать количество уведомлении за:
+      </span></label>
+      <select class="select select-bordered w-full"
+              bind:value={counterFor}>
+        {#each notifyOptions as o}
+          <option value={o}>{o}</option>
+        {/each}
+      </select>
+    </div>
+    <div>
+      <label class="label"><span class="label-text"></span></label>
+      <select class="select select-bordered w-full mb-2"
+              bind:value={emailFor}>
+        {#each notifyOptions as o}
+          <option value={o}>{o}</option>
+        {/each}
+      </select>
+      <select class="select select-bordered w-full"
+              bind:value={emailFreq}>
+        {#each freqOptions as f}
+          <option value={f}>{f}</option>
+        {/each}
+      </select>
+    </div>
+    <div class="modal-action justify-end space-x-2">
+      <button class="btn btn-ghost" on:click={() => settingsModal.set(false)}>
+        Cancel
+      </button>
+      <button class="btn btn-primary" on:click={() => settingsModal.set(false)}>
+        Save
+      </button>
+    </div>
+  </div>
 </ModalBase>
 
+<!-- 2) Out-of-office responder -->
+<ModalBase bind:open={$oooModal} title="Нет на месте">
+  <div class="p-4 space-y-4">
+    <div class="flex items-center">
+      <input type="checkbox" id="oooToggle" class="toggle toggle-primary"
+             bind:checked={oooEnabled}/>
+      <label for="oooToggle" class="ml-2">
+        Отправлять автоматические ответы на входящие сообщения
+      </label>
+    </div>
+    <div>
+      <p>
+        Ваш часовой пояс сейчас установлен на <strong>{timeZone}</strong>. 
+        <a href='/profile/timezone' class="link link-primary">
+          Изменить
+        </a>
+      </p>
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <!-- svelte-ignore a11y_label_has_associated_control -->
+        <label class="label"><span class="label-text">Первый день</span></label>
+        <input type="date" class="input input-bordered w-full"
+               bind:value={oooFirstDay}/>
+      </div>
+      <div>
+        <!-- svelte-ignore a11y_label_has_associated_control -->
+        <label class="label"><span class="label-text">Последний день</span></label>
+        <input type="date" class="input input-bordered w-full"
+               bind:value={oooLastDay}/>
+      </div>
+    </div>
+    <div>
+      <!-- svelte-ignore a11y_label_has_associated_control -->
+      <label class="label"><span class="label-text">Ваше сообщение</span></label>
+      <!-- svelte-ignore element_invalid_self_closing_tag -->
+      <textarea class="textarea textarea-bordered w-full" rows="4"
+                bind:value={oooMessage}/>
+    </div>
+    <div class="modal-action justify-end space-x-2">
+      <button class="btn btn-ghost" on:click={() => oooModal.set(false)}>
+        Отмена
+      </button>
+      <button class="btn btn-primary" on:click={() => oooModal.set(false)}>
+        Отправить
+      </button>
+    </div>
+  </div>
+</ModalBase>
+
+<!-- 3) Keyboard Shortcuts -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<!-- svelte-ignore a11y_missing_attribute -->
 <ModalBase bind:open={$shortcutsModal} title="Горячие клавиши">
- <ul class="list-disc list-inside space-y-1 text-sm">
-   <li><kbd class="kbd kbd-sm">Ctrl</kbd> + <kbd class="kbd kbd-sm">K</kbd> — открыть поиск</li>
-   <li><kbd class="kbd kbd-sm">Ctrl</kbd> + <kbd class="kbd kbd-sm">↑</kbd> — пред. чат</li>
-   <li><kbd class="kbd kbd-sm">Ctrl</kbd> + <kbd class="kbd kbd-sm">↓</kbd> — след. чат</li>
- </ul>
+  <div class="p-4">
+    <div class="tabs">
+      <a class="tab {activeTab === 'General' ? 'tab-active' : ''}"
+         on:click={() => (activeTab = 'General')}>
+        Общие
+      </a>
+      <a class="tab {activeTab === 'Text' ? 'tab-active' : ''}"
+         on:click={() => (activeTab = 'Text')}>
+        Форматирование текста
+      </a>
+    </div>
+    {#if activeTab === 'General'}
+      <ul class="mt-4 space-y-2">
+        {#each generalShortcuts as sc}
+          <li class="flex justify-between">
+            <span>{sc.action}</span>
+            <kbd class="kbd kbd-sm">{sc.combo}</kbd>
+          </li>
+        {/each}
+      </ul>
+    {:else}
+      <ul class="mt-4 space-y-2">
+        {#each textShortcuts as sc}
+          <li class="flex justify-between">
+            <span>{sc.action}</span>
+            <kbd class="kbd kbd-sm">{sc.combo}</kbd>
+          </li>
+        {/each}
+      </ul>
+    {/if}
+    <div class="modal-action justify-end">
+      <button class="btn btn-primary" on:click={() => shortcutsModal.set(false)}>
+        Закрыть
+      </button>
+    </div>
+  </div>
 </ModalBase>
 
+<!-- 4) Integrations -->
 <ModalBase bind:open={$integModal} title="Настроить интеграции">
- <p class="opacity-70">Здесь позже появится список интеграций (Slack, Email, Webhooks …)</p>
+  <div class="p-4 space-y-4">
+    <p class="opacity-70">
+      Здесь позже появится список интеграций (Slack, Email, Webhooks …)
+    </p>
+    <div class="modal-action justify-end space-x-2">
+      <button class="btn btn-ghost" on:click={() => integModal.set(false)}>
+        Отмена
+      </button>
+      <button class="btn btn-primary"
+              on:click={() => { goto('/integrations'); }}>
+        Перейти к интеграциям
+      </button>
+    </div>
+  </div>
 </ModalBase>
-
 <style>
   /* Стили для лучшего отображения списка чатов и аватарок */
   .avatar .bg-neutral-focus {

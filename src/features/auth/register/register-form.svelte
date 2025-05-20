@@ -36,6 +36,14 @@
 
 	let loading = false;
 	let error: string | null = null;
+	
+	const validateEmail = (email: string) => {
+	  return String(email)
+	    .toLowerCase()
+	    .match(
+	      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+	    );
+	};
 
 	async function handleSubmit() {
 		error = null;
@@ -55,6 +63,14 @@
 		if (!form.country) {
 			error = "Выберите страну";
 			return;
+		}
+		if (!validateEmail(form.email)) { 
+			error = "Неправильный эмейл"
+			return; 
+		}
+		if ((form.name + " " + form.surname).split(" ").length != 2) { 
+			error = "Не должно быть пробела в имени и фамилии"
+			return; 
 		}
 		// Если нужно, можно добавить accountType и country в payload
 		// Например, расширить RegisterUserSchema или отправлять их отдельно

@@ -39,12 +39,14 @@
 
     <!-- Статус онлайн -->
     <li class="flex items-center justify-between">
-      <span class="text-sm">Online for messages</span>
+      <span class="text-sm">Онлайн</span>
       <input type="checkbox" class="toggle toggle-success" checked={$CurrentUser?.isOnline} />
     </li>
 
     <!-- Профиль -->
-    <li><a href="/profile" class="text-sm">Ваш профиль</a></li>
+    <li><a href={$CurrentUser?.type == UserEntityType.Freelancer ? `/freelancer/${$CurrentUser?.id}` : "/client"} class="text-sm">
+      Ваш профиль
+    </a></li>
 
     <!-- Статистика -->
     <li><a href="/stats" class="text-sm">Статистика и тренды</a></li>
