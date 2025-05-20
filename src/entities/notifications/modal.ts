@@ -12,7 +12,7 @@ export async function loadNotifications(): Promise<NotificationEntity[] | undefi
         return undefined;  
 
     let userId = user.id; 
-    let notifications = await GlobalClient.getNotifications(userId); 
+    let notifications = await GlobalClient.getNotifications(userId, 0, 10); 
 
     CurrentNotifications.set(notifications)
 

@@ -72,7 +72,7 @@ async function initializeHubConnection() {
   if (!browser || hub) return; // Уже подключены или не в браузере
 
   hub = new HubConnectionBuilder()
-    .withUrl(backendHost + "api/ws/general", {
+    .withUrl(backendHost + "/api/ws/general", {
       transport: HttpTransportType.WebSockets,
       // если фронт и бэк на разных origin-ах:
       withCredentials: true

@@ -6,6 +6,7 @@
     import { InputField } from '$lib/shared/ui/inputs';
     import { 
         AddPaymentMethodCommand, 
+        CreateSetupIntentCommand, 
         Money, 
         MoneyCurrency, // Используем MoneyCurrency из flsurf-client
         PaymentMethodDto, 
@@ -67,10 +68,7 @@
     $: topUpCurrency = data.wallet?.currency?.toString() ?? "KZT";
 
     async function initializeStripe(intentType: 'setupIntent' | 'paymentIntent') {
-        if (!paymentElementDiv) {
-            showError("Элемент для встраивания формы Stripe не найден. Пожалуйста, обновите страницу.", true);
-            return;
-        }
+
         if (!selectedProviderId) {
             showError("Пожалуйста, выберите платежного провайдера.", true);
             return;
@@ -85,10 +83,11 @@
             let serverResponse: any; // Для хранения ответа от бэкенда
 
             if (intentType === 'setupIntent') {
-                serverResponse = await GlobalClient.createSetupIntent({
+                serverResponse = await GlobalClient.createSetupIntent(new CreateSetupIntentCommand({
                     providerId: selectedProviderId,
-                    systemId: selectedSystemId // Если ваш API его принимает
-                });
+                    systemId: selectedSystemId, // Если ваш API его принимает 
+                    returnUrl: "", 
+                }));
                 currentClientSecret = serverResponse.clientSecret;
             } else { // paymentIntent для пополнения
                 if (topUpAmount <= 0) {
@@ -249,7 +248,7 @@
             showError(data.error, true);
         }
         if (!GlobalConfig.stripePublicKey) {
-            showError("Публичный ключ Stripe не настроен. Платежи не будут работать.", true);
+            showError("Публичный ключ Stripe не настроен. Платежи не будут работать. ключ: " + GlobalConfig.stripePublicKey, true);
             return;
         }
         // Загружаем Stripe.js один раз при монтировании компонента

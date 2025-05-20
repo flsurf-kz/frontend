@@ -20,7 +20,7 @@ export interface PaymentPageData {
     error?: string;
 }
 
-export const load: PageLoad<PaymentPageData> = async ({ fetch: eventFetch, parent }) => {
+export const load: PageLoad<PaymentPageData> = async ({  }) => {
     // Можно дождаться загрузки данных из родительского layout, если там, например, сессия пользователя
     // await parent();
     // const { user } = await parent(); // Пример получения пользователя из родительского load
@@ -41,34 +41,6 @@ export const load: PageLoad<PaymentPageData> = async ({ fetch: eventFetch, paren
             }
             throw err; // Перебрасываем другие ошибки
         });
-
-        // Вариант 2: Прямое использование event.fetch (если GlobalClient не подходит для SSR)
-        /*
-        const apiBaseUrl = 'http://localhost:5000/api'; // ЗАМЕНИТЕ НА ВАШ РЕАЛЬНЫЙ API URL
-        const headers = { 'Content-Type': 'application/json' };
-        // Не забудьте про авторизацию, если требуется (передача cookie через event.fetch происходит автоматически)
-
-        const methodsPromise = eventFetch(`${apiBaseUrl}/payment/methods`, { headers })
-            .then(async res => {
-                if (!res.ok) throw new Error(await res.text() || `Failed to fetch payment methods: ${res.status}`);
-                return res.json() as Promise<PaymentMethodDto[]>;
-            });
-
-        const providersPromise = eventFetch(`${apiBaseUrl}/payment/providers`, { headers })
-            .then(async res => {
-                if (!res.ok) throw new Error(await res.text() || `Failed to fetch providers: ${res.status}`);
-                return res.json() as Promise<TransactionProviderEntity[]>;
-            });
-        
-        const walletPromise = eventFetch(`${apiBaseUrl}/wallet/my`, { headers })
-            .then(async res => {
-                if (!res.ok) {
-                    if (res.status === 404) return null; // Кошелек может еще не существовать
-                    throw new Error(await res.text() || `Failed to fetch wallet: ${res.status}`);
-                }
-                return res.json() as Promise<WalletEntity | null>;
-            });
-        */
 
         const [methods, providers, wallet] = await Promise.all([
             methodsPromise,
