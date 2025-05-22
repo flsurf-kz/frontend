@@ -20,7 +20,7 @@
                 <div class="flex items-center gap-4">
                     <UserAvatar />
                     <div>
-                        <h2 class="text-lg font-semibold">{proposal.freelancer?.name}</h2>
+                        <h2 class="text-lg font-semibold">{proposal.freelancer?.fullname}</h2>
                     </div>
                 </div>
             </div>  

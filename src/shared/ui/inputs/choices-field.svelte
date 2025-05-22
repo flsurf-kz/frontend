@@ -6,6 +6,7 @@
 	export let value: string = '';
 	export let label: string = '';
 	export let disabled: boolean = false;
+	export let className: string = ""
 
 	const dispatch = createEventDispatcher();
 
@@ -15,7 +16,7 @@
 	}
 </script>
 
-<div class="form-control w-full max-w-xs">
+<div class="form-control w-full max-w-xs {className}">
 	{#if label}
 		<!-- svelte-ignore a11y_label_has_associated_control -->
 		<label class="label">

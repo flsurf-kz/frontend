@@ -41,7 +41,7 @@
 				coverLetter,
 			}));
 			submitted = true;
-			goto(`/job/${job.id}`);
+			goto(`/jobs/${job.id}`);
 		} catch (e) {
 			error = 'Ошибка при отправке. Попробуйте позже.';
 		} finally {

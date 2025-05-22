@@ -1,102 +1,136 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import {
-	  JobEntityBudgetType,
-	  JobEntityStatus,
-	  type JobEntity
-	} from 'flsurf-client';
-  
+	import { JobEntityBudgetType, JobEntityStatus, type JobEntity, type SkillEntity } from 'flsurf-client';
+    import { formatDistanceToNowStrict } from 'date-fns'; // Для "Posted X hours ago"
+    import { ru } from 'date-fns/locale'; // Для русского языка в date-fns
+
 	export let job: JobEntity;
-  
-	// Оплата
-	const hourlyRate =
-	  job.budgetType === JobEntityBudgetType.Hourly && job.payout?.amount
-		? `${job.payout.amount}$ / час`
-		: '';
-  
-	// Ставки
-	const proposalCount =
-	  (job.proposals?.length ?? 0) > 10
-		? 'Ставок: Больше чем 10'
-		: `Ставок: ${job.proposals?.length ?? 0}`;
-  
-	// Инфо о работодателе
-	const employerName = job.employer?.fullname
-	  ?? job.employer?.name
-	  ?? 'Без имени';
-	const location = job.employer?.location ?? 'Неизвестно';
-  
-	// Теги
-	const tags = job.requiredSkills?.map(s => s.name) ?? [];
-  </script>
-  
-  <article
-	class="card bg-base-100 text-base-content shadow-md rounded-xl p-6 relative overflow-hidden"
-  >
-	<!-- Полностью кликабельный фон -->
-	<a
-	  class="absolute inset-0 z-10"
-	  aria-label="Перейти к вакансии"
-	  href="/jobs/{job.id}"
-	></a>
-  
-	<!-- Заголовок + ставка -->
-	<div class="flex justify-between items-start">
-	  <div class="space-y-1">
-		{#if job.status === JobEntityStatus.Closed} 
-			<p class="text-xl text-yellow-200">Работа уже закрыта</p>
-		{/if}
-		<h3 class="text-xl font-bold">{job.title}</h3>
-		<div class="flex items-center text-sm opacity-60 space-x-2">
-		  <span class="font-medium">{employerName}</span>
-		  <span>·</span>
-		  <svg
-			xmlns="http://www.w3.org/2000/svg"
-			class="w-4 h-4"
-			fill="none"
-			viewBox="0 0 24 24"
-			stroke="currentColor"
-		  >
-			<path
-			  stroke-linecap="round"
-			  stroke-linejoin="round"
-			  stroke-width="2"
-			  d="M12 11c0 .552-.224 1.052-.586 1.414a2 2 0 01-2.828 0A1.999 1.999 0 018 11a2 2 0 114 0z"
-			/>
-		  </svg>
-		  <span>{location}</span>
-		</div>
-  
-		{#if job.budgetType === JobEntityBudgetType.Hourly}
-		  <p class="text-sm opacity-80 mt-1">
-			Почасовая оплата – {job.payout?.amount ?? '?'} {job.payout?.currency ?? ''}
-		  </p>
-		{/if}
-	  </div>
-  
-	  {#if hourlyRate}
-		<div class="text-lg font-semibold text-green-500 whitespace-nowrap">
-		  {hourlyRate}
-		</div>
-	  {/if}
-	</div>
-  
-	<!-- Описание -->
-	<p class="mt-4 text-base opacity-90 line-clamp-2">
-	  {job.description}
-	</p>
-  
-	<!-- Теги -->
-	<div class="mt-4 flex flex-wrap gap-2">
-	  {#each tags.slice(0,5) as tag}
-		<span class="badge badge-outline">{tag}</span>
-	  {/each}
-	  {#if tags.length > 5}
-		<span class="badge badge-outline">+{tags.length - 5}</span>
-	  {/if}
-	</div>
-  
-	<!-- Ставки -->
-	<p class="mt-4 text-sm opacity-60">{proposalCount}</p>
-  </article>
-  
+
+    // Для относительного времени
+    let postedTimeAgo: string = '';
+    $: {
+        if (job.publicationDate || job.createdAt) {
+            const dateToCompare = job.publicationDate || job.createdAt;
+            try {
+                postedTimeAgo = formatDistanceToNowStrict(new Date(dateToCompare), { addSuffix: true, locale: ru });
+            } catch (e) {
+                postedTimeAgo = "недавно"; // Запасной вариант
+            }
+        } else {
+            postedTimeAgo = "недавно";
+        }
+    }
+
+    // Форматирование бюджета и типа работы
+    let jobTypeAndBudget: string = '';
+    $: {
+        let parts: string[] = [];
+        if (job.budgetType === JobEntityBudgetType.Fixed && job.payout?.amount) {
+            parts.push("Фикс. цена");
+            if (job.level) parts.push(job.level.toString()); // Предполагаем, что JobEntityLevel это enum или имеет toString()
+            parts.push(`Бюджет: ${job.payout.amount}${job.payout.currency === "USD" ? '$' : (job.payout.currency === "KZT" ? '₸' : job.payout.currency )}`);
+        } else if (job.budgetType === JobEntityBudgetType.Hourly && job.payout?.amount) {
+            parts.push("Почасовая");
+            if (job.level) parts.push(job.level.toString());
+            parts.push(`Ставка: ${job.payout.amount}${job.payout.currency === "USD" ? '$' : (job.payout.currency === "KZT" ? '₸' : job.payout.currency )}/час`);
+        } else {
+            if (job.level) parts.push(job.level.toString());
+            parts.push("Бюджет не указан");
+        }
+        jobTypeAndBudget = parts.join(' - ');
+    }
+
+    // Информация о клиенте (заглушки, если данных нет в job.employer)
+    const employerRating = 4.0; // Пример, если у UserEntity есть rating
+    const employerSpent = '1000r+ spent'; // Пример
+    const employerLocation = job.employer?.location ?? 'Не указана'; // Пример
+
+    // Количество предложений
+    let proposalCountText: string = 'Предложения: ';
+    $: {
+        const count = job.proposals?.length ?? 0;
+        if (count === 0) proposalCountText = 'Предложений: Нет';
+        else if (count < 5) proposalCountText = `Предложений: ${count}`;
+        else if (count <=10) proposalCountText = 'Предложений: 5-10'; // Как на скриншоте
+        else proposalCountText = 'Предложений: 10+';
+    }
+
+    const skillsForTagList: SkillEntity[] = job.requiredSkills || [];
+
+</script>
+
+<article class="bg-gray-800 text-gray-300 shadow-lg rounded-lg p-5 relative border border-transparent hover:border-gray-700 transition-colors">
+    <div class="flex justify-between items-start mb-3">
+        <p class="text-xs text-gray-500">Опубликовано {postedTimeAgo}</p>
+        <div class="flex space-x-2 z-20 relative">
+            <button title="Не интересно" class="text-gray-500 hover:text-white transition-colors">
+                <IconThumbDown />
+            </button>
+            <button title="Сохранить в закладки" class="text-gray-500 hover:text-white transition-colors">
+                <IconHeart />
+            </button>
+            </div>
+    </div>
+
+    <h2 class="text-lg font-semibold text-white mb-2 hover:text-green-400 transition-colors">
+        <a href={`/jobs/${job.id}`} class="stretched-link-pseudo">{job.title || 'Без названия'}</a>
+    </h2>
+
+    <div class="flex flex-wrap items-center text-xs text-gray-400 space-x-3 mb-3">
+        {#if job.paymentVerified}
+        <span class="flex items-center">
+            <IconPaymentVerified />
+            <span class="ml-1">Платеж подтвержден</span>
+        </span>
+        {/if}
+        <span class="flex items-center">
+            <IconStarRating />
+            <span class="ml-1">{employerRating.toFixed(1)}</span>
+        </span>
+        <span>{employerSpent}</span>
+        {#if employerLocation !== 'Не указана'}
+        <span class="flex items-center">
+            <IconLocationSimple />
+            <span class="ml-1">{employerLocation}</span>
+        </span>
+        {/if}
+    </div>
+
+    <p class="text-sm text-gray-300 mb-3">{jobTypeAndBudget}</p>
+
+    <p class="text-sm text-gray-400 line-clamp-3 mb-4 leading-relaxed">
+        {job.description || 'Описание отсутствует.'}
+    </p>
+
+    {#if skillsForTagList.length > 0}
+        <div class="mb-4">
+            <TaggedList items={skillsForTagList} maxVisible={3}/>
+        </div>
+    {/if}
+
+    <p class="text-xs text-gray-500">{proposalCountText}</p>
+
+    {#if job.status === JobEntityStatus.Closed} 
+        <div class="absolute inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center rounded-lg z-0">
+            <span class="text-yellow-400 font-semibold px-3 py-1 bg-gray-900 rounded">Вакансия закрыта</span>
+        </div>
+    {/if}
+</article>
+
+<style>
+    /* Для кликабельной карточки, если не используется <a> вокруг всего */
+    .stretched-link-pseudo::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 10; /* Ниже чем у кнопок */
+        pointer-events: auto;
+        background-color: rgba(0,0,0,0); /* Для срабатывания */
+    }
+    /* Убедитесь, что интерактивные элементы внутри карточки имеют более высокий z-index, если нужно */
+    article:hover .stretched-link-pseudo {
+        /* Можно добавить эффект при наведении на "ссылку" */
+    }
+</style>

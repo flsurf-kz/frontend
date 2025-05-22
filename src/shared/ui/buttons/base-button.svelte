@@ -8,6 +8,7 @@
   export let className: string = ''; 
   export let loading: boolean = false;
   export let onclick: MouseEventHandler<EventTarget>
+  export let tabindex: number | undefined = undefined; 
 </script>
   
 <button
@@ -15,6 +16,7 @@
     type={type}
     disabled={disabled || loading}
     onclick={onclick}
+    {tabindex}
 >
 <slot />
 </button>
