@@ -25,11 +25,6 @@ interface Options {
 	cookies: Cookies;
 }
 
-/**
- * Читает пользователя из /me.
- * Возвращает undefined, если сессии нет или токен протух.
- * Никаких Svelte‑store‑ов здесь нарочно нет — это чистая util‑ка.
- */
 export async function getServerCurrentUser({ fetch, cookies }: Options) {
   const authFetch = async (url: RequestInfo | URL, init: RequestInit = {}) => {
     const cookieHeader = cookies.getAll().map(c => `${c.name}=${c.value}`).join('; ');
@@ -37,18 +32,29 @@ export async function getServerCurrentUser({ fetch, cookies }: Options) {
       init.headers = new Headers(init.headers ?? {});
       (init.headers as Headers).set('cookie', cookieHeader);
     }
-    init.credentials = 'include';
+    init.credentials = 'include'; // Важно для передачи кук
     return fetch(url, init);
   };
 
+  // Предполагается, что Client - это ваш NSwag/OpenAPI сгенерированный клиент
+  // и backendHost - это URL вашего API, например "http://localhost:7000"
   const client = new Client(backendHost, { fetch: authFetch });
 
   try {
-    const me = await client.getMe();
-    return structuredClone(me);          // ✨ главное изменение
+    const me = await client.getMe(); // Запрос к эндпоинту /api/me или аналогичному
+    return structuredClone(me);       // ✨ главное изменение - глубокое клонирование
   } catch (e: any) {
-    if (e?.status === 401 || e?.status === 403) return undefined;
-    throw e;
+    // Если /me возвращает 401 (Unauthorized) или 403 (Forbidden), 
+    // это значит, что пользователь не аутентифицирован или не имеет прав.
+    // В этом случае корректно вернуть undefined (или null), что означает "нет пользователя".
+    if (e?.status === 401 || e?.status === 403) {
+        console.log('[getServerCurrentUser] No authenticated user (401/403 from /me)');
+        return undefined; // или null
+    }
+    // Если произошла другая ошибка (например, бэкенд недоступен),
+    // то выбрасываем ее дальше, чтобы SvelteKit обработал как ошибку загрузки.
+    console.error('[getServerCurrentUser] Error fetching current user:', e);
+    throw e; 
   }
 }
 

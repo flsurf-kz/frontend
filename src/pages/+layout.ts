@@ -15,6 +15,8 @@ export const ssr = false;
  * • восстанавливаем тему из localStorage
  */
 export const load: LayoutLoad = async ({ data }: { data: any }) => {
+	
+	console.log("CurrentUser", data)
 	if (data !== undefined && data !== null) { 
 		CurrentUser.set(data.currentUser);   // <— store сразу готов
 		loadNotifications();           // использует fetch() в браузере

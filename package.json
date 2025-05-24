@@ -49,6 +49,7 @@
 		"flowbite-svelte": "^0.48.6",
 		"flsurf-client": "^1.0.55",
 		"lodash": "^4.17.21",
-		"lodash-es": "^4.17.21"
+		"lodash-es": "^4.17.21",
+		"lucide-svelte": "^0.511.0"
 	}
 }
