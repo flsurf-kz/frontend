@@ -24,16 +24,15 @@
 
 <div class="flex flex-col gap-2">
   {#each options as option (option.key)}
-    <label class="flex items-center gap-2 cursor-pointer p-1 hover:bg-base-200 rounded-md"> {/* Добавлен cursor-pointer и hover-эффект */}
+    <label class="flex items-center gap-2 cursor-pointer p-1 hover:bg-base-200 rounded-md"> 
       <input
         type="checkbox"
-        class="checkbox checkbox-primary checkbox-sm" {# Добавлены классы для стилизации DaisyUI #}
-        value={option.key} {# value атрибут для семантики, хотя Svelte работает через checked #}
+        class="checkbox checkbox-primary checkbox-sm"
+        value={option.key}
         checked={selected.includes(option.key)}
         on:change={() => toggleOption(option.key)}
-        {#if name} name="{name}-{option.key}" {/if} {# Опционально, для уникальных имен, если это группа в форме #}
       />
-      <span class="text-sm">{option.label}</span> {# Отображаем label #}
+      <span class="text-sm">{option.label}</span>
     </label>
   {/each}
 </div>
