@@ -40,7 +40,7 @@ export const load: PageLoad<ClientDashboardPageData> = async ({ }) => {
 
     if (!currentUser?.id) {
         console.warn("Пользователь не аутентифицирован в +page.ts для дашборда клиента.");
-        throw redirect(307, '/login'); // Или ваша страница входа
+        throw redirect(307, '/auth/login'); // Или ваша страница входа
     }
     // Дополнительная проверка, что это клиент, если есть поле role/type
     if (currentUser.role?.toString().toLowerCase() !== 'client' && currentUser.type?.toString().toLowerCase() !== 'client') {

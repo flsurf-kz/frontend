@@ -38,7 +38,7 @@
 			// Предположим, API-метод resetPassword принимает объект с code и новым паролем
 			await GlobalClient.resetPassword(new ResetPasswordCommand({ code: code, email: email, newPassword: password }));
 			successMessage = "Пароль успешно сброшен. Вы будете перенаправлены на страницу входа.";
-			setTimeout(() => goto("/login"), 3000);
+			setTimeout(() => goto("/auth/login"), 3000);
 		} catch (e) {
 			error = "Ошибка сброса пароля. Проверьте данные и попробуйте ещё раз.";
 			console.error(e);
@@ -89,6 +89,6 @@
 		</button>
 	</div>
 	<div class="text-center mt-4">
-		<a href="/login" class="link link-hover">Вернуться ко входу</a>
+		<a href="/auth/login" class="link link-hover">Вернуться ко входу</a>
 	</div>
 </div>

@@ -41,7 +41,7 @@
 		<!-- Offers -->
 		<Section title="Принятые ставки" count={data.accepted.length}>
 			{#each data.accepted as p}
-				<ProposalCard {p} />
+				<ProposalCard proposal={p}/>
 			{/each}
 		</Section>
 
@@ -58,7 +58,7 @@
 		<!-- Submitted (Pending) -->
 		<Section title="Отправленные ставки" count={data.pending.length}>
 			{#each data.pending as p}
-				<ProposalCard {p} />
+				<ProposalCard proposal={p}/>
 			{/each}
 		</Section>
 	{/if}
@@ -74,7 +74,7 @@
 	{#if $tab === 'archived'}
 		<Section title="Архирвированные ставки" count={data.hidden.length}>
 			{#each data.hidden as p}
-				<ProposalCard {p} />
+				<ProposalCard proposal={p}/>
 			{/each}
 		</Section>
 	{/if}

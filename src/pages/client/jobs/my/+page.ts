@@ -1,4 +1,3 @@
-import type { PageLoad } from './$types';
 import { GlobalClient } from '$lib/shared/api';
 import {
     type JobEntity,
@@ -9,6 +8,8 @@ import {
 } from 'flsurf-client';
 import { showError } from '$lib/shared/ui/errors';
 import { redirect } from '@sveltejs/kit';
+import { CurrentUser } from '$lib/entities/user/model/modal';
+import { get } from 'svelte/store';
 
 export interface MyJobsPageData {
     jobPosts: JobEntity[];
@@ -29,12 +30,11 @@ export interface MyJobsPageData {
 const DEFAULT_PAGE_SIZE_MY_JOBS = 10;
 
 export const load = async ({ url, parent }) => {
-    const parentData = await parent();
     // @ts-ignore - Предполагаем, что parentData.user содержит данные сессии
-    const currentUser = parentData.user;
+    const currentUser = get(CurrentUser);
 
     if (!currentUser?.id) { // Простая проверка авторизации
-        throw redirect(307, '/login'); // Или ваша страница входа
+        throw redirect(307, '/auth/login'); // Или ваша страница входа
     }
     // Можно добавить проверку, что пользователь является клиентом, если это необходимо
     // if (currentUser.type !== 'Client') {

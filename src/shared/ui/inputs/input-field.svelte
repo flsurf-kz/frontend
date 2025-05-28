@@ -23,6 +23,7 @@
     }
   
     function clearInput() {
+      value = ''
       dispatch('change', '');
     }
   </script>

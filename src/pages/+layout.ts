@@ -1,7 +1,7 @@
 // +layout.ts     (работает ТОЛЬКО в браузере)
 import type { LayoutLoad } from './$types';
 
-import { CurrentUser }  from '$lib/entities/user/model/modal';   // writable‑store
+import { CurrentUser, getCurrentUser }  from '$lib/entities/user/model/modal';   // writable‑store
 import { loadNotifications } from '$lib/entities/notifications/modal';
 import { loadTheme }         from '$lib/shared/ui/theme';
 
@@ -20,8 +20,14 @@ export const load: LayoutLoad = async ({ data }: { data: any }) => {
 	if (data !== undefined && data !== null) { 
 		CurrentUser.set(data.currentUser);   // <— store сразу готов
 		loadNotifications();           // использует fetch() в браузере
+	} else { 
+		let result = await getCurrentUser(); 
+		if (result === undefined) 
+			console.error("User is not authorized");
+		else { 
+			data.currentUser = result; 
+		}
 	}
-	loadTheme();                         // читает localStorage
-
-	return {};                           // дочерние страницы получат всё через store
+	loadTheme(); 
+	return { };                           // дочерние страницы получат всё через store
 };

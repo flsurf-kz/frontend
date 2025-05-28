@@ -2,6 +2,9 @@
   import { goto } from '$app/navigation';
 	import SelectorTaggableSearch from '$lib/shared/ui/selector/selector-taggable-search.svelte';
 	import { createJobStore } from '../modal';
+	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
+	import { currentJobCreationStepKey } from '../modal';
 	import type { SelectItem } from '$lib/shared/types';
 	import { GlobalClient } from '$lib/shared/api';
 
@@ -11,7 +14,7 @@
   async function handleSearch(query: string) { 
       const result = await GlobalClient.getSkills(query)
       searchResults = result.map(
-          (v) => ({key: v.id, label: v.name ?? ""})
+          (v) => ({key: v.id ?? "", label: v.name ?? ""})
       )
   }
 
@@ -29,8 +32,16 @@
       ...data,
       requiredSkillIds: selectedItems.map((v) => v.key), 
     }));
-    goto("/job/create/volume");
+    goto("/jobs/post/volume");
   }
+
+  onMount(() => {
+    const currentKeyOnPage = $page.params.stepKey;
+    if (currentKeyOnPage) {
+        currentJobCreationStepKey.set(currentKeyOnPage);
+        // console.log(`Category page mounted, current step key set to: ${currentKeyOnPage}`);
+    }
+  });
   </script>
   
 <!-- svelte-ignore a11y_label_has_associated_control -->

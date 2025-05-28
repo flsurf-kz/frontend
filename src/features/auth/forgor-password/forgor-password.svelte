@@ -62,6 +62,6 @@
 		</div>
 	{/if}
 	<div class="text-center mt-4">
-		<a href="/login" class="link link-hover">Вернуться к входу</a>
+		<a href="/auth/login" class="link link-hover">Вернуться к входу</a>
 	</div>
 </div>

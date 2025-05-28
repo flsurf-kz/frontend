@@ -4,6 +4,9 @@
 	import type { CategoryEntity } from 'flsurf-client';
 	import { createJobStore } from '../modal';
 	import { GlobalClient } from '$lib/shared/api';
+	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
+	import { currentJobCreationStepKey } from '../modal';
 
   let categories = $state<CategoryEntity[] | undefined>(undefined);
 
@@ -46,8 +49,16 @@
 			categoryId,
 			requiredSkillIds: selectedSkills
 		}));
-		goto("/job/create/skills");
+		goto("/jobs/post/skills");
 	}
+
+    onMount(() => {
+      const currentKeyOnPage = $page.params.stepKey;
+      if (currentKeyOnPage) {
+          currentJobCreationStepKey.set(currentKeyOnPage);
+          // console.log(`Category page mounted, current step key set to: ${currentKeyOnPage}`);
+      }
+    });
 </script>
 
 <!-- svelte-ignore a11y_label_has_associated_control -->

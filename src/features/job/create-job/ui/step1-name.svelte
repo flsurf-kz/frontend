@@ -1,7 +1,9 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
+	import { page } from "$app/stores";
 	import InputField from "$lib/shared/ui/inputs/input-field.svelte";
-	import { createJobStore } from "../modal";
+	import { onMount } from "svelte";
+	import { createJobStore, currentJobCreationStepKey } from "../modal";
   
     // Локальные переменные для шага 1
     let title = '';
@@ -16,8 +18,16 @@
         description,
         timestamp: new Date()
       }));
-      goto("/job/create/category");
+      goto("/jobs/post/category");
     }
+
+    onMount(() => {
+      const currentKeyOnPage = $page.params.stepKey;
+      if (currentKeyOnPage) {
+          currentJobCreationStepKey.set(currentKeyOnPage);
+          // console.log(`Category page mounted, current step key set to: ${currentKeyOnPage}`);
+      }
+    });
   </script>
   
   <div class="space-y-4">

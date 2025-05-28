@@ -1,6 +1,9 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
 	import { createJobStore } from '../modal';
+	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
+	import { currentJobCreationStepKey } from '../modal';
     
     // Локальные переменные
     let budgetType: string = "";
@@ -16,8 +19,16 @@
         hourlyRate: hourlyRate ?? undefined,
         duration: duration ?? undefined
       }));
-      goto("/job/create/description");
+      goto("/jobs/post/review");
     }
+
+onMount(() => {
+  const currentKeyOnPage = $page.params.stepKey;
+  if (currentKeyOnPage) {
+      currentJobCreationStepKey.set(currentKeyOnPage);
+      // console.log(`Category page mounted, current step key set to: ${currentKeyOnPage}`);
+  }
+});
   </script>
   
 <!-- svelte-ignore a11y_label_has_associated_control -->

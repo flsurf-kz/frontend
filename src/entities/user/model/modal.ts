@@ -69,7 +69,7 @@ export async function logout() {
 export async function registerUser(payload: RegisterUserSchema): Promise<void> {
 	try {
 		await GlobalClient.register(payload);
-		getCurrentUser(); 
+		await getCurrentUser(); 
 		
 		console.log("Пользватель зарегистрирован")
 	} catch (e) {

@@ -15,7 +15,7 @@
     import { createEventDispatcher } from 'svelte';
 
     export let proposal: ProposalEntity;
-    export let job: JobEntity; // Принимаем объект вакансии
+    export let job: JobEntity | undefined = undefined; // Принимаем объект вакансии
 
     const dispatch = createEventDispatcher<{
         accept: ProposalEntity; // Передаем весь объект proposal для удобства
@@ -200,7 +200,7 @@
                         </BaseButton>
                     </div>
                 {:else if isJobOwner && proposalStatusValue === ProposalEntityStatus.Accepted}
-                     <a href={`/contracts/job/${job.id}`} class="btn btn-sm btn-info w-full sm:w-auto">
+                     <a href={`/contracts/job/${job?.id ?? ""}`} class="btn btn-sm btn-info w-full sm:w-auto">
                         Перейти к контракту
                      </a>
                 {/if}

@@ -112,9 +112,9 @@
             <ArrowDown className="h-4 ml-1" height={'5'}/>
           </label>
           <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-48">
-            <li><a href="/jobs/create">Опубликовать работу</a></li>
-            <li><a href="/jobs/all">Все опубликованные</a></li>
-            <li><a href="/contracts">Все контракты</a></li>
+            <li><a href="/jobs/post">Опубликовать работу</a></li>
+            <li><a href="/client/jobs/my">Ваши Заказы</a></li>
+            <li><a href="/client/contracts">Все контракты</a></li>
             <li><a href="/dashboard/client">Панель клиента</a></li>
           </ul>
         </div>
@@ -128,7 +128,7 @@
             <li><a href="/finances/summary">Обзор финансов</a></li>
             <li><a href="/finances/reports">Финансовые отчёты</a></li>
             <li><a href="/finances/transactions">Транзакции</a></li>
-            <li><a href="/user/settings/getpaid">Выплаты</a></li>
+            <li><a href="/settings/getpaid">Выплаты</a></li>
           </ul>
         </div>
       {/if}
