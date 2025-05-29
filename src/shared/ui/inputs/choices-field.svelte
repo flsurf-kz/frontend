@@ -7,6 +7,7 @@
 	export let label: string = '';
 	export let disabled: boolean = false;
 	export let className: string = ""
+	export let required: boolean = false; 
 
 	const dispatch = createEventDispatcher();
 
@@ -29,6 +30,7 @@
 		bind:value
 		on:change={onSelect}
 		disabled={disabled}
+		{required}
 	>
 		{#each options as option}
 			<option value={option.key}>{option.label}</option>

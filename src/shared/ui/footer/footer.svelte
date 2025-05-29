@@ -1,73 +1,69 @@
 <script lang="ts">
   import {
     LinkedInIcon,
-    XIcon,
+    XIcon, // Assuming X (Twitter)
     YouTubeIcon,
     InstagramIcon,
-    AppleIcon,
-    AndroidIcon,
+    // AppleIcon, // Removed
+    // AndroidIcon, // Removed
     FacebookIcon
-  } from "$lib/shared/ui/icons";
+  } from "$lib/shared/ui/icons"; // Убедитесь, что путь к иконкам корректный
 
-  const brandLinks = [
-    { title: "About Us", url: "#" },
-    { title: "Feedback", url: "#" },
-    { title: "Trust, Safety & Security", url: "#" }
+  // Обновленные ссылки с русскими названиями и правильными путями
+  const companyLinks = [ // Переименовано из brandLinks для ясности
+    { title: "О нас", url: "/unauth/about" },
+    { title: "Обратная связь", url: "/unauth/feedback" },
+    { title: "Доверие и Безопасность", url: "/unauth/trust-safety-security" }
   ];
 
   const helpLinks = [
-    { title: "Help & Support", url: "#" },
-    { title: "Terms of Service", url: "#" },
-    { title: "Privacy Policy", url: "#" }
+    { title: "Помощь и Поддержка", url: "/unauth/help-support" },
+    { title: "Условия обслуживания", url: "/unauth/terms-of-service" },
+    { title: "Политика конфиденциальности", url: "/unauth/privacy-policy" }
   ];
 
-  const docsLinks = [
-    { title: "CA Notice at Collection", url: "#" },
-    { title: "Cookie Settings", url: "#" },
-    { title: "Cookie Policy", url: "#" }
+  const legalLinks = [ // Переименовано из docsLinks
+    { title: "Уведомление CA при сборе данных", url: "/unauth/ca-notice-at-collection" },
+    { title: "Настройки Cookie", url: "/unauth/cookie-settings" },
+    { title: "Политика Cookie", url: "/unauth/cookie-policy" },
+    { title: "Лицензионное соглашение", url: "/unauth/license" } // Добавлена ссылка на лицензию
   ];
+
+  const currentYear = new Date().getFullYear();
 </script>
 
-<footer class="flex justify-between footer p-10 bg-gray-900 text-gray-300">
-  <!-- Первая колонка: бренд и основные ссылки -->
+<footer class="footer p-10 text-neutral-content flex justify-between bg-gray-900"> 
   <div>
-    <span class="footer-title text-white">FlsurfIz</span> 
-    {#each brandLinks as link}
+    <span class="footer-title opacity-100">flsurf.kz</span> 
+    {#each companyLinks as link}
       <a href={link.url} class="link link-hover">{link.title}</a>
     {/each}
-    <p class="mt-4 text-sm text-gray-500">© 2015 - {new Date().getFullYear()} FlsurfIz Inc.</p>
+    <p class="mt-4 text-sm opacity-70">© 2025 - {currentYear} flsurf.kz</p> 
   </div> 
 
-  <!-- Вторая колонка: Помощь -->
   <div>
-    <span class="footer-title text-white">Помощь</span> 
+    <span class="footer-title opacity-100">Помощь</span> 
     {#each helpLinks as link}
       <a href={link.url} class="link link-hover">{link.title}</a>
     {/each}
   </div> 
 
-  <!-- Третья колонка: Документы -->
   <div>
-    <span class="footer-title text-white">Документы</span> 
-    {#each docsLinks as link}
+    <span class="footer-title opacity-100">Документы</span> 
+    {#each legalLinks as link}
       <a href={link.url} class="link link-hover">{link.title}</a>
     {/each}
   </div> 
 
-  <!-- Четвертая колонка: Социальные сети и мобильные приложения -->
   <div>
-    <span class="footer-title text-white">Мы в соц сетях</span> 
+    <span class="footer-title opacity-100">Мы в соцсетях</span> 
     <div class="grid grid-flow-col gap-4 mt-2">
-      <a href="/" class="hover:text-white"><FacebookIcon width="24" height="24" /></a>
-      <a href="/" class="hover:text-white"><LinkedInIcon width="24" height="24" /></a>
-      <a href="/" class="hover:text-white"><XIcon width="24" height="24" /></a>
-      <a href="/" class="hover:text-white"><YouTubeIcon width="24" height="24" /></a>
-      <a href="/" class="hover:text-white"><InstagramIcon width="24" height="24" /></a>
+      <a href="https://youtube.com" class="hover:opacity-80 transition-opacity" aria-label="YouTube FLSURF.KZ">
+        <YouTubeIcon width="24" height="24" />
+      </a>
+      <a href="https://instagram.com" class="hover:opacity-80 transition-opacity" aria-label="Instagram FLSURF.KZ">
+        <InstagramIcon width="24" height="24" />
+      </a>
     </div>
-    <span class="footer-title text-white mt-4">Mobile App</span>
-    <div class="grid grid-flow-col gap-4 mt-2">
-      <a href="/" class="hover:text-white"><AppleIcon width="24" height="24" /></a>
-      <a href="/" class="hover:text-white"><AndroidIcon width="24" height="24" /></a>
     </div>
-  </div>
 </footer>

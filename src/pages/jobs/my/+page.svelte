@@ -4,8 +4,6 @@
     // Предполагаем, что FreelancerJobInvolvementStatus импортируется, если используется для фильтров/отображения
     // import { FreelancerJobInvolvementStatus } from 'flsurf-client'; 
     import BaseButton from '$lib/shared/ui/buttons/base-button.svelte';
-    import PagePagination from '$lib/shared/ui/navigation/PagePagination.svelte';
-    import { InputField, SelectField } from '$lib/shared/ui/inputs'; 
     // import CheckboxList from '$lib/shared/ui/lists/CheckboxList.svelte'; // Если нужен фильтр по статусам вовлеченности
     // import type { SelectItem } from '$lib/shared/types';
     import { goto, invalidateAll } from '$app/navigation';
@@ -15,7 +13,8 @@
     import UserAvatar from '$lib/shared/ui/icons/UserAvatar.svelte';
     import { showError } from '$lib/shared/ui/errors';
     import { onMount } from 'svelte';
-	import { getContractStatusDisplay } from '$lib/shared/api/formatter';
+	import { formatMoney, getContractStatusDisplay, getInitials } from '$lib/shared/api/formatter';
+	import { PagePagination } from '$lib/shared/ui/navigation';
 
     export let data: PageData;
     
@@ -38,12 +37,53 @@
     //     key: s, label: getFreelancerInvolvementDisplay(s).text // Используем текст из хелпера
     // }));
 
-    // Реализация функций фильтрации
-    function countActiveFilters(): number {
-        let count = 0;
-        if (searchTermInput.trim()) count++;
-        // if (involvementStatusesFilter.length > 0) count++;
-        return count;
+    
+    // Handler for page changes from PagePagination
+    function handlePageChange(event: CustomEvent<{ page: number }>) {
+        const newPage = event.detail.page;
+        const params = new URLSearchParams();
+
+        params.set('page', newPage.toString());
+        params.set('pageSize', data.pageSize.toString()); // Keep current page size
+
+        if (searchTermInput.trim()) { // Keep current search term
+            params.set('q', searchTermInput.trim());
+        }
+        // If you had other filters, you would add them here too:
+        // involvementStatusesFilter.forEach(stat => {
+        //     if (stat) params.append('involvement_status', stat);
+        // });
+
+        const currentPath = $page.url.pathname;
+        goto(`${currentPath}?${params.toString()}`, {
+            invalidateAll: true,
+            noScroll: true,
+            keepFocus: true
+        });
+    }
+
+    // Handler for page size changes from PagePagination
+    function handlePageSizeChange(event: CustomEvent<{ pageSize: number }>) {
+        const newPageSize = event.detail.pageSize;
+        const params = new URLSearchParams();
+
+        params.set('page', '1'); // Reset to page 1 when page size changes
+        params.set('pageSize', newPageSize.toString()); // Set new page size
+
+        if (searchTermInput.trim()) { // Keep current search term
+            params.set('q', searchTermInput.trim());
+        }
+        // If you had other filters, you would add them here too:
+        // involvementStatusesFilter.forEach(stat => {
+        //     if (stat) params.append('involvement_status', stat);
+        // });
+        
+        const currentPath = $page.url.pathname;
+        goto(`${currentPath}?${params.toString()}`, {
+            invalidateAll: true,
+            noScroll: true,
+            keepFocus: true
+        });
     }
 
     function applyFiltersAndNavigate() {
@@ -123,7 +163,7 @@
     <div class="space-y-6">
         {#if data.jobs && data.jobs.length > 0}
             {#each data.jobs as job (job.id)}
-                {@const involvementInfo = getContractStatusDisplay((job as any).myInvolvementStatus, job.status)}
+                {@const involvementInfo = getContractStatusDisplay((job as any).myInvolvementStatus)}
                 {@const client = job.employer}
                 <div class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow rounded-xl border border-transparent hover:border-primary/30">
                     <div class="card-body p-5 md:p-6">
@@ -175,7 +215,7 @@
                                             К моему контракту
                                         </a>
                                     {:else if (job as any).myProposalId && involvementInfo.text === 'Предложение подано'}
-                                         <a href={`/jobs/${job.id}/proposals/my`} class="btn btn-sm btn-outline"> {/* Пример URL */}
+                                         <a href={`/jobs/${job.id}/proposals/my`} class="btn btn-sm btn-outline"> 
                                             Мое предложение
                                         </a>
                                     {/if}

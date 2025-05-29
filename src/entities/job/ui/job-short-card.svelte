@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { JobEntityBudgetType, JobEntityStatus, type JobEntity, type SkillEntity } from 'flsurf-client';
+	import { BookmarkJobCommand, JobEntityBudgetType, JobEntityStatus, type JobEntity, type SkillEntity } from 'flsurf-client';
     import { formatDistanceToNowStrict } from 'date-fns'; // Для "Posted X hours ago"
     import { ru } from 'date-fns/locale'; // Для русского языка в date-fns
 	import { TaggedListField } from '$lib/shared/ui/lists';
@@ -9,6 +9,7 @@
 	import IconStarRating from '$lib/shared/ui/icons/IconStarRating.svelte';
 	import IconLocationSimple from '$lib/shared/ui/icons/IconLocationSimple.svelte';
 	import TagsList from '$lib/shared/ui/lists/tags-list.svelte';
+	import { GlobalClient } from '$lib/shared/api';
 
 	export let job: JobEntity;
 
@@ -64,21 +65,30 @@
     const skillsForTagList: SkillEntity[] = job.requiredSkills || [];
     const skillsTags = skillsForTagList.map(v => v.name)
 
+    const dislikeJobs = async () => { 
+        await GlobalClient.dislikeJob(job.id)
+    }
+
+    const saveBookmark = async () => { 
+        await GlobalClient.bookmarkJob(new BookmarkJobCommand({jobId: job.id}))
+    }
 </script>
 
 <article class="bg-base-100 text-gray-300 shadow-lg rounded-lg p-5 relative border border-transparent hover:bg-base-200 transition-colors">
     <div class="flex justify-between items-start mb-3 relative">
         <p class="text-xs text-gray-500">Опубликовано {postedTimeAgo}</p>
         <div class="absolute flex space-x-2 z-20 right-0">
-            <button title="Не интересно" 
+            <button title="Не интересно"
+                onclick={dislikeJobs} 
                 class="text-base-content/70 hover:text-base-content transition-colors border-1 border-green-500 rounded-full p-2 bg-base-100">
                 <IconThumbDown />
             </button>
             <button title="Сохранить в закладки" 
+                onclick={saveBookmark}
                 class="text-base-content/70 hover:text-base-content transition-colors border-1 border-green-500 rounded-full p-2 bg-base-100">
                 <IconHeart />
             </button>
-            </div>
+        </div>
     </div>
 
     <h2 class="text-lg font-semibold text-green-400 mb-2 hover:text-green-500 transition-colors">

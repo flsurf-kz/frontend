@@ -5,6 +5,7 @@
     export let disabled: boolean = false;
     export let value: string = '';
     export let maxLength: number = 0;
+    export let required: boolean = false; 
   
     $: remaining = maxLength > 0 ? maxLength - value.length : null;
   
@@ -27,6 +28,7 @@
         placeholder={placeholder}
         disabled={disabled}
         maxlength={maxLength > 0 ? maxLength : undefined}
+        {required}
       ></textarea>
   
       {#if value}

@@ -114,8 +114,8 @@
           <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-48">
             <li><a href="/jobs/post">Опубликовать работу</a></li>
             <li><a href="/client/jobs/my">Ваши Заказы</a></li>
-            <li><a href="/client/contracts">Все контракты</a></li>
-            <li><a href="/dashboard/client">Панель клиента</a></li>
+            <li><a href="/client/contracts/my">Все контракты</a></li>
+            <li><a href="/client/dashboard">Панель клиента</a></li>
           </ul>
         </div>
   

@@ -1,13 +1,13 @@
 import type { PageLoad } from './$types';
 import { GlobalClient } from '$lib/shared/api';
-import type {
-    JobEntity,
+import {
+    type JobEntity,
     GetJobsListQuery,
-    UserEntity,
-    FreelancerJobInvolvementStatus // Убедитесь, что этот enum есть, если будете фильтровать по нему
+    type UserEntity,
 } from 'flsurf-client';
-import { showError } from '$lib/shared/ui/errors';
 import { redirect } from '@sveltejs/kit';
+import { CurrentUser } from '$lib/entities/user/model/modal';
+import { get } from 'svelte/store';
 
 export interface MyFreelancerJobsPageData {
     jobs: JobEntity[]; 
@@ -25,10 +25,8 @@ export interface MyFreelancerJobsPageData {
 
 const DEFAULT_PAGE_SIZE = 10;
 
-export const load: PageLoad<MyFreelancerJobsPageData> = async ({ url, parent }) => {
-    const { userSession } = await parent();
-    // @ts-ignore
-    const currentUser = userSession?.user as UserEntity | undefined;
+export const load: PageLoad<MyFreelancerJobsPageData> = async ({ url }) => {
+    const currentUser = get(CurrentUser)
 
     if (!currentUser?.id) {
         throw redirect(307, '/login');
@@ -52,21 +50,18 @@ export const load: PageLoad<MyFreelancerJobsPageData> = async ({ url, parent }) 
         // involvementStatuses: involvementStatusParams?.length ? involvementStatusParams : null,
     };
 
-    const queryParams: GetJobsListQuery = {
+    const queryParams: GetJobsListQuery = new GetJobsListQuery({
         start: start,
         ends: pageSize, 
         freelancerId: currentUser.id, 
         search: currentFilters.searchTerm || undefined,
-        // statuses: currentFilters.involvementStatuses, // Если DTO и API это поддерживают
-        sortBy: "UpdatedAt", 
-        sortOption: "Desc"
-    };
+    });
 
     try {
         const response = await GlobalClient.getJobsList(queryParams); 
         
-        const jobs = response.items || response; 
-        const totalJobs = response.totalCount || (Array.isArray(jobs) ? jobs.length : 0);
+        const jobs = response; 
+        const totalJobs = response.length
         const totalPages = totalJobs > 0 ? Math.ceil(totalJobs / pageSize) : 0;
 
         return {
