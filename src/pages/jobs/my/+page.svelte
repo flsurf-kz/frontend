@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { PageData } from './$types';
-    import { JobEntityStatus, type JobEntity, type Money, type UserEntity, type FileEntity, ContractEntity } from 'flsurf-client';
+    import { JobEntityStatus, type JobEntity, type Money, type UserEntity, type FileEntity, ContractEntity, ContractEntityStatus } from 'flsurf-client';
     // Предполагаем, что FreelancerJobInvolvementStatus импортируется, если используется для фильтров/отображения
     // import { FreelancerJobInvolvementStatus } from 'flsurf-client'; 
     import BaseButton from '$lib/shared/ui/buttons/base-button.svelte';
@@ -163,7 +163,7 @@
     <div class="space-y-6">
         {#if data.jobs && data.jobs.length > 0}
             {#each data.jobs as job (job.id)}
-                {@const involvementInfo = getContractStatusDisplay((job as any).myInvolvementStatus)}
+                {@const involvementInfo = getContractStatusDisplay(ContractEntityStatus.Active)}
                 {@const client = job.employer}
                 <div class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow rounded-xl border border-transparent hover:border-primary/30">
                     <div class="card-body p-5 md:p-6">
@@ -210,18 +210,14 @@
                                     <a href={`/jobs/${job.id}`} class="btn btn-sm btn-outline btn-primary">
                                         <EyeIcon class="w-4 h-4 mr-1"/> Детали вакансии
                                     </a>
-                                    {#if (job as any).myContractId}
-                                        <a href={`/freelancer/contracts/dashboard/${(job as any).myContractId}`} class="btn btn-sm btn-outline btn-secondary">
+                                    {#if job.contractId}
+                                        <a href={`/contracts/dashboard/${job.contractId}`} class="btn btn-sm btn-outline btn-secondary">
                                             К моему контракту
-                                        </a>
-                                    {:else if (job as any).myProposalId && involvementInfo.text === 'Предложение подано'}
-                                         <a href={`/jobs/${job.id}/proposals/my`} class="btn btn-sm btn-outline"> 
-                                            Мое предложение
                                         </a>
                                     {/if}
                                     
-                                    {#if (job as any).chatId}
-                                        <a href={`/messages?chatId=${(job as any).chatId}`} class="btn btn-sm btn-outline">
+                                    {#if (job.chats ?? [])[0].id }
+                                        <a href={`/messages?chatId=${(job.chats ?? [])[0]?.id}`} class="btn btn-sm btn-outline">
                                            <MessageSquareIcon class="w-4 h-4 mr-1"/> Обсудить
                                         </a>
                                     {/if}

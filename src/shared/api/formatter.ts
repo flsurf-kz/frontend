@@ -69,3 +69,98 @@ export function getContractStatusDisplay(status?: ContractEntityStatus): { text:
     }
     return { text, className };
 }
+
+export interface ContractStatusInfo {
+    label: string;
+    description?: string;
+    className?: string; // Для возможной цветовой индикации статуса
+}
+
+export function getContractStatusInfo(
+    status: ContractEntityStatus | undefined,
+    pauseReason?: string | undefined,
+    isFreelancer?: boolean, // Чтобы кастомизировать описание для PendingApproval
+    isClient?: boolean
+): ContractStatusInfo {
+    switch (status) {
+        case ContractEntityStatus.PendingApproval:
+            let pendingDesc = "Заказчик предложил условия контракта. ";
+            if (isFreelancer) {
+                pendingDesc += "Вам необходимо принять контракт, чтобы начать работу. Если вы не примете его в течение установленного срока, предложение может быть аннулировано.";
+            } else if (isClient) {
+                pendingDesc += "Ожидается принятие условий со стороны исполнителя. Если исполнитель не примет контракт, он будет аннулирован.";
+            } else {
+                pendingDesc += "Ожидается принятие условий одной из сторон.";
+            }
+            return {
+                label: "Ожидает Принятия",
+                description: pendingDesc,
+                className: "text-warning-content bg-warning/20 border-warning" // Пример класса для цвета
+            };
+        case ContractEntityStatus.Active:
+            let activeDesc = "Контракт активен. Идет выполнение работ согласно условиям.";
+            if (isFreelancer) activeDesc += " Не забывайте своевременно сдавать работу или этапы.";
+            if (isClient) activeDesc += " Вы можете отслеживать прогресс и ожидать результатов.";
+            return {
+                label: "Активен",
+                description: activeDesc,
+                className: "text-success-content bg-success/20 border-success"
+            };
+        case ContractEntityStatus.Paused:
+            return {
+                label: "Приостановлен",
+                description: `Работа по контракту временно приостановлена. ${pauseReason ? `Причина: ${pauseReason}` : 'Причина не указана.'}`,
+                className: "text-warning-content bg-warning/20 border-warning"
+            };
+        case ContractEntityStatus.Completed:
+            return {
+                label: "Завершен",
+                description: "Все работы по контракту выполнены, приняты заказчиком, и произведены все расчеты.",
+                className: "text-info-content bg-info/20 border-info"
+            };
+        case ContractEntityStatus.Disputed:
+            return {
+                label: "Открыт Спор",
+                description: "По контракту возникли разногласия, и открыт спор. Ожидается его разрешение арбитражной службой FLSURF.KZ.",
+                className: "text-error-content bg-error/20 border-error"
+            };
+        case ContractEntityStatus.Cancelled:
+            return {
+                label: "Отменен",
+                description: "Контракт был отменен до его полного завершения по инициативе одной из сторон или по взаимному согласию.",
+                className: "text-error-content bg-error/20 border-error"
+            };
+        case ContractEntityStatus.Expired:
+            return {
+                label: "Истек Срок",
+                description: "Срок действия контракта истек. Если работы не были завершены, могут потребоваться дальнейшие действия.",
+                className: "text-neutral-content bg-neutral/20 border-neutral"
+            };
+        case ContractEntityStatus.Closed:
+            return {
+                label: "Закрыт",
+                description: "Контракт окончательно закрыт. Все взаимные обязательства выполнены или урегулированы.",
+                className: "text-info-content bg-info/20 border-info"
+            };
+        case ContractEntityStatus.PendingFinishApproval:
+            let pendingFinishDesc = "";
+             if (isClient) {
+                pendingFinishDesc = "Исполнитель сдал работу на проверку. Пожалуйста, рассмотрите и примите выполненную работу или запросите доработки.";
+            } else if (isFreelancer) {
+                pendingFinishDesc = "Ваша работа отправлена на проверку заказчику. Ожидайте его решения.";
+            } else {
+                pendingFinishDesc = "Работа сдана исполнителем и ожидает подтверждения завершения заказчиком.";
+            }
+            return {
+                label: "Ожидает Подтверждения Завершения",
+                description: pendingFinishDesc,
+                className: "text-warning-content bg-warning/20 border-warning"
+            };
+        default:
+            return {
+                label: status ? String(status) : "Неизвестен",
+                description: "Статус контракта не определен или является нестандартным.",
+                className: "text-base-content bg-base-300/30 border-base-300"
+            };
+    }
+}

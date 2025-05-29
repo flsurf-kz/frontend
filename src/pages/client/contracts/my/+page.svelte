@@ -225,7 +225,7 @@
         {#if data.contracts && data.contracts.length > 0}
             {#each data.contracts as contract (contract.id)}
                 {@const statusInfo = getContractStatusDisplay(contract.status)}
-                <a href={`/contracts/dashboard/${contract.id}`} class="block card bg-base-100 shadow-lg hover:shadow-xl transition-shadow rounded-xl border border-transparent hover:border-primary/40">
+                <a href={`/contracts/${contract.id}`} class="block card bg-base-100 shadow-lg hover:shadow-xl transition-shadow rounded-xl border border-transparent hover:border-primary/40">
                     <div class="card-body p-5 md:p-6">
                         <div class="flex flex-col md:flex-row gap-4">
                             <div class="flex-shrink-0 md:w-1/4 flex items-center md:flex-col md:items-start text-center md:text-left mb-3 md:mb-0 md:border-r md:border-base-200 md:pr-4">
