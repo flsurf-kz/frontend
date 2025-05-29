@@ -182,14 +182,14 @@
 </script>
 
 {#if submitted}
-    <div class="max-w-3xl mx-auto text-center p-10">
+    <div class="max-w-3xl text-center p-10">
         <svg class="w-16 h-16 text-green-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
         <p class="text-xl font-semibold text-green-700">Ваше предложение успешно отправлено!</p>
         <p class="text-gray-600 mt-2">Вы будете перенаправлены на страницу заказа.</p>
         <BaseButton className="primary mt-6" onclick={() => goto(`/jobs/${job.id}`)}>Перейти к заказу</BaseButton>
     </div>
 {:else}
-    <div class="max-w-3xl mx-auto flex-col justify-center p-4 sm:p-6 bg-base-100 rounded-lg shadow-xl space-y-6 min-w-50">
+    <div class="max-w-3xl flex-col justify-center p-4 sm:p-6 bg-base-100 rounded-lg shadow-xl space-y-6 min-w-50">
         <h1 class="text-2xl font-bold text-base-content">Отправить предложение</h1>
 
         <div class="bg-base-200 p-4 rounded-md border border-base-300 space-y-1.5">
@@ -290,7 +290,7 @@
                 type="submit" 
                 className="btn-primary" 
                 onclick={submit} 
-                disabled={isSubmitting || !coverLetter.trim() || (milestoneMode ? totalMilestoneAmount <=0 : !proposedRateInput.trim() || parseFloat(proposedRateInput) <=0 ) || !projectDuration }
+                disabled={isSubmitting}
             >
                 {#if isSubmitting && !fileUploadMessage} <span class="loading loading-spinner loading-xs mr-2"></span> Отправка...
                 {:else if isSubmitting && fileUploadMessage}

@@ -25,7 +25,7 @@
 	let categoryId = $state("");
 	let selectedSkills = $state<string[]>([]);
 
-  function convertCategories(entities: CategoryEntity[] | undefined): Category[] {
+  	function convertCategories(entities: CategoryEntity[] | undefined): Category[] {
 		if (!entities) return [];
 		return entities.map((entity) => ({
 			key: entity.id,
@@ -34,7 +34,7 @@
 		}));
 	}
 
-  interface Category {
+  	interface Category {
 		key: string;
 		label: string;
 		items: Category[];

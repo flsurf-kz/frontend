@@ -2,6 +2,7 @@ import type { PageLoad } from './$types';
 import { GlobalClient } from '$lib/shared/api'; // Ваш API клиент
 import {
     GetContractsListQuery,
+    GetContractsListQueryStatus,
     type ContractEntity,
     type ContractEntityStatus, // Ваш enum статусов контракта из flsurf-client
     type UserEntity // Для типа currentUser
@@ -20,7 +21,7 @@ export interface MyClientContractsPageData {
     pageSize: number;
     totalPages: number;
     currentFilters: {
-        statuses?: ContractEntityStatus[] | null; // Массив выбранных статусов
+        status?: GetContractsListQueryStatus | null; // Массив выбранных статусов
         searchTerm?: string | null;
     };
     currentUser?: UserEntity; // Передаем информацию о текущем пользователе
@@ -49,7 +50,7 @@ export const load: PageLoad<MyClientContractsPageData> = async ({ url }) => {
     // Извлечение параметров из URL для пагинации и фильтрации
     const pageParam = url.searchParams.get('page') || '1';
     const pageSizeParam = url.searchParams.get('pageSize') || DEFAULT_PAGE_SIZE_CONTRACTS.toString();
-    const statusParams = url.searchParams.getAll('status') as ContractEntityStatus[]; // Получаем все значения status
+    const statusParams = url.searchParams.get('status') as GetContractsListQueryStatus; // Получаем все значения status
     const searchTermParam = url.searchParams.get('q');
 
     const currentPage = parseInt(pageParam, 10) || 1;
@@ -58,15 +59,16 @@ export const load: PageLoad<MyClientContractsPageData> = async ({ url }) => {
 
     // Сохраняем текущие значения фильтров для передачи в Svelte компонент
     const currentFilters: MyClientContractsPageData['currentFilters'] = {
-        statuses: statusParams?.length ? statusParams : null,
+        status: statusParams ? statusParams : null,
         searchTerm: searchTermParam || null,
     };
 
     // Формируем DTO для запроса к API
     const queryParams: GetContractsListQuery = new GetContractsListQuery({
-        start: start,
-        ends: pageSize, // Убедитесь, что ваше DTO использует 'limit' или 'ends'
+        start: 0,
+        ends: 100, // Убедитесь, что ваше DTO использует 'limit' или 'ends'
         userId: currentUser.id, // ВАЖНО: Фильтруем контракты по ID текущего клиента
+        status: currentFilters.status ?? GetContractsListQueryStatus.Active, 
         // searchTerm: currentFilters.searchTerm || undefined,
         // statuses: currentFilters.statuses?.length ? currentFilters.statuses : undefined,
         // sortBy: 'updatedAt', // Сортировка по умолчанию (например, по дате последнего обновления)

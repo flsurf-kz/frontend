@@ -22,13 +22,20 @@ export const load: PageLoad = async ({ params, url }) => {
 
 	try {
 		/* ── параллельные запросы ──────────────────────────────── */
-		const [profile, projects, jobs] = await Promise.all([
+		const [profile, projects] = await Promise.all([
 			GlobalClient.getFreelancerProfile(freelancerId),
 			GlobalClient.getPortfolioProjects(freelancerId),
-			GlobalClient.getJobsList(
+
+		]);
+
+		try { 
+			var jobs = await GlobalClient.getJobsList(
 				new GetJobsListQuery({ freelancerId })
 			)
-		]);
+		} catch (exc) {
+			console.log("Не работа") 
+			jobs = [ ]
+		}
 
 		return {
 			freelancerId,

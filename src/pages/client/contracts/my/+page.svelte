@@ -18,13 +18,13 @@
     let showFiltersPanel = false;
     // Состояния фильтров, инициализируются из data.currentFilters, которые приходят из URL через +page.ts
     let searchTermInput: string = data.currentFilters.searchTerm || '';
-    let statusesFilter: string[] = (data.currentFilters.statuses as string[] | null) || [];
+    let statusesFilter: string[] = (data.currentFilters.status as string[] | null) || [];
 
 
     // Обновление локальных состояний фильтров при изменении data (например, при навигации назад/вперед)
     $: if (data.currentFilters) {
         searchTermInput = data.currentFilters.searchTerm || '';
-        statusesFilter = (data.currentFilters.statuses as string[] | null) || [];
+        statusesFilter = (data.currentFilters.status as string[] | null) || [];
     }
 
     onMount(() => {
@@ -230,15 +230,7 @@
                         <div class="flex flex-col md:flex-row gap-4">
                             <div class="flex-shrink-0 md:w-1/4 flex items-center md:flex-col md:items-start text-center md:text-left mb-3 md:mb-0 md:border-r md:border-base-200 md:pr-4">
                                 {#if contract.freelancer}
-                                    {#if contract.freelancer.avatar}
-                                        <UserAvatar avatarFile={contract.freelancer.avatar} className="w-12 h-12 md:w-16 md:h-16 rounded-full mb-0 md:mb-2 mr-3 md:mr-0" />
-                                    {:else}
-                                    <div class="avatar placeholder mb-0 md:mb-2 mr-3 md:mr-0">
-                                        <div class="bg-neutral-focus text-neutral-content rounded-full w-12 h-12 md:w-16 md:h-16 flex items-center justify-center">
-                                            <span class="text-lg md:text-xl">{getInitials(contract.freelancer.fullname || contract.freelancer.name)}</span>
-                                        </div>
-                                    </div>
-                                    {/if}
+                                    <UserAvatar avatarFile={contract.freelancer.avatar} className="w-12 h-12 md:w-16 md:h-16 rounded-full mb-0 md:mb-2 mr-3 md:mr-0" />
                                     <div class="flex-grow">
                                         <p class="font-semibold text-base-content text-md leading-tight">{contract.freelancer.fullname || 'Фрилансер'}</p>
                                         <span class="text-xs text-base-content/60">Исполнитель</span>

@@ -153,7 +153,7 @@
                                 <div class="flex justify-between items-start mb-2 gap-2">
                                     <div>
                                         {#if isMyProposal && (proposal.status === ProposalEntityStatus.Pending)}
-                                            <div>Иди нахуй</div>
+                                            <div>Ваш заказ все еще в ожидании</div>
                                         {/if}
                                     </div>
                                     <div class="text-right flex-shrink-0">
