@@ -5,6 +5,7 @@
 	function goHome() {
 		goto('/');
 	}
+	goHome()
 </script>
 
 {#if page.status == 404}

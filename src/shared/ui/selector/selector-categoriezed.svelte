@@ -66,9 +66,17 @@
 
         <div class="max-h-72 overflow-y-auto custom-scrollbar pr-1">
             {#if categories.length > 0}
-                {#each categories as group (group.key)} {#if group.items.length > 0}
-                        <li class="menu-title px-2 pt-2">
-                            <span>{group.label}</span>
+                {#each categories as group (group.key)} 
+                        <li>
+                            <label class="label cursor-pointer py-2 px-2 rounded-md hover:bg-base-200/70 active:bg-primary active:text-primary-content font-medium">
+                                <span class="label-text flex-grow truncate" title={group.label}>{group.label}</span>
+                                <input
+                                    type="checkbox"
+                                    class="checkbox checkbox-primary checkbox-sm"
+                                    checked={group.key === selectedValue}
+                                    on:change={() => handleToggle(group.key)}
+                                />
+                            </label>
                         </li>
                         {#each group.items as item (item.key)}
                             <li>
@@ -83,7 +91,6 @@
                                 </label>
                             </li>
                         {/each}
-                    {/if}
                 {/each}
             {:else if searchValue} <li class="px-2 py-2 text-sm text-base-content/70">Категории по запросу "{searchValue}" не найдены.</li>
             {:else} <li class="px-2 py-2 text-sm text-base-content/70">Нет доступных категорий.</li>

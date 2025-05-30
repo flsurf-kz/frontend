@@ -12,7 +12,7 @@
         ...data,
         additionalInfo: additionalInfo.trim() !== "" ? additionalInfo : undefined
       }));
-      goto("/jobs/post/review");
+      goto("/jobs/post/category");
     }
 
   onMount(() => {

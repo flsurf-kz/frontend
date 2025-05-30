@@ -24,7 +24,7 @@ onMount(() => {
   
  <!-- svelte-ignore a11y_label_has_associated_control -->
   <div class="space-y-4">
-    <h1 class="text-2xl font-bold mb-4">Срок выполнения заказа</h1>
+    <h1 class="text-2xl font-bold mb-4">Когда заказ будет закрыт</h1>
     <div>
       <label class="label">Дата окончания</label>
       <input type="date" bind:value={expirationDate} class="input input-bordered w-full" required />

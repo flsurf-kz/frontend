@@ -83,12 +83,12 @@
           </li>
         {/each}
       {:else}
-        <li class="p-4 text-center opacity-60">No notifications</li>
+        <li class="p-4 text-center opacity-60">Нету уведомлений</li>
       {/if}
   
       <li class="p-2 text-center">
         <a href="/notifications" class="text-sm text-primary">
-          See all notifications
+          Просмотр всех уведомлений
         </a>
       </li>
     </ul>

@@ -4,20 +4,21 @@
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	import { currentJobCreationStepKey } from '../modal';
+	import { CreateJobCommandBudgetType } from 'flsurf-client';
     
     // Локальные переменные
-    let budgetType: string = "";
-    let budget: number | null = null;
-    let hourlyRate: number | null = null;
-    let duration: number | null = null;
+    let budgetType: CreateJobCommandBudgetType = CreateJobCommandBudgetType.Fixed;
+    let budget: number | undefined = undefined;
+    let hourlyRate: number | undefined = undefined;
+    let duration: number | undefined = undefined;
   
     function handleNext() {
       createJobStore.update(data => ({
         ...data,
-        budgetType: budgetType as any,
-        budget: budget ?? undefined,
-        hourlyRate: hourlyRate ?? undefined,
-        duration: duration ?? undefined
+        budgetType: budgetType,
+        budget: budget,
+        hourlyRate: hourlyRate,
+        duration: duration
       }));
       goto("/jobs/post/review");
     }
@@ -39,20 +40,20 @@ onMount(() => {
       <label class="label">Тип работы</label>
       <select bind:value={budgetType} class="select select-bordered w-full">
         <option value="" disabled selected>Выберите тип работы</option>
-        <option value="fixed">Фиксированная цена</option>
-        <option value="hourly">Почасовая</option>
+        <option value="Fixed">Фиксированная цена</option>
+        <option value="Hourly">Почасовая</option>
       </select>
     </div>
     
-    {#if budgetType === "fixed"}
+    {#if budgetType === CreateJobCommandBudgetType.Fixed}
       <div>
         <label class="label">Бюджет (₸)</label>
         <input type="number" bind:value={budget} placeholder="Укажите бюджет" class="input input-bordered w-full" required />
       </div>
-    {:else if budgetType === "hourly"}
+    {:else if budgetType === CreateJobCommandBudgetType.Hourly}
       <div>
         <label class="label">Почасовая ставка (₸)</label>
-        <input type="number" bind:value={hourlyRate} placeholder="Укажите почасовую ставку" class="input input-bordered w-full" required />
+        <input type="number" bind:value={hourlyRate}  placeholder="Укажите почасовую ставку" class="input input-bordered w-full" required />
       </div>
     {/if}
     

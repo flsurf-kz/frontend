@@ -9,6 +9,7 @@
 	// Импорт типа схемы регистрации из клиента
 	import { RegisterUserSchema, RegisterUserSchemaCountry, RegisterUserSchemaType } from "flsurf-client";
 	import { goto } from "$app/navigation";
+	import { backendHost } from "$lib/shared/api/client";
 
 	let userTypeParam = page.url.searchParams.get('type') || "";
 
@@ -126,7 +127,18 @@
 	<!-- Социальные входы -->
 	<div class="flex justify-between">
 		<a href="/auth/vk" class="btn btn-outline btn-info btn-xs">Войти через ВКонтакте</a>
-		<a href="/auth/google" class="btn btn-outline btn-info btn-xs">Войти через Google</a>
+	    <a 
+	        href="{backendHost}/api/auth/external-login/Google" 
+	        class="btn btn-outline border-primary text-primary hover:bg-primary hover:text-primary-content w-full"
+	        rel="external" >
+	        <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+	            <path d="M22.56,12.25C22.56,11.47 22.49,10.72 22.36,10H12.28V14.2H18.13C17.85,15.74 17.02,17.04 15.73,17.95V20.68H19.45C21.54,18.76 22.56,15.8 22.56,12.25Z" />
+	            <path d="M12.28,24C15.38,24 17.99,22.96 19.45,21.19L15.73,18.46C14.76,19.11 13.61,19.53 12.28,19.53C9.74,19.53 7.59,17.93 6.75,15.59H2.97V18.42C4.48,21.71 8.08,24 12.28,24Z" />
+	            <path d="M6.75,15.07C6.54,14.48 6.41,13.85 6.41,13.2C6.41,12.55 6.54,11.92 6.75,11.33V8.5H2.97C2.05,10.23 1.53,12.25 1.53,14.2C1.53,16.15 2.05,18.17 2.97,19.9L6.75,17.07V15.07Z" />
+	            <path d="M12.28,5.9C13.83,5.9 15.21,6.46 16.26,7.45L19.52,4.21C17.52,2.37 15.03,1.17 12.28,1.17C8.08,1.17 4.48,3.75 2.97,7.03L6.75,9.86C7.59,7.52 9.74,5.9 12.28,5.9Z" />
+	        </svg>
+	        Войти через Google
+	    </a>
 	</div>
 	
 	<Checkbox

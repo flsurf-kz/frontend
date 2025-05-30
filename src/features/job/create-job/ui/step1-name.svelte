@@ -18,7 +18,7 @@
         description,
         timestamp: new Date()
       }));
-      goto("/jobs/post/category");
+      goto("/jobs/post/description");
     }
 
     onMount(() => {

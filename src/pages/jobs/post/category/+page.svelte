@@ -138,8 +138,10 @@
 
     {#if selectedCategoryKey}
         <div class="mt-4 p-3 bg-base-200 rounded-md">
-            <p class="text-sm text-base-content">Выбранная категория (ID): <span class="font-semibold">{selectedCategoryKey}</span></p>
-            </div>
+            <p class="text-sm text-base-content">Выбранная категория: <span class="font-semibold">
+                {(categoriesForSelector.find(x => x.key == selectedCategoryKey) ?? {label: "Нету у категории имени"}).label}
+            </span></p>
+        </div>
     {/if}
 
     <div class="flex justify-end mt-8 pt-4 border-t border-base-300">

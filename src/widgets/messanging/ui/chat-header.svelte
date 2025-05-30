@@ -13,6 +13,6 @@
       aria-label="Chat settings"
     >⚙</button>
   {:else}
-    <span>Select a chat</span>
+    <span>Выбери чат</span>
   {/if}
 </header>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import UserAvatar from '$lib/shared/ui/icons/UserAvatar.svelte';
 	import { format } from 'date-fns';
 	import { ru } from 'date-fns/locale';
     import { JobDetails, JobEntity } from 'flsurf-client'
@@ -12,7 +13,7 @@
 <div class="bg-white rounded-xl border shadow-md p-4 space-y-6 max-w-sm">
 	<!-- 🔹 Header -->
 	<div class="flex items-center gap-4">
-		<img src={rawJob.employer?.avatar?.filePath} alt="avatar" class="w-16 h-16 rounded-full object-cover" />
+		<UserAvatar avatarFile={rawJob.employer?.avatar} altText="avatar" className="w-16 h-16 rounded-full object-cover" />
 		<div>
 			<p class="text-lg font-semibold">{job.clientName}</p>
 			<p class="text-sm text-gray-500 flex items-center gap-1">

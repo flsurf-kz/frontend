@@ -114,7 +114,7 @@
             await GlobalClient.createJob(new CreateJobCommand(commandPayload));
             showNotification('Вакансия успешно опубликована!', false);
             createJobStore.set({}); // Очистить стор
-            goto('/my-jobs'); 
+            goto('/jobs/my'); 
         } catch (e: any) {
             const errMessage = e?.error?.message || e?.message || "Ошибка публикации вакансии. Проверьте все поля и попробуйте ещё раз.";
             error = errMessage;

@@ -8,6 +8,7 @@ import { browser } from '$app/environment';
 import { GlobalClient } from '$lib/shared/api';
 import { HttpTransportType, HubConnection, HubConnectionBuilder, HubConnectionState } from '@microsoft/signalr';
 import { backendHost } from '$lib/shared/api/client';
+import { CurrentUser } from '../user/model/modal';
 
 export const CurrentChatsList   = writable<ChatEntity[]>([]);
 export const CurrentChat        = writable<ChatEntity | undefined>();
@@ -84,6 +85,9 @@ async function initializeHubConnection() {
     // Важно: Убедитесь, что сообщение пришло для текущего открытого чата
     // или обновите счетчик непрочитанных для других чатов
     const currentOpenChat = get(CurrentChat);
+    if (message.senderId === get(CurrentUser)?.id) { 
+      return
+    }
     if (currentOpenChat && currentOpenChat.id === chatId) {
       CurrentMessages.update(msgs => [...msgs, message]);
     } else {

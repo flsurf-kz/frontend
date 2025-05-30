@@ -53,7 +53,7 @@
   <div class="flex flex-wrap gap-2 mb-2">
     {#each selectedItems as item, index}
       <div class="badge badge-accent flex items-center gap-1">
-        {item}
+        {item.label}
         <button type="button" onclick={() => removeItem(index)}>✕</button>
       </div>
     {/each}
@@ -78,7 +78,7 @@
           class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
           onclick={() => selectItem(result)}
         >
-          {result}
+          {result.label}
         </li>
       {/each}
     </ul>
