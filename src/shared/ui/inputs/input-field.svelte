@@ -5,7 +5,7 @@
     export let placeholder: string = 'Введите текст...';
     export let label: string = '';
     export let error: string = '';
-    export let inputType: "email" | "text" | "phone" | "number" | "date" = "text" 
+    export let inputType: "email" | "text" | "phone" | "number" | "date" | "url" = "text" 
     export let disabled: boolean = false;
     export let required: boolean = false; 
     export let className: string = ""

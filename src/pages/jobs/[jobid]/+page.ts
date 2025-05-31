@@ -22,7 +22,6 @@ export const load: PageLoad = async ({ params }) => {
 		job: jobDetails,
 		rawJob: rawJob, 
 		isClient,
-		isAuthenticated,
-		proposals
+		isAuthenticated
 	};
 };

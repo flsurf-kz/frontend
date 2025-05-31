@@ -5,7 +5,6 @@
     } from '$lib/shared/api';
     import { showNotification } from '$lib/shared/ui/errors/modal';
     import { onMount, onDestroy } from 'svelte';
-    import { page } from '$app/stores'; // To access route params if needed, though data prop is primary
 	import CreateWorkSessionModal from '$lib/features/contract/ui/create-work-session-modal.svelte';
 	import WorkSessionCard from '$lib/entities/job/ui/work-session-card.svelte';
 	import { ApproveWorkSessionCommand, GetWorkSessionListQuery, ReactToWorkSessionCommand, SubmitWorkSessionCommand, WorkSessionEntityStatus, type ContractEntity, type WorkSessionEntity } from 'flsurf-client';
@@ -13,7 +12,7 @@
     // For simplicity, WorkSessionCard and Modals will be defined in this file.
     // In a larger app, move them to $lib/components/work-sessions/ or similar.
 
-    export let data: PageData;
+    let { data } = $props(); 
 
     let contract = $state<ContractEntity>(data.contract);
     let workSessionsList = $state<WorkSessionEntity[]>(data.workSessions);
@@ -131,11 +130,11 @@
     const isClientViewing = $derived(userRole === 'client' || userRole === 'staff'); // Staff can act as client
     const isFreelancerViewing = $derived(userRole === 'freelancer');
 
-    $: clientPendingSessions = workSessionsList.filter(ws => ws.status === WorkSessionEntityStatus.Pending);
-    $: freelancerOwnPendingSessions = workSessionsList.filter(ws => ws.freelancerId === currentUser?.id && ws.status === WorkSessionEntityStatus.Pending);
-    $: approvedSessions = workSessionsList.filter(ws => ws.status === WorkSessionEntityStatus.Approved);
-    $: rejectedSessions = workSessionsList.filter(ws => ws.status === WorkSessionEntityStatus.Rejected);
-    $: activeSessionByThisFreelancer = workSessionsList.find(ws => ws.freelancerId === currentUser?.id && (ws.endDate === undefined || ws.endDate === null));
+    let clientPendingSessions = $derived(workSessionsList.filter(ws => ws.status === WorkSessionEntityStatus.Pending));
+    let freelancerOwnPendingSessions = $derived(workSessionsList.filter(ws => ws.freelancerId === currentUser?.id && ws.status === WorkSessionEntityStatus.Pending));
+    let approvedSessions = $derived(workSessionsList.filter(ws => ws.status === WorkSessionEntityStatus.Approved));
+    let rejectedSessions = $derived(workSessionsList.filter(ws => ws.status === WorkSessionEntityStatus.Rejected));
+    let activeSessionByThisFreelancer = $derived(workSessionsList.find(ws => ws.freelancerId === currentUser?.id && (ws.endDate === undefined || ws.endDate === null)));
 
 
     onMount(() => {
@@ -156,12 +155,12 @@
         </div>
         <div class="flex gap-2 items-center">
             {#if isFreelancerViewing}
-                <button class="btn btn-primary btn-sm" on:click={() => showCreateWorkSessionModal = true}>
+                <button class="btn btn-primary btn-sm" onclick={() => showCreateWorkSessionModal = true}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M8 1.75a.75.75 0 0 1 .75.75v4.75H13.5a.75.75 0 0 1 0 1.5H8.75v4.75a.75.75 0 0 1-1.5 0V8.75H2.5a.75.75 0 0 1 0-1.5h4.75V2.5A.75.75 0 0 1 8 1.75Z" clip-rule="evenodd" /></svg>
                     Добавить сессию вручную
                 </button>
             {/if}
-            <button class="btn btn-outline btn-sm" on:click={() => refreshWorkSessions()} disabled={isLoadingSessions}>
+            <button class="btn btn-outline btn-sm" onclick={() => refreshWorkSessions()} disabled={isLoadingSessions}>
                 {#if isLoadingSessions} <span class="loading loading-spinner loading-xs"></span> Обновление... {:else} Обновить список {/if}
             </button>
         </div>
@@ -187,7 +186,7 @@
                 </h2>
                 <div class="space-y-4">
                     {#each clientPendingSessions as session (session.id)}
-                        <WorkSessionCard bind:session userRole={'client'} {formatDate}
+                        <WorkSessionCard session={session} userRole={'client'} {formatDate}
                             on:approve={() => handleApproveWorkSession(session.id!)}
                             on:reject={() => promptRejectWorkSession(session)}
                             on:view_details={() => viewWorkSessionDetails(session)}
@@ -204,7 +203,7 @@
                 </h2>
                 <div class="space-y-4">
                     {#each freelancerOwnPendingSessions as session (session.id)}
-                        <WorkSessionCard bind:session userRole={'freelancer'} {formatDate}
+                        <WorkSessionCard session={session} userRole={'freelancer'} {formatDate}
                             on:view_details={() => viewWorkSessionDetails(session)}
                         />
                     {/each}
@@ -217,7 +216,7 @@
                 <h2 class="text-xl font-semibold text-success-content mb-4">Одобренные сессии ({approvedSessions.length})</h2>
                 <div class="space-y-4">
                     {#each approvedSessions as session (session.id)}
-                        <WorkSessionCard bind:session {userRole} {formatDate}
+                        <WorkSessionCard session={session} {userRole} {formatDate}
                             on:view_details={() => viewWorkSessionDetails(session)}
                         />
                     {/each}
@@ -230,7 +229,7 @@
                 <h2 class="text-xl font-semibold text-error-content mb-4">Отклоненные сессии ({rejectedSessions.length})</h2>
                 <div class="space-y-4">
                     {#each rejectedSessions as session (session.id)}
-                        <WorkSessionCard bind:session {userRole} {formatDate}
+                        <WorkSessionCard session={session} {userRole} {formatDate}
                             on:view_details={() => viewWorkSessionDetails(session)}
                         />
                     {/each}
@@ -266,12 +265,12 @@
     <div class="modal modal-open">
         <div class="modal-box">
             <h3 class="font-bold text-lg text-error">Отклонить рабочую сессию</h3>
-             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" on:click={() => {showRejectionModal = false; currentWorkSessionForAction=null;}}>✕</button>
-            <p class="py-2 text-sm">Сессия от {formatDate(currentWorkSessionForAction.startDate)} ({currentWorkSessionForAction.durationInMinutes ?? 'N/A'} мин)</p>
+             <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick={() => {showRejectionModal = false; currentWorkSessionForAction=null;}}>✕</button>
+            <p class="py-2 text-sm">Сессия от {formatDate(currentWorkSessionForAction.startDate)} (20 мин)</p>
             <textarea class="textarea textarea-bordered w-full mt-2" bind:value={rejectionReason} placeholder="Укажите причину отклонения..."></textarea>
             <div class="modal-action mt-4">
-                <button class="btn btn-error" on:click={handleRejectWorkSession} disabled={!rejectionReason.trim()}>Отклонить</button>
-                <button class="btn btn-ghost" on:click={() => {showRejectionModal = false; currentWorkSessionForAction=null;}}>Отмена</button>
+                <button class="btn btn-error" onclick={handleRejectWorkSession} disabled={!rejectionReason.trim()}>Отклонить</button>
+                <button class="btn btn-ghost" onclick={() => {showRejectionModal = false; currentWorkSessionForAction=null;}}>Отмена</button>
             </div>
         </div>
     </div>
@@ -281,7 +280,7 @@
     <div class="modal modal-open modal-bottom sm:modal-middle">
         <div class="modal-box w-full sm:w-11/12 sm:max-w-3xl max-h-[90vh]">
             <h3 class="font-bold text-lg">Детали рабочей сессии</h3>
-            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" on:click={() => {showWorkSessionDetailsModal = false; currentWorkSessionForAction=null;}}>✕</button>
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" onclick={() => {showWorkSessionDetailsModal = false; currentWorkSessionForAction=null;}}>✕</button>
             <div class="py-4 space-y-2 text-sm max-h-[calc(80vh-100px)] overflow-y-auto pr-2">
                 <p><strong>Контракт:</strong> <a href={`/contracts/${currentWorkSessionForAction.contractId}`} class="link link-hover">{currentWorkSessionForAction.contractId?.substring(0,8)}...</a></p>
                 <p><strong>Исполнитель:</strong> {currentWorkSessionForAction.freelancer?.fullname ?? currentWorkSessionForAction.freelancerId ?? 'N/A'}</p>
@@ -293,15 +292,15 @@
                     <p class="text-error mt-1"><strong>Причина отклонения:</strong> {currentWorkSessionForAction.clientComment}</p>
                 {/if}
 
-                <h4 class="font-semibold mt-6 mb-2">Скриншоты ({currentWorkSessionForAction.screenshots?.length ?? 0}):</h4>
-                {#if currentWorkSessionForAction.screenshots && currentWorkSessionForAction.screenshots.length > 0}
+                <h4 class="font-semibold mt-6 mb-2">Скриншоты ({currentWorkSessionForAction.files?.length ?? 0}):</h4>
+                {#if currentWorkSessionForAction.files && currentWorkSessionForAction.files.length > 0}
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-2 p-2 bg-base-200 rounded-md">
-                        {#each currentWorkSessionForAction.screenshots as screenshot (screenshot.url ?? screenshot.id)}
-                            <a href={screenshot.url} target="_blank" rel="noopener noreferrer" class="block border rounded-md hover:shadow-lg transition-shadow overflow-hidden group aspect-video">
-                                <img src={screenshot.url} alt="Screenshot {screenshot.timestamp ? ` at ${formatDate(screenshot.timestamp, false)}` : ''}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                                {#if screenshot.timestamp}
+                        {#each currentWorkSessionForAction.files as screenshot (screenshot.filePath ?? screenshot.id)}
+                            <a href={screenshot.filePath} target="_blank" rel="noopener noreferrer" class="block border rounded-md hover:shadow-lg transition-shadow overflow-hidden group aspect-video">
+                                <img src={screenshot.filePath} alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                {#if screenshot.createdAt}
                                     <div class="absolute bottom-0 left-0 right-0 p-1 bg-black/30 text-white text-xs text-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                        {formatDate(screenshot.timestamp)}
+                                        {formatDate(screenshot.createdAt)}
                                     </div>
                                 {/if}
                             </a>
@@ -312,7 +311,7 @@
                 {/if}
             </div>
              <div class="modal-action mt-1">
-                <button class="btn btn-ghost" on:click={() => {showWorkSessionDetailsModal = false; currentWorkSessionForAction=null;}}>Закрыть</button>
+                <button class="btn btn-ghost" onclick={() => {showWorkSessionDetailsModal = false; currentWorkSessionForAction=null;}}>Закрыть</button>
             </div>
         </div>
     </div>

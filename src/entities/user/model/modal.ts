@@ -21,7 +21,7 @@ export async function getCurrentUser(): Promise<UserEntity | undefined> {
 }
 
 interface Options {
-	fetch: typeof globalThis.fetch;
+	fetch: typeof fetch;
 	cookies: Cookies;
 }
 
@@ -31,9 +31,9 @@ export async function getServerCurrentUser({ fetch, cookies }: Options) {
     if (cookieHeader) {
       init.headers = new Headers(init.headers ?? {});
       (init.headers as Headers).set('cookie', cookieHeader);
-    }
+    } 
     init.credentials = 'include'; // Важно для передачи кук
-    return fetch(url, init);
+    return fetch(url, init as RequestInit);
   };
 
   // Предполагается, что Client - это ваш NSwag/OpenAPI сгенерированный клиент

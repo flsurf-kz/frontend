@@ -7,7 +7,7 @@ type GetJobsPageParams = Omit<IGetJobsListQuery, 'queryId' | 'timestamp'> & {
 	limit?: number;
 };
 
-export async function getJobsPage(params: GetJobsPageParams): Promise<{ jobs: JobEntity[]; total?: number }> {
+export async function getJobs(params: GetJobsPageParams): Promise<{ jobs: JobEntity[]; total?: number }> {
 	const {
 		page = 1,
 		limit = 12,
