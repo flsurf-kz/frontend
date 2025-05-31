@@ -128,7 +128,7 @@
 	<div class="flex justify-between">
 		<a href="/auth/vk" class="btn btn-outline btn-info btn-xs">Войти через ВКонтакте</a>
 	    <a 
-	        href="{backendHost}/api/auth/external-login/Google" 
+	        href="{backendHost}/api/auth/external-login/GoogleOpenIdConnect" 
 	        class="btn btn-outline border-primary text-primary hover:bg-primary hover:text-primary-content w-full"
 	        rel="external" >
 	        <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
