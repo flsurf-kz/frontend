@@ -10,7 +10,7 @@
     const referrals = []; // Mock
 </script>
 
-<div class="max-w-5xl py-6 px-4 space-y-6 mx-auto">
+<div class="max-w-5xl py-6 px-4 space-y-6">
     <h1 class="text-3xl font-bold">Мои ставки</h1>
 
     <div class="tabs tabs-lifted">
