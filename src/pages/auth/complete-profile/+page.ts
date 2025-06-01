@@ -7,11 +7,11 @@ import { UserEntityType } from 'flsurf-client';
 
 export const load: PageLoad = async () => {
     const currentUser = get(CurrentUser);
+    console.log(currentUser)
 
-    // if (!currentUser || !currentUser.id) {
-    //     console.warn('complete-profile: User not authenticated, redirecting to login.');
-    //     throw redirect(307, '/auth/login');
-    // }
+    if (!currentUser || !currentUser.id) {
+        console.warn('complete-profile: User not authenticated, redirecting to login.');
+    }
 
     // if (currentUser.type && currentUser.type !== UserEntityType.NonUser) {
     //     console.warn(`complete-profile: User already has type ${currentUser.type}, redirecting.`);
@@ -25,8 +25,8 @@ export const load: PageLoad = async () => {
     // }
 
     return {
-        userId: currentUser?.id, // Передаем ID для использования в командах
-        userEmail: currentUser?.email,
-        userName: currentUser?.fullname || currentUser?.name
+        userId: currentUser.id, // Передаем ID для использования в командах
+        userEmail: currentUser.email,
+        userName: currentUser.fullname || currentUser?.name
     };
 };
