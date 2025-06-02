@@ -39,7 +39,7 @@
 </script>
 
 <!-- svelte-ignore a11y_label_has_associated_control -->
-<ModalBase {open} onClose={onclose}>
+<ModalBase {open}>
 	<h2 class="text-lg font-bold mb-4">Продвинутый поиск</h2>
 
 	<div class="space-y-4">

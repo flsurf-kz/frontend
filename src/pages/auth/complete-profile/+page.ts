@@ -25,8 +25,8 @@ export const load: PageLoad = async () => {
     // }
 
     return {
-        userId: currentUser.id, // Передаем ID для использования в командах
-        userEmail: currentUser.email,
-        userName: currentUser.fullname || currentUser?.name
+        userId: currentUser?.id, // Передаем ID для использования в командах
+        userEmail: currentUser?.email,
+        userName: currentUser?.fullname || currentUser?.name
     };
 };

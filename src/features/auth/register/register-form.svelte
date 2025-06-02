@@ -125,7 +125,7 @@
 
 
 	<!-- Социальные входы -->
-	<div class="flex justify-between">
+	<div class="flex justify-between flex-col gap-4">
 		<a href="/auth/vk" class="btn btn-outline btn-info btn-xs">Войти через ВКонтакте</a>
 	    <a 
 	        href="{backendHost}/api/auth/external-login/GoogleOpenIdConnect" 

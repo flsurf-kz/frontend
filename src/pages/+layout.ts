@@ -1,36 +1,50 @@
-// +layout.ts (работает ТОЛЬКО в браузере из-за ssr=false)
+/* ------------------------------------------------------------------ */
+/*  src/routes/+layout.ts (только в браузере)                         */
+/* ------------------------------------------------------------------ */
 import type { LayoutLoad } from './$types';
-import { CurrentUser } from '$lib/entities/user/model/modal'; // writable-store
+import { page } from '$app/stores';
+import { get } from 'svelte/store';
+import { redirect } from '@sveltejs/kit';
+
+import { CurrentUser } from '$lib/entities/user/model/modal';
 import { loadNotifications } from '$lib/entities/notifications/modal';
 import { loadTheme } from '$lib/shared/ui/theme';
-import { UserEntity, UserEntityType } from 'flsurf-client';
-import { redirect } from '@sveltejs/kit';
-import { get } from 'svelte/store';
-import { page } from '$app/state';
-import { GlobalClient } from '$lib/shared/api';
+import { UserEntityType, type UserEntity } from 'flsurf-client';
 
-/** делаем страницу полностью клиентской – т.к. внутри localStorage */
 export const ssr = false;
 export const prerender = false;
 
-export const load: LayoutLoad = async ({ data }: { data: any }) => { // `data` здесь приходит из `+layout.server.ts`
-    if (!data) {
-        let user = await GlobalClient.getMe();
-        if (!user) { 
-            return { }
-        } 
-        data.currentUser = user; 
-    }
-    const serverUser = data.currentUser as UserEntity | undefined; // Пользователь, загруженный на сервере
+export const load: LayoutLoad = async ({ data, url }) => {
+	/* 1. синхронизируем стор с server-data */
+	const user = (data.currentUser ?? undefined) as UserEntity | undefined;
+	CurrentUser.set(user);
 
-    // 1. Инициализируем стор CurrentUser данными с сервера (или null, если их нет)
-    CurrentUser.set(serverUser);
+	/* 2. редиректы только в браузере */
+	const { pathname } = url;
 
-    // 2. Загружаем клиентские вещи
-    if (serverUser) { // Только если пользователь существует (был загружен сервером)
-        loadNotifications(); // использует fetch() в браузере
-    }
-    loadTheme(); // Загрузка темы может быть не связана с пользователем
+	// a) NonUser → complete-profile (если не на разрешённых страницах)
+	if (user && user.type === UserEntityType.NonUser) {
+		const allow = [
+			'/auth/complete-profile',
+			'/auth/login',
+			'/auth/register',
+			'/auth/forgot-password',
+			'/auth/reset-password',
+			'/auth/secret-phrase-confirmation'
+		];
+		const ok = allow.includes(pathname) || pathname.startsWith('/unauth/');
+		if (!ok) throw redirect(307, '/auth/complete-profile');
+	}
 
-    return {}; // Данные для дочерних страниц теперь будут браться из сторов или data от +page.server.ts / +page.ts
+	// b) корневой «/» перенаправляем на дашборд роли
+	if (pathname === '/' && user) {
+		if (user.type === UserEntityType.Client)      throw redirect(302, '/client');
+		if (user.type === UserEntityType.Freelancer)  throw redirect(302, '/freelancer');
+	}
+
+	/* 3. клиентские побочные эффекты */
+	if (user) loadNotifications();
+	loadTheme();
+
+	return {user};
 };

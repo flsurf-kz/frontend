@@ -106,7 +106,7 @@
 		</div>
 		<div class="flex-1">
 			<img
-				src="https://via.placeholder.com/600x400"
+				src="https://picsum.photos/600/400"
 				alt="Промо изображение"
 				class="w-full md:w-1/2 rounded shadow-md"
 			/>

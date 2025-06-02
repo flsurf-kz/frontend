@@ -58,6 +58,15 @@ export async function getServerCurrentUser({ fetch, cookies }: Options) {
   }
 }
 
+export async function getMeSafe(): Promise<UserEntity | undefined> {
+	try {
+		return await GlobalClient.getMe();       // ваш API-обёртка
+	} catch (e: any) {
+		if (e.status === 401) return null;       // просто гость
+		throw e;                                // остальные ошибки наружу
+	}
+}
+
 export async function logout() {
     // здесь, возможно, вызов бекенда /logout
     // потом обнуляем Store

@@ -11,6 +11,6 @@ export const GlobalConfig = {
   appName: PUBLIC_APP_NAME,
   // Если нужно резервное значение, можно оставить оператор ??,
   // но обычно PUBLIC_BASE_FILES_URL всегда задана.
-  baseFilesUrl: PUBLIC_BASE_FILES_URL ?? 'https://localhost:8000/api/files/download/',
+  baseFilesUrl: PUBLIC_BASE_FILES_URL ?? 'http://localhost:8000/api/files/download/',
   stripePublicKey: PUBLIC_STRIPE_PUBLIC_KEY
 };

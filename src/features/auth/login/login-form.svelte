@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { loginUser } from "$lib/entities/user/model";
+	import { backendHost } from "$lib/shared/api/client";
 	import BaseButton from "$lib/shared/ui/buttons/base-button.svelte";
 	import { Checkbox } from "$lib/shared/ui/checkboxes";
 	import { InputField, PasswordField } from "$lib/shared/ui/inputs";
@@ -52,7 +53,7 @@
 
 	<div class="divider">или</div>
 
-	<a href="/auth/google" class="btn w-full bg-blue-500 text-white hover:bg-blue-600">
+	<a href="{backendHost}/api/auth/external-login/GoogleOpenIdConnect"  class="btn w-full bg-blue-500 text-white hover:bg-blue-600">
 		<img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="" class="w-5 h-5 mr-2" />
 		Зайти через Google
 	</a>
