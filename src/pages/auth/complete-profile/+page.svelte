@@ -64,15 +64,11 @@
         if ($CurrentUser === undefined) { 
             return; 
         }
-        if (!data.userId) {
-            errorMessage = "Ошибка: ID пользователя не найден.";
-            return;
-        }
         isLoading = true;
         errorMessage = null;
         try {
             const command = new CreateFreelancerProfileCommand({
-                userId: data.userId,
+                userId: $CurrentUser.id,
                 experience: freelancerFormData.experience,
                 hourlyRate: freelancerFormData.hourlyRate ?? undefined, // Отправляем undefined если null или 0
                 resume: freelancerFormData.resume // Если это ссылка или текст
@@ -100,10 +96,6 @@
         if ($CurrentUser === undefined) { 
             return; 
         }
-        if (!data.userId) {
-            errorMessage = "Ошибка: ID пользователя не найден.";
-            return;
-        }
         if (!clientFormData.companyName.trim()) {
             errorMessage = "Название компании обязательно для заполнения.";
             return;
@@ -130,7 +122,7 @@
 
         try {
             const command = new CreateClientProfileCommand({
-                userId: data.userId,
+                userId: $CurrentUser.id,
                 companyName: clientFormData.companyName,
                 companyDescription: clientFormData.companyDescription || undefined,
                 companyWebsite: clientFormData.companyWebsite || undefined,
