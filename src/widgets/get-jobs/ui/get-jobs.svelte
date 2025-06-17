@@ -8,7 +8,7 @@
 	import { PagePagination } from '$lib/shared/ui/navigation';
 	import JobShortCard from '$lib/entities/job/ui/job-short-card.svelte';
 	import SearchAdvanced from './search-advanced.svelte';
-	import { getJobsPage } from '$lib/entities/job/models/modal';
+	import { getJobs } from '$lib/entities/job/models/modal';
 	$effect(() => {(async () => {
 		
 		// при желании можно сразу загрузить свежий список через API
@@ -31,7 +31,7 @@
     error = null;
 
     try {
-      const { jobs: result, total } = await getJobsPage({
+      const { jobs: result, total } = await getJobs({
         search,
         // sortBy: sort,
         page: currentPage,
