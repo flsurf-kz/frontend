@@ -49,16 +49,16 @@
     </a></li>
 
     <!-- Статистика -->
-    <li><a href="/stats" class="text-sm">Статистика и тренды</a></li>
+    <li><a href="/freelancer/stats" class="text-sm">Статистика и тренды</a></li>
 
     <!-- Премиум -->
-    <li><a href="/premium" class="text-sm font-medium">Премиум</a></li>
+    <li><a href="/freelancer/premium" class="text-sm font-medium">Премиум</a></li>
 
     <!-- Темы -->
     <li tabindex="0">
       <details>
         <summary class="flex justify-between items-center text-sm">
-          Theme: Dark
+          Тема: Темная
           <ArrowDown className="w-4 h-4" />
         </summary>
         <!-- svelte-ignore a11y_click_events_have_key_events -->
