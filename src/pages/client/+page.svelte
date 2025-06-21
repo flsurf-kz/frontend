@@ -181,7 +181,7 @@
                                     {#if session.workedHours != null} <p class="text-xs text-gray-600">Часы: <span class="font-medium">{session.workedHours}</span></p> {/if}
                                     <p class="text-sm text-gray-700 line-clamp-2 my-1">{session.comment || "Без описания"}</p>
                                     <p class="text-md font-semibold mt-1">К оплате: {formatMoney(new Money(
-                                        {amount: ((session.contract?.costPerHour?.amount ?? 0) * (session.workedHours ?? 0)), currency: MoneyCurrency.RUB}))}</p>
+                                        {amount: ((session.contract?.costPerHour?.amount ?? 0) * (session.workedHours ?? 0)), currency: MoneyCurrency.KZT}))}</p>
                                     <div class="card-actions justify-end mt-3">
                                         <BaseButton onclick={() => handleRejectWorkSession(session.id)} className="error btn-xs">
                                             <ThumbsDownIcon class="w-3.5 h-3.5 mr-1"/> Отклонить

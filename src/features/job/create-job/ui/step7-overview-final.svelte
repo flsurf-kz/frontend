@@ -135,12 +135,12 @@
     $: {
         const store = $createJobStore; // Используем $ для доступа к значению стора
         if (store.budgetType === CreateJobCommandBudgetType.Fixed) {
-            budgetDisplay = `Фиксированный: ${store.budget || 'N/A'} ${'RUB'}`;
+            budgetDisplay = `Фиксированный: ${store.budget || 'N/A'} ${'KZT'}`;
         } else if (store.budgetType === CreateJobCommandBudgetType.Hourly) {
             const rateMin = store.hourlyRate
             const rateMax = store.hourlyRate;
             if (rateMin) {
-                budgetDisplay = `Почасовой: ${rateMin} ${'RUB'} / час`;
+                budgetDisplay = `Почасовой: ${rateMin} ${'KZT'} / час`;
             } else {
                 budgetDisplay = 'Почасовая: Ставка не указана';
             }

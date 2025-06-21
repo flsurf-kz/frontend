@@ -4,6 +4,7 @@
     } from 'lucide-svelte';
     import { goto } from '$app/navigation';
     import BaseButton from '$lib/shared/ui/buttons/base-button.svelte';
+	import { GlobalClient } from '$lib/shared/api/client.js';
 
     export let data;
 
@@ -19,6 +20,7 @@
                 minimumFractionDigits: 0,
                 maximumFractionDigits: (amount % 1 === 0) ? 0 : 2 // Show decimals only if present
             }).format(amount);
+            GlobalClient.reactToSentJob()
         } catch (e) {
             console.warn(`Currency formatting error for ${currencyCode}:`, e);
             return `${amount.toLocaleString('ru-RU')} ${currencyCode}`; // Fallback with locale
@@ -147,7 +149,7 @@
                 <div class="card bg-base-100 shadow-lg p-6">
                     <h2 class="text-xl font-semibold text-base-content mb-3">Обзор Финансов</h2>
                     {#if spendingLast30}
-                        <p class="text-lg">Потрачено за 30 дней: <span class="font-bold">{formatCurrency(spendingLast30.netAmount, "RUB")}</span></p>
+                        <p class="text-lg">Потрачено за 30 дней: <span class="font-bold">{formatCurrency(spendingLast30.netAmount, "KZT")}</span></p>
                         <div class="mt-4 h-48 bg-base-200 flex items-center justify-center rounded-md">
                             <p class="text-base-content/50">Здесь может быть график расходов</p>
                         </div>
