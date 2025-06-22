@@ -272,7 +272,7 @@
             <section>
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-xl font-semibold text-gray-700">Последние транзакции</h2>
-                    <a href="/wallet/transactions" class="link text-sm text-primary hover:text-primary-focus">Вся история</a>
+                    <a href="/settings/transactions" class="link text-sm text-primary hover:text-primary-focus">Вся история</a>
                 </div>
                 <div class="space-y-2">
                     {#if data.recentTransactions && data.recentTransactions.length > 0}

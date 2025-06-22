@@ -9,7 +9,7 @@
 	import ModalBase from '$lib/shared/ui/modal/modal-base.svelte';
 	import { showError } from '$lib/shared/ui/errors';
 	import { debounce } from 'lodash';
-	import { SearchIcon, UserPlusIcon } from '$lib/shared/ui/icons';
+	import { SearchIcon, UserAvatar, UserPlusIcon } from '$lib/shared/ui/icons';
   
   const isOwner = derived(
     [CurrentChat, CurrentUser],
@@ -229,27 +229,27 @@
   <!-- tabs switcher (order depends on owner) -->
   <nav class="tabs tabs-bordered w-full">
     <a role="tab" class="tab" class:tab-active={$tab === 'search'}
-       on:click={() => tab.set('search')}>Search</a>
+       on:click={() => tab.set('search')}>Поиск</a>
 
     {#if !$isOwner}
       <a role="tab" class="tab" class:tab-active={$tab === 'media'}
-         on:click={() => tab.set('media')}>Media</a>
+         on:click={() => tab.set('media')}>Медиа</a>
     {/if}
 
     <a role="tab" class="tab" class:tab-active={$tab === 'people'}
-       on:click={() => tab.set('people')}>People</a>
+       on:click={() => tab.set('people')}>Учатсники</a>
 
     {#if $isOwner}
       <a role="tab" class="tab" class:tab-active={$tab === 'media'}
-         on:click={() => tab.set('media')}>Media</a>
+         on:click={() => tab.set('media')}>Медиа</a>
     {/if}
 
     <a role="tab" class="tab" class:tab-active={$tab === 'notes'}
-       on:click={() => tab.set('notes')}>Notes</a>
+       on:click={() => tab.set('notes')}>Заметки</a>
 
     {#if $isOwner}
       <a role="tab" class="tab text-error" class:tab-active={$tab === 'archive'}
-         on:click={() => tab.set('archive')}>Archive</a>
+         on:click={() => tab.set('archive')}>Архив</a>
     {/if}
   </nav>
 
@@ -262,8 +262,8 @@
         <input class="input input-bordered flex-1"
                bind:value={$query}
                on:keydown={(e) => e.key === 'Enter' && searchMessages()}
-               placeholder="Search messages…" />
-        <button class="btn btn-primary" on:click={searchMessages}>Go</button>
+               placeholder="Найти сообщение..." />
+        <button class="btn btn-primary" on:click={searchMessages}>Поиск</button>
       </div>
 
       {#if $searchLoading}
@@ -278,7 +278,7 @@
             </li>
           {/each}
           {#if $searchRes.length === 0}
-            <p class="opacity-60 text-sm">No results</p>
+            <p class="opacity-60 text-sm">Нету результатов</p>
           {/if}
         </ul>
       {/if}
@@ -291,12 +291,12 @@
           <li class="flex items-center gap-3">
             <div class="avatar">
               <div class="w-8 rounded-full">
-                <img src={u.avatar?.filePath} />
+                <UserAvatar avatarFile={u.avatar}/>
               </div>
             </div>
             <span class="flex-1">{u.fullname}</span>
             {#if u.id === $CurrentChat?.ownerId}
-              <span class="badge badge-outline badge-sm">owner</span>
+              <span class="badge badge-outline badge-sm">Владелец</span>
             {/if}
           </li>
         {/each}
@@ -321,7 +321,7 @@
           </li>
         {/each}
         {#if $media.length === 0}
-          <p class="opacity-60 text-sm">No files yet</p>
+          <p class="opacity-60 text-sm">Пока что нету файлов</p>
         {/if}
       </ul>
     {/if}

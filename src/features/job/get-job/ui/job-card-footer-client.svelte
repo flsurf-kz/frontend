@@ -39,7 +39,7 @@
             const command = new StartChatWithFreelancerCommand({ jobId: job.id, proposalId: proposal.id });
             const result: CommandResult & { id?: string } = await GlobalClient.startChatWithFreelancer(command);
             if (result?.isSuccess && result.id) {
-                goto(`/messaging/${result.id}`);
+                goto(`/messaging?chatId=${result.id}`);
             } else if (result?.isSuccess) {
                 showNotification("Чат создан/открыт. Вы можете найти его в списке ваших чатов.", false);
             } else {
@@ -137,21 +137,30 @@
                 // amount: selectedProposalForContract.proposedRate?.amount,
                 // currency: selectedProposalForContract.proposedRate?.currency,
             });
-            const result: CommandResult & { id?: string } = await GlobalClient.createContract(command);
+            try {
+                const result: CommandResult & { id?: string } = await GlobalClient.createContract(command);
 
-            if (result.isSuccess) {
-                showNotification("Контракт успешно создан! Ожидаем принятия контракта от фрилансера", false);
-                if (result.id) { // Assuming the contract ID is returned in 'id'
-                    // Optionally update the proposal to link it to the contractId if your model supports it
-                    // selectedProposalForContract.contractId = result.id; 
-                    goto(`/jobs/${result.id}`);
+                if (result.isSuccess) {
+                    showNotification("Контракт успешно создан! Ожидаем принятия контракта от фрилансера", false);
+                    if (result.id) { // Assuming the contract ID is returned in 'id'
+                        // Optionally update the proposal to link it to the contractId if your model supports it
+                        // selectedProposalForContract.contractId = result.id; 
+                        goto(`/jobs/${result.id}`);
+                    } else {
+                        // Consider fetching updated job details or navigating to a contracts list
+                        // invalidateAll(); or specific key
+                    }
                 } else {
-                    // Consider fetching updated job details or navigating to a contracts list
-                    // invalidateAll(); or specific key
+                    showNotification(result.message || "Не удалось создать контракт.", true);
                 }
-            } else {
-                showNotification(result.message || "Не удалось создать контракт.", true);
-            }
+            } catch (exc: any) { 
+                if (exc?.status !== 409) { 
+                    throw exc; 
+                } 
+                showNotification("Не хватает баланса для создания контракта.");
+                return; 
+            } 
+            
         } catch (error: any) {
             const errorMessage = error.response?.data?.message || error.message || "Ошибка при создании контракта.";
             showNotification(errorMessage, true);

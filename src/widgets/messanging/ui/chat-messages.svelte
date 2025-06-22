@@ -3,16 +3,16 @@
   import { DeleteMessageDto, PinMessageDto, type MessageEntity } from 'flsurf-client';
 
   import { fixIso, GlobalClient } from '$lib/shared/api';
-	import { CurrentEditingMessage, CurrentMessageReplyTo, CurrentMessages } from '$lib/entities/messanging';
+	import { CurrentChat, CurrentEditingMessage, CurrentMessageReplyTo, CurrentMessages } from '$lib/entities/messanging';
 	import UserAvatar from '$lib/shared/ui/icons/UserAvatar.svelte';
 	import { EditButton } from '$lib/shared/ui/buttons';
 	import { EditIcon, PinIcon, ReplyIcon, TrashIcon } from '$lib/shared/ui/icons';
 	import { CurrentUser } from '$lib/entities/user/model/modal';
 	import { writable } from 'svelte/store';
+	import { ru } from 'date-fns/locale';
   /* ---------- входные параметры ---------- */
   export let messages: MessageEntity[] = [];   // уже отсортированные по времени ↑
   export let currentUserId = $CurrentUser?.id;              // id текущего пользователя
-
   /* ---------- хелперы ---------- */
   export function toDate(input: string | Date): Date {
     if (input instanceof Date) return input;
@@ -69,7 +69,7 @@
 </script>
 
 <!-- прокручиваемая колонка сообщений -->
-<div class="flex-1 min-h-0 overflow-y-auto px-6 py-4 space-y-1">
+<div class="flex-1 min-h-0 overflow-y-auto px-6 py-4 space-y-1 max-h-162">
   {#if messages.length === 0}
     <div class="text-center opacity-60 py-12">No messages yet</div>
   {/if}
@@ -89,7 +89,7 @@
       {#if newDay}
         <!-- разделитель дат -->
         <div class="text-center text-xs opacity-60 my-3">
-          {format(sent, 'EEEE, MMMM dd')}
+          {format(sent, 'EEEE, MMMM dd', {locale: ru})}
         </div>
       {/if}
 
@@ -99,7 +99,7 @@
         <div class="flex gap-3 mt-4  hover:bg-base-300 rounded-lg">
           <UserAvatar imageUrl={msg.sender?.avatar?.filePath} width={"35px"} height={"35px"}/>
           <div class="text-sm font-medium">
-            {msg.sender?.fullname}
+            {msg.sender?.fullname ?? $CurrentChat?.participants?.find(x => x.id === msg.senderId)?.fullname ?? "Имя неизвестно"}
             <span class="text-xs opacity-60 ml-2">{fTime(sent)}</span>
           </div>
         </div>
