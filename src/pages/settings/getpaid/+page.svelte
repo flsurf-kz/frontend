@@ -10,6 +10,7 @@
         Money, 
         MoneyCurrency, // Используем MoneyCurrency из flsurf-client
         PaymentMethodDto, 
+        RemovePaymentMethodCommand, 
         StartPaymentFlowCommand, 
         StartPaymentFlowCommandFlow, 
         StartPaymentFlowCommandType, 
@@ -26,6 +27,7 @@
 
     // Импортируем тип данных страницы из сгенерированного SvelteKit $types
     import type { PageData } from './$types';
+	import { Trash } from 'lucide-svelte';
 
     export let data: PageData; // data теперь имеет тип PaymentPageData (WalletEntity | null, и т.д.)
 
@@ -34,6 +36,8 @@
     let paymentElement: StripePaymentElement | null = null;
     let paymentElementDiv: HTMLDivElement;
 
+    const cardComplete = writable(false); 
+    const removing = writable<string | null>(null);
     const isLoading = writable(false);
     const isStripeElementReady = writable(false);
     let currentClientSecret: string | null = null;
@@ -138,6 +142,10 @@
             paymentElement = elements.create('payment', {
                 /* layout: 'tabs' */
             });
+
+            paymentElement.on('change', (e:any) => {
+                cardComplete.set(!!e.complete);
+            });
             isStripeElementReady.set(true);   // ← div уже есть (hidden)
             await tick();                     // гарантируем, что bind:this выполнился
             console.log(paymentElementDiv)
@@ -149,6 +157,24 @@
             currentClientSecret = null; // Сбрасываем, чтобы можно было попробовать снова
         } finally {
             isLoading.set(false);
+        }
+    }
+
+    async function deleteMethod(id: string) {
+        if (!confirm('Удалить эту карту?')) return;
+
+        removing.set(id);
+        try {
+            await GlobalClient.removePaymentMethod(
+                new RemovePaymentMethodCommand({ methId: id })
+            );
+            showError('Карта удалена');
+            /* перезагружаем данные страницы */
+            goto($page.url.pathname, { invalidateAll: true });
+        } catch (e: any) {
+            showError(e.message ?? 'Ошибка удаления карты', true);
+        } finally {
+            removing.set(null);
         }
     }
     
@@ -332,7 +358,7 @@
             <BaseButton 
                 className="secondary mt-6 w-full md:w-auto" 
                 onclick={() => initializeStripe('paymentIntent')} 
-                disabled={get(isLoading) || topUpAmount <= 0 || !selectedProviderId}> 
+                disabled={$isLoading || topUpAmount <= 0 || !selectedProviderId}> 
                 <!-- {# selectedProviderId должен быть установлен для Stripe #} -->
                 Продолжить к оплате
             </BaseButton>
@@ -354,7 +380,16 @@
                                 {#if method.isDefault}
                                     <span class="badge badge-success badge-sm">Основная</span>
                                 {/if}
-                                </div>
+                                <button class="btn btn-xs btn-error"
+                                    disabled={$removing === method.id}
+                                    on:click={() => deleteMethod(method.id ?? "")}>
+                                {#if $removing === method.id}
+                                    …
+                                {:else}
+                                    <Trash size={14}/>
+                                {/if}
+                            </button>
+                            </div>
                         </li>
                     {/each}
                 </ul>
@@ -390,7 +425,7 @@
             <BaseButton 
                 className="secondary mt-2 w-full md:w-auto" 
                 onclick={() => initializeStripe('setupIntent')} 
-                disabled={get(isLoading) || !selectedProviderId}>
+                disabled={$isLoading || !selectedProviderId}>
                 Ввести данные новой карты
             </BaseButton>
         </div>
@@ -410,7 +445,7 @@
                 </h3>
                 <div class="p-3 border border-base-300 rounded-md bg-base-100 min-h-[200px] flex flex-col justify-center" bind:this={paymentElementDiv}>
                     <!-- {# Payment Element монтируется сюда. Можно добавить плейсхолдер загрузки, если paymentElementDiv уже есть, а сам элемент еще нет #} -->
-                    {#if !paymentElement && get(isLoading) && currentClientSecret }
+                    {#if !paymentElement && $isLoading && currentClientSecret }
                         <div class="text-center"><span class="loading loading-ring loading-lg text-primary"></span><p>Загрузка формы оплаты...</p></div>
                     {/if}
                 </div>
@@ -419,12 +454,14 @@
                         <BaseButton className="primary btn-md" onclick={() => $isStripeElementReady = false}>
                             Отмена
                         </BaseButton>
-                        <BaseButton className="primary btn-md" onclick={handleAddCard} disabled={get(isLoading)}>
-                            {get(isLoading) ? 'Сохранение...' : 'Сохранить карту'}
+                        <BaseButton className="primary btn-md"
+                                    onclick={handleAddCard}
+                                    disabled={!$cardComplete || $isLoading}>   <!-- ③ -->
+                            {$isLoading ? 'Сохранение…' : 'Сохранить карту'}
                         </BaseButton>
                     {:else if currentStripeIntentType === 'paymentIntent'}
-                         <BaseButton className="primary btn-md" onclick={handleTopUp} disabled={get(isLoading) || topUpAmount <= 0}>
-                            {get(isLoading) ? 'Обработка...' : `Оплатить ${topUpAmount} ${topUpCurrency}`}
+                         <BaseButton className="primary btn-md" onclick={handleTopUp} disabled={$isLoading || topUpAmount <= 0}>
+                            {$isLoading ? 'Обработка...' : `Оплатить ${topUpAmount} ${topUpCurrency}`}
                         </BaseButton>
                     {/if}
                 </div>
