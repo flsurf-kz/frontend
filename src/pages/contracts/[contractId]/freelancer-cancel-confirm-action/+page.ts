@@ -1,12 +1,15 @@
 // src/routes/contracts/[contractId]/freelancer-cancel-confirm-action/+page.ts
-import { GlobalClient, FreelancerCancelContractCommand, ContractEntityStatus } from '$lib/shared/api';
+import { GlobalClient } from '$lib/shared/api';
 import { redirect, error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 import { showNotification } from '$lib/shared/ui/errors/modal';
+import { get } from 'svelte/store';
+import { CurrentUser } from '$lib/entities/user/model/modal';
+import { ContractEntityStatus, FreelancerFinishContractCommand } from 'flsurf-client';
 
 export const load: PageLoad = async ({ params, url, parent }) => {
     const { contractId } = params;
-    const { currentUser } = await parent() as { currentUser: any };
+    const currentUser = get(CurrentUser)
 
     if (!currentUser) {
         throw redirect(303, `/auth/login?redirectTo=/contracts/${contractId}`);
@@ -31,8 +34,8 @@ export const load: PageLoad = async ({ params, url, parent }) => {
              throw redirect(303, finalRedirectAfterAction || `/contracts/${contractId}`);
         }
 
-        const command = new FreelancerCancelContractCommand({ contractId, reason });
-        await GlobalClient.freelancerCancelContract(command);
+        const command = new FreelancerFinishContractCommand({ contractId });
+        await GlobalClient.freelancerFinishContract(command);
 
         showNotification('Вы успешно отказались от выполнения контракта.', false);
     } catch (e: any) {

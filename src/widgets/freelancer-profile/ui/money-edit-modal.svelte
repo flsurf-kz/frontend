@@ -52,9 +52,9 @@
 
     <!-- Service fee (disabled) -->
     <div>
-      <header class="font-semibold mb-1">Upwork&nbsp;Service&nbsp;Fee</header>
+      <header class="font-semibold mb-1">Flsurf&nbsp;Сервисная&nbsp;Комиссия</header>
       <p class="text-xs opacity-60 mb-2">
-        Fees vary and are shown before contract acceptance
+        Комиссия может менятся
       </p>
 
       <div class="flex items-center gap-2">

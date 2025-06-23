@@ -1,12 +1,15 @@
 // src/routes/contracts/[contractId]/client-cancel-confirm-action/+page.ts
-import { GlobalClient, ClientCloseContractCommand, ContractEntityStatus } from '$lib/shared/api'; // Ensure ContractEntityStatus
+import { GlobalClient } from '$lib/shared/api'; // Ensure ContractEntityStatus
 import { redirect, error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 import { showNotification } from '$lib/shared/ui/errors/modal'; // Assuming global or through a service
+import { CurrentUser } from '$lib/entities/user/model/modal';
+import { get } from 'svelte/store';
+import { ClientCloseContractCommand, ContractEntityStatus } from 'flsurf-client';
 
 export const load: PageLoad = async ({ params, url, parent }) => {
     const { contractId } = params; // contractId from path
-    const { currentUser } = await parent() as { currentUser: any };
+    const currentUser = get(CurrentUser)
 
     if (!currentUser) {
         throw redirect(303, `/auth/login?redirectTo=/contracts/${contractId}`); // Redirect to contract page

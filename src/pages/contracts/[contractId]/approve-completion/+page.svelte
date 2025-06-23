@@ -1,12 +1,13 @@
 <script lang="ts">
     import type { PageData } from './$types';
-    import { GlobalClient, ClientApproveFinishCommand, type ContractEntityStatus } from '$lib/shared/api';
+    import { GlobalClient } from '$lib/shared/api';
     import { showNotification } from '$lib/shared/ui/errors/modal';
     import { goto, invalidateAll } from '$app/navigation';
     import BaseButton from '$lib/shared/ui/buttons/base-button.svelte';
     import { MetaTags } from '$lib/shared/ui/meta-tags';
+	import { ClientAcceptFinishContractCommand, WorkSessionEntityStatus } from 'flsurf-client';
 
-    export let data: PageData;
+    let { data } = $props(); 
     const { contract, jobSummary, freelancer } = data;
 
     let isLegallyBindingAgreementChecked = $state(false);
@@ -33,13 +34,12 @@
             total = contract.budget?.amount ?? 0;
         } else if (contract.budgetType === 'Hourly') { // Same here
             total = (contract.workSessions ?? [])
-                .filter(ws => ws.status === 'Approved' || ws.status === 'Paid')
-                .reduce((sum, ws) => sum + (ws.amountBilled?.amount ?? 0), 0);
+                .filter(ws => ws.status === WorkSessionEntityStatus.Approved || ws.status === WorkSessionEntityStatus.Pending)
+                .reduce((sum, ws) => sum + ((ws.workedHours ?? 0 * (contract.costPerHour?.amount ?? 0)) ?? 0), 0);
         }
         // Add bonuses - assuming bonuses are part of the contract object or fetched separately
         // For simplicity, let's assume `contract.bonuses` is an array like `[{amount: {amount: 100}}]`
         const totalBonuses = (contract.bonuses ?? []) // Assuming bonuses are on contract
-            .filter(b => b.status === 'Awarded' || b.status === 'Paid')
             .reduce((sum, b) => sum + (b.amount?.amount ?? 0), 0);
         total += totalBonuses;
         return total;
@@ -53,11 +53,11 @@
         }
         isSubmitting = true;
         try {
-            const command = new ClientApproveFinishCommand({
+            const command = new ClientAcceptFinishContractCommand({
                 contractId: contract.id
                 // You could add fields for feedback/rating here if your command supports it
             });
-            await GlobalClient.clientApproveFinish(command); // Adjust GlobalClient method name
+            await GlobalClient.clientAcceptFinishContract(command); // Adjust GlobalClient method name
 
             showNotification('Контракт успешно завершен! Средства будут перечислены исполнителю.', false);
             // Invalidate contract data cache and navigate
@@ -95,8 +95,6 @@
                     <h2 class="card-title text-xl mb-2">Временная шкала (упрощенно)</h2>
                     <ul class="list-disc list-inside space-y-1 text-sm">
                         <li><strong>Начало контракта:</strong> {formatDate(contract.startDate)}</li>
-                        {#if contract.proposedFinishDateByFreelancer} <li><strong>Предложено завершение исполнителем:</strong> {formatDate(contract.proposedFinishDateByFreelancer)}</li>
-                        {/if}
                         <li><strong>Текущая дата (подтверждение):</strong> {formatDate(new Date())}</li>
                     </ul>
                 </div>
@@ -104,7 +102,7 @@
                 <div>
                     <h2 class="card-title text-xl mb-2">Средства к Переводу Исполнителю</h2>
                     <p class="text-3xl font-bold text-success">
-                        {getMoneyDisplay({amount: totalPayableAmount, currency: contract.budget?.currency})}
+                        {getMoneyDisplay({amount: totalPayableAmount(), currency: contract.budget?.currency})}
                     </p>
                     <p class="text-xs text-gray-500 mt-1">
                         (Включает оплату за выполненную работу и все одобренные бонусы, за вычетом комиссий платформы, если применимо).
@@ -139,8 +137,7 @@
                     <BaseButton
                         className="btn-success"
                         onclick={handleClientApproveCompletion}
-                        disabled={!isLegallyBindingAgreementChecked || isSubmitting}
-                        isLoading={isSubmitting}>
+                        disabled={!isLegallyBindingAgreementChecked || isSubmitting}>
                         {isSubmitting ? 'Обработка...' : 'Подтвердить и Завершить Контракт'}
                     </BaseButton>
                 </div>

@@ -104,10 +104,8 @@
 <style>
     /* Стили для .prose можно настроить в app.pcss или здесь, если нужно */
     .prose :global(strong) {
-        @apply font-semibold;
     }
     .prose :global(a) {
-        @apply text-primary hover:text-primary-focus;
     }
     /* и т.д. для других элементов, если стандартные стили prose не подходят */
 </style>
