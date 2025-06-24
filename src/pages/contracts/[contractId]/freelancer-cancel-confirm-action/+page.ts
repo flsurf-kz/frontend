@@ -45,5 +45,7 @@ export const load: PageLoad = async ({ params, url, parent }) => {
     } finally {
         throw redirect(303, finalRedirectAfterAction || `/contracts/${contractId}`);
     }
+
+    
     return {};
 };

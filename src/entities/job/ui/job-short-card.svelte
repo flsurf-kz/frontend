@@ -1,156 +1,178 @@
 <script lang="ts">
-	import { BookmarkJobCommand, JobEntityBudgetType, JobEntityStatus, type JobEntity, type SkillEntity } from 'flsurf-client';
-    import { formatDistanceToNowStrict } from 'date-fns'; // Для "Posted X hours ago"
-    import { ru } from 'date-fns/locale'; // Для русского языка в date-fns
-	import { TaggedListField } from '$lib/shared/ui/lists';
-	import IconThumbDown from '$lib/shared/ui/icons/IconThumbDown.svelte';
-	import IconHeart from '$lib/shared/ui/icons/IconHeart.svelte';
-	import IconPaymentVerified from '$lib/shared/ui/icons/IconPaymentVerified.svelte';
-	import IconStarRating from '$lib/shared/ui/icons/IconStarRating.svelte';
-	import IconLocationSimple from '$lib/shared/ui/icons/IconLocationSimple.svelte';
-	import TagsList from '$lib/shared/ui/lists/tags-list.svelte';
-	import { GlobalClient } from '$lib/shared/api';
+    import {
+        BookmarkJobCommand,
+        JobEntityBudgetType,
+        JobEntityStatus,
+        type JobEntity,
+        type SkillEntity
+    }                                    from 'flsurf-client';
+    import { GlobalClient }              from '$lib/shared/api';
+    import { formatDistanceToNowStrict } from 'date-fns';
+    import { ru }                        from 'date-fns/locale';
+    import { showNotification }          from '$lib/shared/ui/errors/modal';
 
-	export let job: JobEntity;
+    /* ───── UI ──────────────────────────────────────────────────────────── */
+    import TagsList            from '$lib/shared/ui/lists/tags-list.svelte';
+    import IconThumbDown       from '$lib/shared/ui/icons/IconThumbDown.svelte';
+    import IconHeart           from '$lib/shared/ui/icons/IconHeart.svelte';
+    import IconPaymentVerified from '$lib/shared/ui/icons/IconPaymentVerified.svelte';
+    import IconStarRating      from '$lib/shared/ui/icons/IconStarRating.svelte';
+    import IconLocationSimple  from '$lib/shared/ui/icons/IconLocationSimple.svelte';
 
-    // Для относительного времени
-    let postedTimeAgo: string = '';
+    /* ───── входные пропсы ──────────────────────────────────────────────── */
+    export let job       : JobEntity;
+    export let bookmarked = false;          // начальное состояние присылает родитель
+
+    /* ───── dislike — через localStorage + API ─────────────────────────── */
+    const LS_DISLIKES = 'disliked_jobs';
+
+    function readDislikes(): Set<string> {
+        try { return new Set(JSON.parse(localStorage.getItem(LS_DISLIKES) ?? '[]')); }
+        catch { return new Set(); }
+    }
+    function saveDislikes(s: Set<string>): void {
+        localStorage.setItem(LS_DISLIKES, JSON.stringify([...s]));
+    }
+
+    let disliked = readDislikes().has(job.id);
+
+    async function toggleDislike(): Promise<void> {
+        const nextState = !disliked;
+
+        try {
+            await GlobalClient.dislikeJob(job.id);   // сервер сам «переключит» состояние
+        } catch (e) {
+            showNotification('Не удалось изменить статус «Не интересно».', true);
+            return;                                  // ничего не меняем локально
+        }
+
+        disliked = nextState;
+        const store = readDislikes();
+        nextState ? store.add(job.id) : store.delete(job.id);
+        saveDislikes(store);
+    }
+
+    /* ───── bookmarks ──────────────────────────────────────────────────── */
+    async function toggleBookmark(): Promise<void> {
+        const nextState = !bookmarked;
+
+        try {
+            await GlobalClient.bookmarkJob(
+                new BookmarkJobCommand({ jobId: job.id })
+            );
+        } catch (e) {
+            showNotification('Не удалось изменить закладку.', true);
+            return;
+        }
+
+        bookmarked = nextState;
+    }
+
+    /* ───── helper-поля (бюджет / дата / предложения) ─────────────────── */
+    let postedTimeAgo = '';
     $: {
-        if (job.publicationDate || job.createdAt) {
-            const dateToCompare = job.publicationDate || job.createdAt;
-            try {
-                postedTimeAgo = formatDistanceToNowStrict(new Date(dateToCompare), { addSuffix: true, locale: ru });
-            } catch (e) {
-                postedTimeAgo = "недавно"; // Запасной вариант
-            }
+        const d = job.publicationDate ?? job.createdAt;
+        postedTimeAgo = d
+            ? formatDistanceToNowStrict(new Date(d), { locale: ru, addSuffix: true })
+            : 'недавно';
+    }
+
+    /* бюджет и тип */
+    let jobTypeAndBudget = '';
+    $: {
+        const p = job.payout;
+        if (job.budgetType === JobEntityBudgetType.Fixed && p?.amount) {
+            jobTypeAndBudget =
+                `Фикс. цена · ${p.amount}${p.currency === 'USD' ? '$' : p.currency}`;
+        } else if (job.budgetType === JobEntityBudgetType.Hourly && p?.amount) {
+            jobTypeAndBudget =
+                `Почасовая · ${p.amount}${p.currency === 'USD' ? '$' : p.currency}/час`;
         } else {
-            postedTimeAgo = "недавно";
+            jobTypeAndBudget = 'Бюджет не указан';
         }
     }
 
-    // Форматирование бюджета и типа работы
-    let jobTypeAndBudget: string = '';
+    /* предложения (очень упрощённо) */
+    let proposalCountText = '';
     $: {
-        let parts: string[] = [];
-        if (job.budgetType === JobEntityBudgetType.Fixed && job.payout?.amount) {
-            parts.push("Фикс. цена");
-            if (job.level) parts.push(job.level.toString()); // Предполагаем, что JobEntityLevel это enum или имеет toString()
-            parts.push(`Бюджет: ${job.payout.amount}${job.payout.currency === "USD" ? '$' : (job.payout.currency === "KZT" ? '₸' : job.payout.currency )}`);
-        } else if (job.budgetType === JobEntityBudgetType.Hourly && job.payout?.amount) {
-            parts.push("Почасовая");
-            if (job.level) parts.push(job.level.toString());
-            parts.push(`Ставка: ${job.payout.amount}${job.payout.currency === "USD" ? '$' : (job.payout.currency === "KZT" ? '₸' : job.payout.currency )}/час`);
-        } else {
-            if (job.level) parts.push(job.level.toString());
-            parts.push("Бюджет не указан");
-        }
-        jobTypeAndBudget = parts.join(' - ');
+        const n = job.proposals?.length ?? 0;
+        proposalCountText =
+            n === 0   ? 'Предложений: нет' :
+            n < 5     ? `Предложений: ${n}` :
+            n <= 10   ? 'Предложений: 5-10' :
+                        'Предложений: 10+';
     }
 
-    // Информация о клиенте (заглушки, если данных нет в job.employer)
-    const employerRating = 4.0; // Пример, если у UserEntity есть rating
-    const employerSpent = '1000r+ spent'; // Пример
-    const employerLocation = job.employer?.location ?? 'Не указана'; // Пример
-
-    // Количество предложений
-    let proposalCountText: string = 'Предложения: ';
-    $: {
-        const count = job.proposals?.length ?? 0;
-        if (count === 0) proposalCountText = 'Предложений: Нет';
-        else if (count < 5) proposalCountText = `Предложений: ${count}`;
-        else if (count <=10) proposalCountText = 'Предложений: 5-10'; // Как на скриншоте
-        else proposalCountText = 'Предложений: 10+';
-    }
-
-    const skillsForTagList: SkillEntity[] = job.requiredSkills || [];
-    const skillsTags = skillsForTagList.map(v => v.name)
-
-    const dislikeJobs = async () => { 
-        await GlobalClient.dislikeJob(job.id)
-    }
-
-    const saveBookmark = async () => { 
-        await GlobalClient.bookmarkJob(new BookmarkJobCommand({jobId: job.id}))
-    }
+    /* прочие «заглушки» клиента                                    */
+    const employerRating   = 4.0;
+    const employerSpent    = '1000₸+ spent';
+    const employerLocation = job.employer?.location ?? '';
+    const skillsTags       = (job.requiredSkills ?? []).map((s: SkillEntity) => s.name);
 </script>
 
-<article class="bg-base-100 text-gray-300 shadow-lg rounded-lg p-5 relative border border-transparent hover:bg-base-200 transition-colors">
+<article
+    class="bg-base-100 text-gray-300 shadow-lg rounded-lg p-5 relative
+           border border-transparent hover:bg-base-200 transition-colors">
+
     <div class="flex justify-between items-start mb-3 relative">
-        <p class="text-xs text-gray-500">Опубликовано {postedTimeAgo}</p>
-        <div class="absolute flex space-x-2 z-20 right-0">
-            <button title="Не интересно"
-                onclick={dislikeJobs} 
-                class="text-base-content/70 hover:text-base-content transition-colors border-1 border-green-500 rounded-full p-2 bg-base-100">
-                <IconThumbDown />
+        <p class="text-xs text-gray-500">Опубликовано&nbsp;{postedTimeAgo}</p>
+
+        <div class="absolute right-0 flex gap-2 z-10">
+            <button
+                class="rounded-full p-2 bg-base-100 transition-colors
+                       {disliked ? 'text-error' : 'text-base-content/60 hover:text-base-content'}"
+                title="Не интересно / вернуть"
+                onclick={toggleDislike}>
+                <IconThumbDown/>
             </button>
-            <button title="Сохранить в закладки" 
-                onclick={saveBookmark}
-                class="text-base-content/70 hover:text-base-content transition-colors border-1 border-green-500 rounded-full p-2 bg-base-100">
-                <IconHeart />
+
+            <button
+                class="rounded-full p-2 bg-base-100 transition-colors
+                       {bookmarked ? 'text-primary' : 'text-base-content/60 hover:text-base-content'}"
+                title="Закладка / убрать"
+                onclick={toggleBookmark}>
+                <IconHeart/>
             </button>
         </div>
     </div>
 
     <h2 class="text-lg font-semibold text-green-400 mb-2 hover:text-green-500 transition-colors">
-        <a href={`/jobs/${job.id}`} class="stretched-link-pseudo">{job.title || 'Без названия'}</a>
+        <a href={`/jobs/${job.id}`} class="stretched-link-pseudo">{job.title ?? 'Без названия'}</a>
     </h2>
 
-    <div class="flex flex-wrap items-center text-xs text-gray-400 space-x-3 mb-3">
+    <div class="flex flex-wrap items-center text-xs text-gray-400 gap-x-3 gap-y-1 mb-3">
         {#if job.paymentVerified}
-        <span class="flex items-center">
-            <IconPaymentVerified />
-            <span class="ml-1">Платеж подтвержден</span>
-        </span>
+            <span class="flex items-center"><IconPaymentVerified/><span class="ml-1">Платёж подтверждён</span></span>
         {/if}
-        <span class="flex items-center">
-            <IconStarRating />
-            <span class="ml-1">{employerRating.toFixed(1)}</span>
-        </span>
+        <span class="flex items-center"><IconStarRating/><span class="ml-1">{employerRating.toFixed(1)}</span></span>
         <span>{employerSpent}</span>
-        {#if employerLocation !== 'Не указана'}
-        <span class="flex items-center">
-            <IconLocationSimple />
-            <span class="ml-1">{employerLocation}</span>
-        </span>
+        {#if employerLocation}
+            <span class="flex items-center"><IconLocationSimple/><span class="ml-1">{employerLocation}</span></span>
         {/if}
     </div>
 
-    <p class="text-sm text-gray-300 mb-3">{jobTypeAndBudget}</p>
+    <p class="text-sm text-gray-300 mb-2">{jobTypeAndBudget}</p>
+    <p class="text-sm text-gray-400 line-clamp-3 mb-4">{job.description ?? 'Описание отсутствует.'}</p>
 
-    <p class="text-sm text-gray-400 line-clamp-3 mb-4 leading-relaxed">
-        {job.description || 'Описание отсутствует.'}
-    </p>
-
-    {#if skillsTags.length > 0}
-        <div class="mb-4">
-            <TagsList tags={skillsTags} readOnly={true}/>
-        </div>
+    {#if skillsTags.length}
+        <TagsList tags={skillsTags} readOnly/>
     {/if}
 
-    <p class="text-xs text-gray-500">{proposalCountText}</p>
+    <p class="text-xs text-gray-500 mt-4">{proposalCountText}</p>
 
-    {#if job.status === JobEntityStatus.Closed} 
-        <div class="absolute inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center rounded-lg z-0">
-            <span class="text-yellow-400 font-semibold px-3 py-1 bg-gray-900 rounded">Вакансия закрыта</span>
+    {#if job.status === JobEntityStatus.Closed}
+        <div class="absolute inset-0 bg-gray-800/60 flex items-center justify-center rounded-lg">
+            <span class="text-yellow-400 bg-gray-900 px-3 py-1 rounded">Вакансия закрыта</span>
         </div>
     {/if}
 </article>
 
 <style>
-    /* Для кликабельной карточки, если не используется <a> вокруг всего */
+    /* «невидимая» ссылка на всю карточку */
     .stretched-link-pseudo::after {
         content: "";
         position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 10; /* Ниже чем у кнопок */
-        pointer-events: auto;
-        background-color: rgba(0,0,0,0); /* Для срабатывания */
-    }
-    /* Убедитесь, что интерактивные элементы внутри карточки имеют более высокий z-index, если нужно */
-    article:hover .stretched-link-pseudo {
-        /* Можно добавить эффект при наведении на "ссылку" */
+        inset: 0;
+        z-index: 0;
     }
 </style>

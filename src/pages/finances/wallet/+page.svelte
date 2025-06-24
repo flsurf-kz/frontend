@@ -1,14 +1,13 @@
 <script lang="ts">
-	import { WalletFreelancerView } from '$lib/widgets/wallet';
-
-	export let data;
+    import { WalletFreelancerView } from '$lib/widgets/wallet';
+    export let data;          /* приходит из load */
 </script>
 
 <WalletFreelancerView
-	available={data.wallet.availableBalance.amount}
-	frozen={data.wallet.frozen.amount}
-	pending={data.wallet.pendingIncome.amount}
-	pendingJobs={data.pendingJobs}
-	activeContracts={data.activeContracts}
-	workSessions={data.workSessions}
+    available       ={data.balance.available}
+    frozen          ={data.balance.frozen}
+    pendingReview   ={data.balance.pendingReview}
+    pendingJobs     ={data.pendingJobs}
+    activeContracts ={data.activeContracts}
+    workSessions    ={data.workSessions}
 />

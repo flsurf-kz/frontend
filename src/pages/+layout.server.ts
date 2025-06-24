@@ -7,6 +7,9 @@ export const load: LayoutServerLoad = async (event) => {
 
 	const currentUser =
 		(await getServerCurrentUser({ fetch: eventFetch, cookies })) ?? undefined;
+	if (currentUser === undefined && cookies.get("session_token")) { 
+		cookies.delete("session_token", {path: "/"})
+	}
 
 	// кладём в data → будет доступно в браузере
 	return { currentUser };

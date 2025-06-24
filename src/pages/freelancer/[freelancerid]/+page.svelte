@@ -101,7 +101,8 @@
     <section class="bg-base-100 border border-base-300 rounded-lg p-6 relative">
 
       {#if isOwner && !publicMode}
-        <EditButton className="absolute right-4 top-4" onclick={() => showAboutModal = true} />
+      
+        <EditButton className="absolute right-1" onclick={() => showAboutModal = true} />
       {/if}
 
       <div class="flex flex-col sm:flex-row gap-4 sm:gap-6">
@@ -132,7 +133,7 @@
             </p>
             {#if isOwner && !publicMode}
               <div class="mt-1">
-                <EditButton size="sm" onclick={() => showRateModal = true} />
+                <EditButton onclick={() => showRateModal = true} />
               </div>
             {/if}
           </div>

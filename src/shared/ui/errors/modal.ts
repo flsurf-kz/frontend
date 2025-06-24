@@ -19,7 +19,7 @@ export type ShowNotificationInfo = {
  * @param critical Если true, ошибка считается критической и вызывает "краш" (оверлей)
  */
 export function showNotification(message: string, critical: boolean = false, info: ShowNotificationInfo | undefined = undefined): void {
-	console.log(message)
+	console.error(message)
 	errorMessages.update(errors => [
 		...errors,
 		{ id: Date.now(), message, critical }

@@ -1,82 +1,167 @@
 <script lang="ts">
-	import type { ContractEntity, JobEntity, WorkSessionEntity } from "flsurf-client";
-	import { ssrDynamicImportKey } from "vite/module-runner";
+    /* ‒‒‒‒‒ imports ‒‒‒‒‒ */
+    import { goto }                from '$app/navigation';
+    import { differenceInHours }   from 'date-fns';
+    import { format }              from 'date-fns';
+    import { ru }                  from 'date-fns/locale';
 
-	export let available = 0;
-	export let frozen = 0;
-	export let pending = 0;
+    /* ‒‒‒‒‒ входящие параметры ‒‒‒‒‒ */
+    import type {
+        ContractEntity,
+        JobEntity,
+        WorkSessionEntity
+    } from 'flsurf-client';
 
-	export let pendingJobs: JobEntity[] = [];
-	export let activeContracts: ContractEntity[] = [];
-	export let workSessions: WorkSessionEntity[] = [];
+    export let available       = 0; // уже доступно
+    export let frozen          = 0; // заморожено
+    export let pendingReview   = 0; // 5-дневный review-период
+    export let pendingRelease  = 0; // «In Process» / ожидает вывода
+
+    export let pendingJobs     : JobEntity[]        = [];
+    export let activeContracts : ContractEntity[]   = [];
+    export let workSessions    : WorkSessionEntity[] = [];
+
+    /* ‒‒‒‒‒ helpers ‒‒‒‒‒ */
+    const KZT = new Intl.NumberFormat('ru-RU', {
+        style: 'currency',
+        currency: 'KZT',
+        maximumFractionDigits: 0
+    });
+
+    const fmtDate = (d?: Date) => d
+        ? format(new Date(d), 'dd.MM.yyyy', { locale: ru })
+        : '—';
+
+    const hrs = (s: WorkSessionEntity) =>
+        (s.startDate && s.endDate)
+            ? differenceInHours(new Date(s.endDate), new Date(s.startDate))
+            : 0;
+
+    /* navigation stubs */
+    const withdraw            = () => {/* TODO */};
+    const openTransactions    = () => goto('/finances/transactions');
+    const openContracts       = () => goto('/contracts');
+    const openSessions        = () => goto('/work-sessions');
 </script>
 
-<div class="max-w-4xl mx-auto p-6 space-y-6">
-	<h1 class="text-2xl font-bold">Кошелёк</h1>
+<!-- ╔════════════════════ Wallet ════════════════════╗ -->
+<div class="max-w-6xl mx-auto px-4 py-10 space-y-12">
 
-	<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-		<div class="bg-green-100 p-4 rounded shadow text-center">
-			<p class="text-sm text-gray-600">Доступно</p>
-			<p class="text-xl font-bold text-green-700">₸{available}</p>
-		</div>
-		<div class="bg-blue-100 p-4 rounded shadow text-center">
-			<p class="text-sm text-gray-600">Заморожено</p>
-			<p class="text-xl font-bold text-blue-700">₸{frozen}</p>
-		</div>
-		<div class="bg-yellow-100 p-4 rounded shadow text-center">
-			<p class="text-sm text-gray-600">На рассмотрении</p>
-			<p class="text-xl font-bold text-yellow-700">₸{pending}</p>
-		</div>
-	</div>
+    <!-- Баланс -->
+    <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="rounded-lg p-4 shadow bg-success/10 text-success-content">
+            <p class="text-sm">Доступно</p>
+            <p class="text-2xl font-bold mt-1">{KZT.format(available)}</p>
+        </div>
+        <div class="rounded-lg p-4 shadow bg-info/10 text-info-content">
+            <p class="text-sm">В ревью</p>
+            <p class="text-2xl font-bold mt-1">{KZT.format(pendingReview)}</p>
+        </div>
+        <div class="rounded-lg p-4 shadow bg-warning/10 text-warning-content">
+            <p class="text-sm">Ожидает вывода</p>
+            <p class="text-2xl font-bold mt-1">{KZT.format(pendingRelease)}</p>
+        </div>
+        <div class="rounded-lg p-4 shadow bg-base-200 text-base-content">
+            <p class="text-sm">Заморожено</p>
+            <p class="text-2xl font-bold mt-1">{KZT.format(frozen)}</p>
+        </div>
+    </section>
 
-	<!-- Заказы в ожидании -->
-	<div>
-		<h2 class="text-lg font-semibold mt-6 mb-2">Ожидают подтверждения</h2>
-		{#if pendingJobs.length > 0}
-			<ul class="divide-y border rounded bg-white">
-				{#each pendingJobs as job}
-					<li class="p-3">
-						<p class="font-medium">{job.title}</p>
-						<p class="text-sm text-gray-500">Оплата: ₸{job.payout?.amount}</p>
-					</li>
-				{/each}
-			</ul>
-		{:else}
-			<p class="text-gray-400 text-sm">Нет ожидающих заказов</p>
-		{/if}
-	</div>
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+        <button class="btn btn-primary" on:click={withdraw}>Вывести средства</button>
+        <button class="link text-sm" on:click={openTransactions}>История транзакций →</button>
+    </div>
 
-	<!-- Контракты в работе -->
-	<div>
-		<h2 class="text-lg font-semibold mt-6 mb-2">В процессе</h2>
-		{#if activeContracts.length > 0}
-			<ul class="divide-y border rounded bg-white">
-				{#each activeContracts as contract}
-					<li class="p-3">
-						<p class="font-medium">"СДЕЛАТЬ НАЗВАНИЯ КОНТРАКТОВ"</p>
-						<p class="text-sm text-gray-500">Тип: {contract.budgetType}</p>
-					</li>
-				{/each}
-			</ul>
-		{:else}
-			<p class="text-gray-400 text-sm">Нет активных контрактов</p>
-		{/if}
-	</div>
+    <!-- Ожидающие заказы -->
+    <section>
+        <h2 class="text-lg font-semibold mb-3">
+            Ожидают подтверждения
+            <span class="badge badge-outline ml-1 align-middle">{pendingJobs.length}</span>
+        </h2>
 
-	<!-- Сессии -->
-	<div>
-		<h2 class="text-lg font-semibold mt-6 mb-2">Сессии работы</h2>
-		{#if workSessions.length > 0}
-			<ul class="divide-y border rounded bg-white">
-				{#each workSessions as s}
-					<li class="p-3">
-						<p class="font-medium">Сессия #{s.id}</p>
-						<p class="text-sm text-gray-500">Длительность: {s.endDate?.getDate() ?? 0 - (s.startDate?.getDate() ?? 0)} ч.</p>
-					</li>
-				{/each}
-			</ul>
-		{:else}
-			<p class="text-gray-400 text-sm">Нет недавних сессий</p>
-		{/if}
-	</div>
+        {#if pendingJobs.length}
+            <div class="overflow-x-auto rounded-lg border border-base-300">
+                <table class="table table-sm">
+                    <tbody>
+                        {#each pendingJobs.slice(0,5) as j}
+                            <tr>
+                                <td class="font-medium">{j.title}</td>
+                                <td class="text-right">{j.payout?.amount ? KZT.format(j.payout.amount) : '—'}</td>
+                            </tr>
+                        {/each}
+                    </tbody>
+                </table>
+            </div>
+        {:else}
+            <p class="text-base-content/60 italic">Нет ожидающих заказов</p>
+        {/if}
+    </section>
+
+    <!-- Активные контракты -->
+    <section>
+        <h2 class="text-lg font-semibold mb-3">
+            Активные контракты
+            <span class="badge badge-outline ml-1 align-middle">{activeContracts.length}</span>
+        </h2>
+
+        {#if activeContracts.length}
+            <div class="overflow-x-auto rounded-lg border border-base-300">
+                <table class="table table-sm">
+                    <tbody>
+                        {#each activeContracts.slice(0,5) as c}
+                            <tr class="hover cursor-pointer" on:click={() => goto(`/contracts/${c.id}`)}>
+                                <td>
+                                    <p class="font-medium">{c.job?.title ?? '—'}</p>
+                                    <p class="text-xs opacity-70">
+                                        {fmtDate(c.startDate)} – {c.endDate ? fmtDate(c.endDate) : '…'}
+                                    </p>
+                                </td>
+                                <td class="text-right whitespace-nowrap">
+                                    {c.costPerHour?.amount ? `${KZT.format(c.costPerHour.amount)}/ч` : '—'}
+                                </td>
+                            </tr>
+                        {/each}
+                    </tbody>
+                </table>
+            </div>
+
+            {#if activeContracts.length > 5}
+                <button class="link text-xs mt-2" on:click={openContracts}>Все контракты →</button>
+            {/if}
+        {:else}
+            <p class="text-base-content/60 italic">Нет активных контрактов</p>
+        {/if}
+    </section>
+
+    <!-- Недавние сессии -->
+    <section>
+        <h2 class="text-lg font-semibold mb-3">
+            Недавние сессии
+            <span class="badge badge-outline ml-1 align-middle">{workSessions.length}</span>
+        </h2>
+
+        {#if workSessions.length}
+            <div class="overflow-x-auto rounded-lg border border-base-300">
+                <table class="table table-sm">
+                    <tbody>
+                        {#each workSessions.slice(0,5) as s}
+                            <tr>
+                                <td>
+                                    <p class="font-medium">#{s.id.slice(0,8)}</p>
+                                    <p class="text-xs opacity-70">{fmtDate(s.startDate)}</p>
+                                </td>
+                                <td class="text-right">{hrs(s)} ч</td>
+                            </tr>
+                        {/each}
+                    </tbody>
+                </table>
+            </div>
+
+            {#if workSessions.length > 5}
+                <button class="link text-xs mt-2" on:click={openSessions}>Все сессии →</button>
+            {/if}
+        {:else}
+            <p class="text-base-content/60 italic">Сессий пока нет</p>
+        {/if}
+    </section>
 </div>

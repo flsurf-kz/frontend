@@ -207,7 +207,7 @@
             <section>
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-2xl font-semibold text-gray-700">Последние контракты</h2>
-                    <a href="/client/contracts" class="link text-sm text-primary hover:text-primary-focus">Все контракты</a>
+                    <a href="/contracts" class="link text-sm text-primary hover:text-primary-focus">Все контракты</a>
                 </div>
                  <div class="space-y-3">
                     {#if data.recentContracts && data.recentContracts.length > 0}

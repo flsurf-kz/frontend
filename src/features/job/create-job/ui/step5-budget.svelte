@@ -13,13 +13,6 @@
     let duration: number | undefined = undefined;
   
     function handleNext() {
-      createJobStore.update(data => ({
-        ...data,
-        budgetType: budgetType,
-        budget: budget,
-        hourlyRate: hourlyRate,
-        duration: duration
-      }));
       goto("/jobs/post/review");
     }
 
@@ -38,7 +31,7 @@ onMount(() => {
     
     <div>
       <label class="label">Тип работы</label>
-      <select bind:value={budgetType} class="select select-bordered w-full">
+      <select bind:value={$createJobStore.budgetType} class="select select-bordered w-full">
         <option value="" disabled selected>Выберите тип работы</option>
         <option value="Fixed">Фиксированная цена</option>
         <option value="Hourly">Почасовая</option>
@@ -48,18 +41,18 @@ onMount(() => {
     {#if budgetType === CreateJobCommandBudgetType.Fixed}
       <div>
         <label class="label">Бюджет (₸)</label>
-        <input type="number" bind:value={budget} placeholder="Укажите бюджет" class="input input-bordered w-full" required />
+        <input type="number" bind:value={$createJobStore.budget} placeholder="Укажите бюджет" class="input input-bordered w-full" required />
       </div>
     {:else if budgetType === CreateJobCommandBudgetType.Hourly}
       <div>
         <label class="label">Почасовая ставка (₸)</label>
-        <input type="number" bind:value={hourlyRate}  placeholder="Укажите почасовую ставку" class="input input-bordered w-full" required />
+        <input type="number" bind:value={$createJobStore.hourlyRate}  placeholder="Укажите почасовую ставку" class="input input-bordered w-full" required />
       </div>
     {/if}
     
     <div>
       <label class="label">Продолжительность (дней)</label>
-      <input type="number" bind:value={duration} placeholder="Укажите продолжительность" class="input input-bordered w-full" required />
+      <input type="number" bind:value={$createJobStore.duration} placeholder="Укажите продолжительность" class="input input-bordered w-full" required />
     </div>
     
     <div class="flex justify-end mt-6">

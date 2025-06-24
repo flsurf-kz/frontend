@@ -1,15 +1,16 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
+  import { goto, invalidateAll } from "$app/navigation";
   import { logout } from "$lib/entities/user/model";
   import { CurrentUser } from "$lib/entities/user/model/modal";
   import { UserAvatar } from "$lib/shared/ui/icons";
   import ArrowDown from "$lib/shared/ui/icons/ArrowDown.svelte";
   import { setTheme } from "$lib/shared/ui/theme";
-	import { UserEntityType } from "flsurf-client";
+	import { UserEntityRole, UserEntityType } from "flsurf-client";
 
   async function handleLogout() {
     await logout();
     goto("/");
+    invalidateAll()
   }
 </script>
 
@@ -53,6 +54,10 @@
 
     <!-- Премиум -->
     <li><a href="/freelancer/premium" class="text-sm font-medium">Премиум</a></li>
+
+    {#if $CurrentUser?.role != UserEntityRole.User}
+      <li><a href="/admin/">Админка</a></li>
+    {/if}
 
     <!-- Темы -->
     <li tabindex="0">

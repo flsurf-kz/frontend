@@ -8,6 +8,8 @@ import {
     type FinanceSummaryDto
 } from 'flsurf-client';
 
+export let csr = true; 
+
 export interface FinancePageData {
     summary: FinanceSummaryDto | null;
     months: { label: string; value: number }[];
@@ -18,9 +20,10 @@ export interface FinancePageData {
     // loading cостояние будет управляться через $navigating в Svelte компоненте
 }
 
-export const load: PageLoad = async ({ url, depends }) => {
+export const load: PageLoad = async ({ url, parent }) => {
 
-    const currentUser = get(CurrentUser);
+    const { user } = await parent()
+    const currentUser = user; 
 
     const now = new Date();
     const currentYear = now.getFullYear();
@@ -44,23 +47,12 @@ export const load: PageLoad = async ({ url, depends }) => {
     if (!months.some(m => m.value === queryMonth)) queryMonth = currentMonth;
     if (!years.includes(queryYear)) queryYear = currentYear;
 
-    if (!currentUser?.id) {
-        return {
-            summary: null,
-            months,
-            years,
-            selectedMonth: queryMonth,
-            selectedYear: queryYear,
-            error: "Пользователь не авторизован. Невозможно загрузить финансовую сводку."
-        };
-    }
-
     try {
         const summary = await GlobalClient.getUserFinancesSummary(
             new GetFinanceSummaryQuery({
                 month: queryMonth,
                 year: queryYear,
-                userId: currentUser.id
+                userId: currentUser?.id ?? "", 
             })
         );
         return {

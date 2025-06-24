@@ -16,6 +16,7 @@
 	})()});
 	let search = $state('');
 	let filters = $state({});
+	GlobalClient.getBookmarksList
 	let sort = $state('newest');
 	let currentPage = $state(1);
 	let pageSize = $state(10);

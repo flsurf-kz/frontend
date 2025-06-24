@@ -8,10 +8,6 @@
     let additionalInfo = "";
   
     function handleNext() {
-      createJobStore.update(data => ({
-        ...data,
-        additionalInfo: additionalInfo.trim() !== "" ? additionalInfo : undefined
-      }));
       goto("/jobs/post/category");
     }
 
@@ -29,7 +25,7 @@
     <div class="form-control">
       <!-- svelte-ignore a11y_label_has_associated_control -->
       <label class="label">Уточнения, дополнительные условия</label>
-      <textarea bind:value={additionalInfo} placeholder="Введите дополнительные сведения" class="textarea textarea-bordered w-full" rows="4"></textarea>
+      <textarea bind:value={$createJobStore.description} placeholder="Введите дополнительные сведения" class="textarea textarea-bordered w-full" rows="4"></textarea>
     </div>
     <div class="flex justify-end mt-6">
       <button class="btn btn-success" on:click={handleNext}>Далее</button>

@@ -186,7 +186,7 @@
                     </div>
                 {:else}
                     <div class="card bg-base-100 p-8 rounded-lg shadow text-center border border-base-300">
-                        <img src="/img/placeholder/no-data-illustration.svg" alt="Нет данных" class="mx-auto w-24 h-24 mb-4 opacity-70"/>
+                        <img src="https://cdn-icons-png.flaticon.com/512/7466/7466140.png" alt="Нет данных" class="mx-auto w-24 h-24 mb-4 opacity-70"/>
                         <p class="font-semibold text-lg text-base-content/80">Нет записей</p>
                         <p class="opacity-60 text-sm">По фиксированной оплате нет данных за выбранный месяц.</p>
                     </div>
@@ -220,7 +220,7 @@
                     </div>
                 {:else}
                     <div class="card bg-base-100 p-8 rounded-lg shadow text-center border border-base-300">
-                        <img src="/img/placeholder/no-data-illustration.svg" alt="Нет данных" class="mx-auto w-24 h-24 mb-4 opacity-70"/>
+                        <img src="https://cdn-icons-png.flaticon.com/512/7466/7466140.png" alt="Нет данных" class="mx-auto w-24 h-24 mb-4 opacity-70"/>
                         <p class="font-semibold text-lg text-base-content/80">Нет записей</p>
                         <p class="opacity-60 text-sm">По почасовой оплате нет данных за выбранный месяц.</p>
                     </div>

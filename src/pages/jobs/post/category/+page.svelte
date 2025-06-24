@@ -12,7 +12,7 @@
 
     // Local state for the component
     let searchValueForSelector = ""; // This will be bound to SelectorCategoriezed's search input
-    let selectedCategoryKey = "";  // This will be bound to SelectorCategoriezed's selectedValue
+    $: selectedCategoryKey = $createJobStore.categoryId;  // This will be bound to SelectorCategoriezed's selectedValue
     
     let selectedSkills: string[] = []; // From your original code for skills selection
 

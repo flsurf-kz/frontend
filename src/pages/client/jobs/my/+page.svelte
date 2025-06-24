@@ -140,10 +140,10 @@
     <header class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
         <h1 class="text-3xl font-bold text-base-content">Мои Вакансии</h1>
         <div class="flex gap-2">
-            <a href="/client/contracts/my" class="btn btn-outline btn-secondary items-center"> 
+            <a href="/contracts/" class="btn btn-outline btn-secondary items-center"> 
                 <FileTextIcon class="w-4 h-4 mr-1.5"/> Мои Контракты
             </a>
-            <a href="/jobs/post" class="btn btn-primary items-center">
+            <a href="/jobs/post/name" class="btn btn-primary items-center">
                 <PlusCircleIcon class="w-5 h-5 mr-1.5"/>Опубликовать новую
             </a>
         </div>
@@ -292,7 +292,7 @@
                 <BriefcaseIcon class="mx-auto h-20 w-20 text-base-content/30 mb-4"/>
                 <p class="text-xl text-base-content/70">У вас пока нет опубликованных вакансий.</p>
                 <p class="text-sm text-base-content/60 mt-2">Готовы найти идеального исполнителя?</p>
-                <a href="/jobs/post" class="btn btn-primary mt-6">Опубликовать первую вакансию</a>
+                <a href="/jobs/post/name" class="btn btn-primary mt-6">Опубликовать первую вакансию</a>
             </div>
         {/if}
     </div>
