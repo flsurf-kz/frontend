@@ -1,17 +1,30 @@
 import adapter from '@sveltejs/adapter-auto';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
+
+
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-	// Consult https://kit.svelte.dev/docs/integrations#preprocessors
-	// for more information about preprocessors
-	preprocess: vitePreprocess(),
+	// Используем препроцессор Vite (например, для SCSS, TypeScript и т.д.)
+	preprocess: vitePreprocess({
+		scss: {
+		  // Опционально: подключаем глобальные SCSS переменные/миксины
+		  prependData: `@import 'src/app/variables.scss';`
+		},
+		postcss: true
+	}),		
 
 	kit: {
-		// adapter-auto only supports some environments, see https://kit.svelte.dev/docs/adapter-auto for a list.
-		// If your environment is not supported, or you settled on a specific environment, switch out the adapter.
-		// See https://kit.svelte.dev/docs/adapters for more information about adapters.
-		adapter: adapter()
+		adapter: adapter(),
+
+		// Настраиваем пути в проекте
+		files: {
+			routes: 'src/pages',              // Переносим маршруты в `app`
+			lib: 'src',
+			appTemplate: 'src/app/app.html',     // Входная точка приложения
+			assets: 'static'
+		}
+
 	}
 };
 

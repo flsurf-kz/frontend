@@ -1,0 +1,1 @@
+export { default as WalletFreelancerView } from './ui/wallet-freelancer-view.svelte'

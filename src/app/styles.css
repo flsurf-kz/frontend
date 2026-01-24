@@ -1,0 +1,18 @@
+
+@plugin "daisyui";
+
+@import "tailwindcss"; 
+
+@layer base { 
+    input { 
+        @apply focus:outline-hidden; 
+    }
+
+    select { 
+        @apply focus:outline-hidden; 
+    }
+}
+
+* { 
+    box-sizing: border-box;
+}

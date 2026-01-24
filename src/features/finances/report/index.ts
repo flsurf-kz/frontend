@@ -1,0 +1,1 @@
+export { default as FinancesReport } from './ui/finances-report.svelte'

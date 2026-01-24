@@ -1,0 +1,1 @@
+export { default as TransactionsTable } from './ui/transactions-table.svelte'
